@@ -1,266 +1,295 @@
-//　ファイル操作用課題
-//　2019.09.09
-//　中村亮介
 
-#include "DxLib.h"
+#include "Dxlib.h"			// Dxlibライブラリを使用
 #include "main.h"
-#include "KeyCheck1.h"
-#include "effect.h"
-//変数の定義
-//システム関連
-int SceneCounter;
-bool pauseFlag;		
-//
+#include "player.h"
+#include "KeyCheck.h"
+#include "Effect.h"
+
+
+// 変数
+//-------------------------------------------------------------
+// シーン管理用
+int gameCounter;		// gameLoop動作確認用
+int sceneCounter;		// シーンカウンター
 SCENE_ID sceneID;
-SCENE_ID preSceneID;				//ひとつ前のシーンID
-//入力情報管理用
+SCENE_ID preSceneID;
 
-//int TitleCouter;
-//int gameCounter;		//ループの動作確認用
-//int GameOverCounter;
+// タイトル
+int titleImage;
+int titleWordImage;
+
+// クラスからインスタンスを生成する
+Player* player1;
 
 
-
-//イメージ関連
-int TitleImage;
-int gameoverImage;
-int hitstartkeyImage;
-
+// WinMain関数
+//-------------------------------------------------------------
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	//システム初期化
-	if (SystemInit())
+	// システムの初期化
+	if (!SystemInit())
 	{
 		return -1;
 	}
 
-	SetDrawScreen(DX_SCREEN_BACK);
-	//初期化処理
-	//if (!SystemInit())
-	//{
-	//	AST();
-	//	return -1;
-	//}
-
-	//ゲームループ
+	// ゲームループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 
+		player1->Control();
+
 		ClsDrawScreen();
 
+		// シーンカウンタを制御
 		if (sceneID != preSceneID)
 		{
-			SceneCounter = 0;
 			preSceneID = sceneID;
+			sceneCounter = 0;
 		}
 
-		KeyCheck();  //キー情報の確認
 
+		// 入力情報の取得
+		KeyCheck();
+
+
+		// シーン選択
 		switch (sceneID)
 		{
-			//ゲームの前の初期化
+		// 初期化シーン
 		case SCENE_ID_INIT:
 			InitScene();
-			sceneID = SCENE_ID_TITLE;
 			break;
-			//タイトル
+
+		// タイトルシーン
 		case SCENE_ID_TITLE:
+			// 画面切り替えエフェクト
+			if (fadeIn)
+			{
+				if (!FadeInScreen(5))
+				{
+					// エフェクト終了後の処理
+				}
+			}
+			else if (fadeOut)
+			{
+				if (!FadeOutScreen(5))
+				{
+					// エフェクト終了後の処理
+					sceneID = SCENE_ID_GAME;
+					fadeIn = true;
+					//SetDrawBright(255, 255, 255);
+				}
+			}
 			TitleScene();
-			//fadeScene();
-			/*if (bright < 1)
-			{
-				sceneID = SCENE_ID_GAME;
-			}*/
-			
-			/*if (CheckHitKey(KEY_INPUT_SPACE))
-			{
-				bright -= 1;
-			}
-			if (bright != 255)
-			{
-				bright -= 1;
-				if (bright < 0)bright = 0;
-				SetDrawBright(bright, bright, bright);
-			}
-			if (bright < 1)
-			{
-				sceneID = SCENE_ID_GAME;
-			}*/
 			break;
-			//	//セレクト
-			//case SCENE_ID_SELECT:
-			//	SelectScene();
-			//	/*sceneID = SCENE_ID_GAME;*/
-			//	break;
 
-				//ゲーム
+		// ゲームシーン
 		case SCENE_ID_GAME:
+			// 画面切り替えエフェクト
+			if (fadeIn)
+			{
+				if (!FadeInScreen(5))
+				{
+					// エフェクト終了後の処理
+				}
+			}
+			else if (fadeOut)
+			{
+				if (!FadeOutScreen(5))
+				{
+					// エフェクト終了後の処理
+					sceneID = SCENE_ID_GAMEOVER;
+					fadeIn = true;
+					//SetDrawBright(255, 255, 255);
+				}
+			}
 			GameScene();
-			fadeScene();
-			if (bright < 1)
-			{
-				sceneID = SCENE_ID_GAMEOVER;
-			}
 			break;
-			/*sceneID = SCENE_ID_GAME;*/
-			//クリア
+
+		// ゲームオーバーシーン
 		case SCENE_ID_GAMEOVER:
-			GameOverScene();
-			fadeScene();
-			if (bright < 1)
+			// 画面切り替えエフェクト
+			if (fadeIn)
 			{
-				sceneID = SCENE_ID_INIT;
+				if (!FadeInScreen(5))
+				{
+					// エフェクト終了後の処理
+				}
 			}
+			else if (fadeOut)
+			{
+				if (!FadeOutScreen(5))
+				{
+					// エフェクト終了後の処理
+					sceneID = SCENE_ID_INIT;
+					fadeIn = true;
+					//SetDrawBright(255, 255, 255);
+				}
+			}
+			GameOverScene();
 			break;
 
-
+		// その他
 		default:
+			return -1;
 			break;
 		}
-		//ゲームのﾒｲﾝ処理
-		//TitleCouter++;
-		 SceneCounter++;
-		//GameOverCounter++;
+
+
+		gameCounter++;
+		sceneCounter++;
+
 		ScreenFlip();
 	}
-	DxLib_End();
+
+	DxLib_End();		// DXライブラリの終了処理
 	return 0;
 }
 
+
+//システム系初期化
+//--------------------------------------------------------------
 bool SystemInit(void)
 {
-	//システムの初期化
-	SetWindowText("1916031_中村亮介");
+	// システムの初期化
+	SetWindowText("SanCo壱");
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);
 	ChangeWindowMode(true);
-	SetDrawScreen(DX_SCREEN_BACK);
-	if (DxLib_Init() == -1)				//DXﾗｲﾌﾞﾗﾘ初期化処理
+	if (DxLib_Init() == -1)
 	{
-		return false;
+		return -1;
 	}
-	int retFlag;
-	//ｸﾞﾗﾌｨｯｸの登録
-	//TitelImage = DrawGraph()
-	TitleImage = LoadGraph("image/title.png");
+	SetDrawScreen(DX_SCREEN_BACK);
 
-		//変数の初期化
-		sceneID = SCENE_ID_INIT;
-		preSceneID = SCENE_ID_MAX;
-		SceneCounter = 0;
-		pauseFlag = true;
-		//FDFlag = true;
-		KeyInit();
-		EffectInit();
-		/*gameCounter = 0;
-		TitleCouter = 0;
-		GameOverCounter = 0;*/
-		return false;
+	// ｲﾝｽﾀﾝｽの生成
+	player1 = new Player(PLAYER_1
+		, 100
+		, SCREEN_SIZE_Y - 50
+		, "image/bule.png"
+		, { KEY_INPUT_W
+		,	KEY_INPUT_D
+		,	KEY_INPUT_S
+		,	KEY_INPUT_A});
+
+
+	// グラフィックの登録
+	//---------------------------------
+	
+	// 変数の初期化
+	//---------------------------------
+	gameCounter = 0;
+	sceneCounter = 0;
+	sceneID = SCENE_ID_INIT;
+	preSceneID = SCENE_ID_MAX;
+	
+	player1->GameInit();
+
+	KeyInit();		// キー情報の初期化
+	EffectInit();	// エフェクトの初期化
+
+	return true;
 }
 
-//
+
+
+// 初期化シーン
+//--------------------------------------------------------------
 void InitScene(void)
 {
+	fadeIn = true;
+	
+	sceneID = SCENE_ID_TITLE;
 
 }
 
-//タイトルのループ
+
+// タイトルシーン
+//---------------------------------------------------------------
 void TitleScene(void)
 {
-	if (keyDownTrigger[KEY_ID_SPACE])
+	if (keyUpTrigger[KEY_ID_SPACE])
 	{
-		FDFlag = true;
+		fadeOut = true;
 	}
-	TitleSceneDraw();
+
+	TitleDraw();
 }
-//タイトルの描画
-void TitleSceneDraw(void)
+
+void TitleDraw(void)
 {
-	
-	DrawBox(100
-		, 100
-		, 700
-		, 500
-		, 0x00FF00, true);
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneCounter = %d", SceneCounter);
-	DrawGraph(100, 100, TitleImage, true);
-	DrawGraph(500, 500, hitstartkeyImage, true);
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "TitleScene : %d", sceneCounter);
+
+	DrawBox(100, 100, 700, 500, GetColor(0, 255, 0), true);
 }
-//ゲームのループ
+
+
+// ゲームシーン
+//----------------------------------------------------------------
 void GameScene(void)
 {
-	// ========== 【画面効果①】フェードイン
-		
-	if (keyDownTrigger[KEY_ID_SPACE])
+
+	if (keyUpTrigger[KEY_ID_SPACE])
 	{
-		FDFlag = true;
+		fadeOut = true;
 	}
 
-	GamemainDraw();
-
-	/*if (pauseFlag)
-	{
-		SetDrawBright(255, 255, 255);
-		DrawGraph()
-	}*/
-}
-
-//ゲームの描画
-void GamemainDraw(void)
-{
-	// ========== 【画面効果②】フェードアウト
-	
-
-	DrawBox(100
-		, 100
-		, 700
-		, 500
-		, 0xFF0000, true);
-
-	DrawFormatString(0, 16, 0xFFFFFF, "SceneCounter : %d", SceneCounter);
-}
-//
-void GameOverScene(void)
-{
-	if (keyDownTrigger[KEY_ID_SPACE])
-	{
-		FDFlag = true;
-	}
-	GameOverSceneDraw();
-}
-//
-void GameOverSceneDraw(void)
-{
-	DrawBox(100
-		, 100
-		, 700
-		, 500
-		, 0x0000FF, true);
-	DrawFormatString(0, 32, 0xFFFFFF, "SceneCounter : %d", SceneCounter);
-	DrawGraph(100, 100, gameoverImage, true);
-}
-//bool FedeInScreen(int fadeStep)
-//{
-//	fadeCnt += fadeStep;
-//
-//}
-
-//ポーズの機能
-void pauseScene(void)
-{
+	// Pause機能
 	if (keyDownTrigger[KEY_ID_PAUSE])
 	{
-		//
 		pauseFlag = !pauseFlag;
 	}
-	//ポーズ中
+
+	// Pause時
 	if (pauseFlag)
 	{
-		SetDrawBright(128, 128, 128);
+		SetDrawBright(100, 100, 100);
 	}
+	// 通常動作時
 	else
 	{
-		//各種処理
-		aaaaCounter++;
+		// 各種処理
+		a++;
 	}
 
+	// 画面描画
+	GameDraw();
+
+	// Pauseメッセージを描画
+	if (pauseFlag)
+	{
+		SetDrawBright(255, 255, 255);
+		DrawFormatString((SCREEN_SIZE_X - 9 * 8) / 2
+			, (SCREEN_SIZE_Y - 16) / 2
+			, GetColor(255, 255, 255)
+			, "P A U S E");
+	}
+}
+
+void GameDraw(void)
+{
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
+	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
+
+	DrawBox(100, 100, 700, 500, GetColor(255, 0, 0), true);
+	player1->Draw();
+}
+
+
+// ゲームオーバーシーン
+//-----------------------------------------------------------------
+void GameOverScene(void)
+{
+	if (keyUpTrigger[KEY_ID_SPACE])
+	{
+		fadeOut = true;
+	}
+
+	GameOverDraw();
+}
+
+void GameOverDraw(void)
+{
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameOverScene : %d", sceneCounter);
+
+	DrawBox(100, 100, 700, 500, GetColor(0, 0, 255), true);
 }
