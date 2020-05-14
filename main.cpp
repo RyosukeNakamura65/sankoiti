@@ -293,13 +293,14 @@ void CharacterSelectDraw(void)
 //---------------------------------------------------------------
 void StageSelectScene(void)
 {
+	STAGE_ID stageID = STAGE_ID_1;
 
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
 	}
 
-	stage = new Stage(STAGE_ID_1
+	stage = new Stage(stageID
 		, "mapChip.png");
 
 	StageSelectDraw();

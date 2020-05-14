@@ -2,10 +2,12 @@
 
 // ’è”‚Ì’è‹`
 //---------------------------------------------------------------------------------
-#define CHIP_SIZE_X 40
-#define CHIP_SIZE_Y 40
-#define MAP_X		21
-#define MAP_Y		15
+#define CHIP_SIZE_X  40
+#define CHIP_SIZE_Y  40
+#define MAP_X		 21
+#define MAP_Y		 15
+#define MAP_OFFSET_X 60
+#define MAP_OFFSET_Y 150
 
 
 // —ñ‹“Œ^

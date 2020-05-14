@@ -9,12 +9,12 @@
 //------------------------------------------------------------------
 // シーン管理用
 enum SCENE_ID {
-	SCENE_ID_INIT,		// 初期化シーン
-	SCENE_ID_TITLE,		// タイトルシーン
-	SCENE_ID_CHARASELE,	// キャラクタ選択シーン
-	SCENE_ID_STAGESELE,	// ステージ選択シーン
-	SCENE_ID_GAME,		// ゲームシーン
-	SCENE_ID_GAMEOVER,	// ゲームオーバーシーン
+	SCENE_ID_INIT,			// 初期化シーン
+	SCENE_ID_TITLE,			// タイトルシーン
+	SCENE_ID_CHARASELE,		// キャラクタ選択シーン
+	SCENE_ID_STAGESELE,		// ステージ選択シーン
+	SCENE_ID_GAME,			// ゲームシーン
+	SCENE_ID_GAMEOVER,		// ゲームオーバーシーン
 	SCENE_ID_MAX
 };
 

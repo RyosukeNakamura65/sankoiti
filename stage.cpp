@@ -57,8 +57,8 @@ void Stage::Draw(void)
 	{
 		for (int x = 0; x < MAP_X; x++)
 		{
-			DrawGraph(x * CHIP_SIZE_X
-				, y * CHIP_SIZE_Y
+			DrawGraph(x * CHIP_SIZE_X + MAP_OFFSET_X
+				, y * CHIP_SIZE_Y + MAP_OFFSET_Y
 				, chipImage[map[y][x]]
 				, true);
 		}
@@ -98,7 +98,9 @@ bool Stage::IsPass(XY pos)
 
 	switch (map[indexPos.y][indexPos.x])
 	{
-		
+	case S1_ROOF:
+	case S1_WALL:
+	case S1_UNBREAK_WALL:
 		return false;
 		break;
 
@@ -150,6 +152,6 @@ void Stage::SetMapData(STAGE_ID stageID)
 				map[y][x] = stage1[y][x];
 			}
 		}
-		stageID = STAGE_ID_1;
+		//stageID = STAGE_ID_1;
 	}
 }
