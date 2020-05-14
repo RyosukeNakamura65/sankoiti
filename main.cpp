@@ -2,6 +2,7 @@
 #include "Dxlib.h"			// Dxlibライブラリを使用
 #include "main.h"
 #include "player.h"
+#include "stage.h"
 #include "KeyCheck.h"
 #include "Effect.h"
 
@@ -20,6 +21,7 @@ int titleWordImage;
 
 // クラスからインスタンスを生成する
 Player* player1;
+Stage* stage;
 
 
 // WinMain関数
@@ -75,12 +77,58 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeOutScreen(5))
 				{
 					// エフェクト終了後の処理
-					sceneID = SCENE_ID_GAME;
+					sceneID = SCENE_ID_CHARASELE;
 					fadeIn = true;
 					//SetDrawBright(255, 255, 255);
 				}
 			}
 			TitleScene();
+			break;
+
+			// キャラクタ選択シーン
+		case SCENE_ID_CHARASELE:
+			// 画面切り替えエフェクト
+			if (fadeIn)
+			{
+				if (!FadeInScreen(5))
+				{
+					// エフェクト終了後の処理
+				}
+			}
+			else if (fadeOut)
+			{
+				if (!FadeOutScreen(5))
+				{
+					// エフェクト終了後の処理
+					sceneID = SCENE_ID_STAGESELE;
+					fadeIn = true;
+					//SetDrawBright(255, 255, 255);
+				}
+			}
+			CharacterSelectScene();
+			break;
+
+			// ステージ選択シーン
+		case SCENE_ID_STAGESELE:
+			// 画面切り替えエフェクト
+			if (fadeIn)
+			{
+				if (!FadeInScreen(5))
+				{
+					// エフェクト終了後の処理
+				}
+			}
+			else if (fadeOut)
+			{
+				if (!FadeOutScreen(5))
+				{
+					// エフェクト終了後の処理
+					sceneID = SCENE_ID_GAME;
+					fadeIn = true;
+					//SetDrawBright(255, 255, 255);
+				}
+			}
+			StageSelectScene();
 			break;
 
 		// ゲームシーン
@@ -223,6 +271,46 @@ void TitleDraw(void)
 }
 
 
+// キャラクタ選択シーン
+//---------------------------------------------------------------
+void CharacterSelectScene(void)
+{
+	if (keyUpTrigger[KEY_ID_SPACE])
+	{
+		fadeOut = true;
+	}
+
+	CharacterSelectDraw();
+}
+
+void CharacterSelectDraw(void)
+{
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "CharacterSelectScene : %d", sceneCounter);
+}
+
+
+// ステージ選択シーン
+//---------------------------------------------------------------
+void StageSelectScene(void)
+{
+
+	if (keyUpTrigger[KEY_ID_SPACE])
+	{
+		fadeOut = true;
+	}
+
+	stage = new Stage(STAGE_ID_1
+		, "mapChip.png");
+
+	StageSelectDraw();
+}
+
+void StageSelectDraw(void)
+{
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
+}
+
+
 // ゲームシーン
 //----------------------------------------------------------------
 void GameScene(void)
@@ -267,10 +355,12 @@ void GameScene(void)
 
 void GameDraw(void)
 {
+	stage->Draw();
+
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
 
-	DrawBox(100, 100, 700, 500, GetColor(255, 0, 0), true);
+	//DrawBox(100, 100, 700, 500, GetColor(255, 0, 0), true);
 	player1->Draw();
 }
 
