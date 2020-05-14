@@ -4,13 +4,26 @@
 //---------------------------------------------------------------------------------
 #define CHIP_SIZE_X 40
 #define CHIP_SIZE_Y 40
-#define MAP_X		19
+#define MAP_X		21
 #define MAP_Y		15
-#define CHIP_MAX	6
 
 
 // 列挙型
 //---------------------------------------------------------------------------------
+// マップチップ管理用
+enum MAP_CHIP {
+	// ステージ１素材
+	S1_ROOF,
+	S1_WALL,
+	S1_ROAD1,
+	S1_UNBREAK_WALL,
+	S1_DESERT,
+	S1_ROAD2,
+
+	MAP_CHIP_MAX
+};
+
+// イベント管理用
 enum EVENT_ID {
 
 };
@@ -19,7 +32,7 @@ enum EVENT_ID {
 class Stage {
 	// メンバ変数
 private:
-	int chipImage[CHIP_MAX];
+	int chipImage[MAP_CHIP_MAX];
 	int map[MAP_Y][MAP_X];
 	STAGE_ID stageNo;
 	
