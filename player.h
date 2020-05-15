@@ -1,5 +1,5 @@
 #define PLAYER_SIZE_X 35
-#define PLAYER_SIZE_Y 52.5
+#define PLAYER_SIZE_Y 50
 #define PLAYER_DEF_SPEED 4
 #define PLAYER_ANI_MAX 4
 

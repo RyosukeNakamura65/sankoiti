@@ -6,7 +6,7 @@ Player::Player(int no, int posX, int posY, const char filename[], KEY_LIST key) 
 {
 	playerNo = no;
 	keyList = key;
-	playerImage[DIR_MAX][PLAYER_ANI_MAX] = LoadDivGraph(filename, PLAYER_ANI_MAX * DIR_MAX, PLAYER_ANI_MAX, DIR_MAX, 35, 52.5, playerImage[0]);
+	playerImage[DIR_MAX][PLAYER_ANI_MAX] = LoadDivGraph(filename, PLAYER_ANI_MAX * DIR_MAX, PLAYER_ANI_MAX, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage[0]);
 
 	// 変数の初期化
 	playerPosX = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;
@@ -41,6 +41,7 @@ void Player::Control(void)
 	// キー操作
 	// ｽﾋﾟｰﾄﾞを変える
 
+		// ﾌﾟﾚｲﾔｰの方向
 	// playerを移動させる
 	if (CheckHitKey(keyList.Right))	// 右移動
 	{
@@ -49,6 +50,7 @@ void Player::Control(void)
 			playerPosX = playerPosX + playerSpeed;
 			playerDir = DIR_DOWN;
 		}
+		playerCounter++;
 	}
 	if (CheckHitKey(keyList.Left))	// 左移動
 	{
@@ -57,6 +59,7 @@ void Player::Control(void)
 			playerPosX = playerPosX - playerSpeed;
 			playerDir = DIR_RIGHT;
 		}
+		playerCounter++;
 	}
 	if (CheckHitKey(keyList.Up))		// 上移動
 	{
@@ -65,6 +68,7 @@ void Player::Control(void)
 			playerPosY = playerPosY - playerSpeed;
 			playerDir = DIR_LEFT;
 		}
+		playerCounter++;
 	}
 	if (CheckHitKey(keyList.Down))		// 下移動
 	{
@@ -73,6 +77,7 @@ void Player::Control(void)
 			playerPosY = playerPosY + playerSpeed;
 			playerDir = DIR_UP;
 		}
+		playerCounter++;
 	}
 
 	//// 弾の発射
@@ -82,16 +87,14 @@ void Player::Control(void)
 	//}
 
 
-	// 自機が倒されたら初期位置に再表示
-	if (playerFlag == false)
-	{
-		playerPosX = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;
-		playerPosY = (SCREEN_SIZE_Y - PLAYER_SIZE_Y);
-		playerFlag = true;
-	}
-	playerCounter++;
+	//// 自機が倒されたら初期位置に再表示
+	//if (playerFlag == false)
+	//{
+	//	playerPosX = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;
+	//	playerPosY = (SCREEN_SIZE_Y - PLAYER_SIZE_Y);
+	//	playerFlag = true;
+	//}
 }
-
 
 XY Player::GetPos(void)
 {
@@ -102,7 +105,6 @@ XY Player::GetSize(void)
 {
 	return { PLAYER_SIZE_X,PLAYER_SIZE_Y };
 }
-
 
 void Player::Draw(void)
 {
@@ -116,7 +118,7 @@ void Player::Draw(void)
 	DrawFormatString(0, 0, 0xffffff, "Speed:%d", playerSpeed);
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", playerCounter);
 
-	DrawGraph(playerPosX, playerPosY, playerImage[playerDir][playerCounter / 5 % PLAYER_ANI_MAX], true);
+	DrawGraph(playerPosX, playerPosY, playerImage[playerDir][playerCounter / 10 % PLAYER_ANI_MAX], true);
 }
 
 void Player::DeletePlayer(void)

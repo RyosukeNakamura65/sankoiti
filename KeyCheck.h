@@ -9,6 +9,10 @@ enum KEY_ID {
 	KEY_ID_SHOT,
 	KEY_ID_RIGHT,		// 右キー
 	KEY_ID_LEFT,		// 左キー
+	KEY_ID_W,			// ｷｬﾗｸﾀｰ上
+	KEY_ID_D,			// ｷｬﾗｸﾀｰ右
+	KEY_ID_S,			// ｷｬﾗｸﾀｰ下
+	KEY_ID_A,			// ｷｬﾗｸﾀｰ左
 	KEY_ID_MAX
 };
 

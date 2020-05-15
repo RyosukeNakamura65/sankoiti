@@ -13,6 +13,7 @@
 // シーン管理用
 int gameCounter;		// gameLoop動作確認用
 int sceneCounter;		// シーンカウンター
+int startCounter;		// ｹﾞｰﾑ開始の時間設定
 SCENE_ID sceneID;
 SCENE_ID preSceneID;
 
@@ -45,11 +46,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// ゲームループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-
-		player1->Control();
-		player2->Control();
-		player3->Control();
-		player4->Control();
 
 		ClsDrawScreen();
 
@@ -263,6 +259,7 @@ bool SystemInit(void)
 	//---------------------------------
 	gameCounter = 0;
 	sceneCounter = 0;
+	startCounter = 0;
 	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
 
@@ -378,42 +375,70 @@ void StageSelectDraw(void)
 //----------------------------------------------------------------
 void GameScene(void)
 {
-
-	if (keyUpTrigger[KEY_ID_SPACE])
-	{
-		fadeOut = true;
-	}
-
-	// Pause機能
-	if (keyDownTrigger[KEY_ID_PAUSE])
-	{
-		pauseFlag = !pauseFlag;
-	}
-
-	// Pause時
-	if (pauseFlag)
-	{
-		SetDrawBright(100, 100, 100);
-	}
-	// 通常動作時
-	else
-	{
-		// 各種処理
-		a++;
-	}
-
 	// 画面描画
 	GameDraw();
 
-	// Pauseメッセージを描画
-	if (pauseFlag)
+	if (startCounter <= START_MSG_1_CNT)
 	{
-		SetDrawBright(255, 255, 255);
-		DrawFormatString((SCREEN_SIZE_X - 9 * 8) / 2
-			, (SCREEN_SIZE_Y - 16) / 2
-			, GetColor(255, 255, 255)
-			, "P A U S E");
+		DrawFormatString(SCREEN_SIZE_X / 2
+			, SCREEN_SIZE_Y / 2
+			, GetColor(255,255,255), "よーい");
 	}
+	else
+	{
+		if (startCounter <= START_MSG_1_CNT + START_MSG_2_CNT)
+		{
+
+			DrawFormatString(SCREEN_SIZE_X / 2
+				, SCREEN_SIZE_Y / 2
+				, GetColor(255, 255, 255), "スタート");
+		}
+		else
+		{
+			if (keyUpTrigger[KEY_ID_SPACE])
+			{
+				fadeOut = true;
+			}
+
+			// Pause機能
+			if (keyDownTrigger[KEY_ID_PAUSE])
+			{
+				pauseFlag = !pauseFlag;
+			}
+
+			// Pause時
+			if (pauseFlag)
+			{
+				SetDrawBright(100, 100, 100);
+			}
+			// 通常動作時
+			else
+			{
+				// 各種処理
+				a++;
+			}
+
+			// Pauseメッセージを描画
+			if (pauseFlag)
+			{
+				SetDrawBright(255, 255, 255);
+				DrawFormatString((SCREEN_SIZE_X - 9 * 8) / 2
+					, (SCREEN_SIZE_Y - 16) / 2
+					, GetColor(255, 255, 255)
+					, "P A U S E");
+			}
+			else
+			{
+				player1->Control();
+				player2->Control();
+				player3->Control();
+				player4->Control();
+			}
+		}
+	}
+
+	startCounter++;
+
 }
 
 void GameDraw(void)
