@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "main.h"
 #include "shot.h"
+#include "KeyCheck.h"
 
 
 //コンストラクタ
@@ -10,8 +11,8 @@ Shot::Shot(const char image[])
 	//ShotImage = LoadGraph("image/弾.png");
 	ShotPosX = 100;
 	ShotPosY = 100;
-	ShotSpeed = 15;
-	Shotflag = true;  //弾を打つとtrue
+	ShotSpeed = 5;
+	Shotflag = false;  //弾を打つとtrue
 }
 
 //デストラクタ
@@ -34,7 +35,15 @@ void Shot::GameInit(void)
 
 void Shot::Control(void)
 {
-
+	
+	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	{
+		Shotflag = true;
+	}
+	if (Shotflag == true)
+	{
+		ShotPosX = ShotPosX + ShotSpeed;
+	}
 }
 
 void Shot::Draw(void)
