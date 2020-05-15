@@ -7,7 +7,7 @@
 #define MAP_X		 21
 #define MAP_Y		 15
 #define MAP_OFFSET_X 60
-#define MAP_OFFSET_Y 150
+#define MAP_OFFSET_Y 130
 
 
 // —ñ‹“Œ^
