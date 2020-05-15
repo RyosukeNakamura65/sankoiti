@@ -62,7 +62,7 @@ void Shot::DeleteShot(void)
 
 XY Shot::GetPos(void)
 {
-	return {ShotPosX, ShotPosY};
+	return { ShotPosX, ShotPosY };
 }
 
 XY Shot::GetSize(void)

@@ -22,7 +22,7 @@ public:
 	void GameInit(void);
 	void Control(void);
 	void Draw(void);
-	
+
 	void CreateShot(XY pos);
 	void DeleteShot(void);
 

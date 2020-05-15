@@ -3,6 +3,7 @@
 #include "main.h"
 #include "player.h"
 #include "stage.h"
+#include "shot.h"
 #include "KeyCheck.h"
 #include "Effect.h"
 
@@ -22,6 +23,7 @@ int titleWordImage;
 // クラスからインスタンスを生成する
 Player* player1;
 Stage* stage;
+Shot* shot;
 
 
 // WinMain関数
@@ -218,7 +220,7 @@ bool SystemInit(void)
 		,	KEY_INPUT_D
 		,	KEY_INPUT_S
 		,	KEY_INPUT_A});
-
+	shot = new Shot("image/プレイヤー1弾.png");
 
 	// グラフィックの登録
 	//---------------------------------
@@ -357,6 +359,7 @@ void GameScene(void)
 void GameDraw(void)
 {
 	stage->Draw();
+	shot->Draw();
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
