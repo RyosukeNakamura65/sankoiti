@@ -37,7 +37,7 @@ Stage::Stage(STAGE_ID no, const char filename[])
 // デストラクタ
 Stage::~Stage()
 {
-	
+	DeleteGraph(chipImage[0]);
 }
 
 
