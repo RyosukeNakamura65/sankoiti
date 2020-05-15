@@ -6,8 +6,9 @@
 enum KEY_ID {
 	KEY_ID_SPACE,		//	スペースキー
 	KEY_ID_PAUSE,
-	KEY_ID_RIGHT,
-	KEY_ID_LEFT,
+	KEY_ID_SHOT,
+	KEY_ID_RIGHT,		// 右キー
+	KEY_ID_LEFT,		// 左キー
 	KEY_ID_MAX
 };
 
