@@ -20,6 +20,10 @@ SCENE_ID preSceneID;
 int titleImage;
 int titleWordImage;
 
+// ステージ
+STAGE_ID stageID;
+int ID;
+
 // クラスからインスタンスを生成する
 Player* player1;
 Player* player2;
@@ -27,7 +31,6 @@ Player* player3;
 Player* player4;
 Stage* stage;
 Shot* shot;
-
 
 // WinMain関数
 //-------------------------------------------------------------
@@ -262,6 +265,9 @@ bool SystemInit(void)
 	sceneCounter = 0;
 	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
+
+	stageID = STAGE_ID_1;
+	ID = 0;
 	
 	player1->GameInit();
 	player2->GameInit();
@@ -329,17 +335,37 @@ void CharacterSelectDraw(void)
 //---------------------------------------------------------------
 void StageSelectScene(void)
 {
-	STAGE_ID stageID = STAGE_ID_1;
+	// ステージの変更
+	if (keyDownTrigger[KEY_ID_RIGHT])
+	{
+		ID++;
+		if (stageID > STAGE_ID_MAX - 2)
+		{
+			ID = 0;
+		}
+	}
+	if (keyDownTrigger[KEY_ID_LEFT])
+	{
+		ID--;
+		if (stageID <= 0)
+		{
+			ID = STAGE_ID_MAX - 1;
+		}
+	}
+	stageID = (STAGE_ID)ID;
 
+	// シーン遷移
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
+
+		// ステージのインスタンスの生成
+		stage = new Stage(stageID
+			, "image/mapChip.png");
 	}
 
-	stage = new Stage(stageID
-		, "image/mapChip.png");
-
 	StageSelectDraw();
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
 }
 
 void StageSelectDraw(void)

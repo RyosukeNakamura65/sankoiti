@@ -6,6 +6,8 @@
 enum KEY_ID {
 	KEY_ID_SPACE,		//	スペースキー
 	KEY_ID_PAUSE,
+	KEY_ID_RIGHT,
+	KEY_ID_LEFT,
 	KEY_ID_MAX
 };
 

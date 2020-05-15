@@ -28,6 +28,7 @@ enum PLAYER {
 
 enum STAGE_ID {
 	STAGE_ID_1,
+	STAGE_ID_2,
 	STAGE_ID_MAX
 };
 
