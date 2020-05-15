@@ -1,5 +1,5 @@
-#define PLAYER_SIZE_X 32
-#define PLAYER_SIZE_Y 32
+#define PLAYER_SIZE_X 35
+#define PLAYER_SIZE_Y 52.5
 #define PLAYER_DEF_SPEED 4
 #define PLAYER_ANI_MAX 4
 
@@ -8,16 +8,26 @@ class Player
 	// privateとして処理されている
 	char playerName;
 
+	enum DIR
+	{
+		DIR_UP,				// ﾌﾟﾚｲﾔｰの後ろ姿
+		DIR_RIGHT,			// ﾌﾟﾚｲﾔｰの右姿	
+		DIR_DOWN,			// ﾌﾟﾚｲﾔｰの前姿
+		DIR_LEFT,			// ﾌﾟﾚｲﾔｰの左姿
+		DIR_MAX
+	};
+
 private:
 	const int START_POS_X;	// プレイヤーの初期位置X座標
 	const int START_POS_Y;	// プレイヤーの初期位置Y座標
 
 	// メンバ変数
-	int playerImage[PLAYER_ANI_MAX];
+	int playerImage[PLAYER_ANI_MAX][DIR_MAX];
 	int playerPosX;
 	int playerPosY;
 	int playerSpeed;
 	int playerCounter;
+	int playerDir;
 	bool playerFlag;
 
 	int playerNo;

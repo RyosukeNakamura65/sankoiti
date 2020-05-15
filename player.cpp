@@ -6,7 +6,7 @@ Player::Player(int no, int posX, int posY, const char filename[], KEY_LIST key) 
 {
 	playerNo = no;
 	keyList = key;
-	playerImage[PLAYER_ANI_MAX] = LoadDivGraph(filename, PLAYER_ANI_MAX, PLAYER_ANI_MAX, 1, 40, 58, playerImage);
+	playerImage[DIR_MAX][PLAYER_ANI_MAX] = LoadDivGraph(filename, PLAYER_ANI_MAX * DIR_MAX, PLAYER_ANI_MAX, DIR_MAX, 35, 52.5, playerImage[0]);
 
 	// 変数の初期化
 	playerPosX = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;
@@ -14,6 +14,7 @@ Player::Player(int no, int posX, int posY, const char filename[], KEY_LIST key) 
 	playerSpeed = PLAYER_DEF_SPEED;
 	playerFlag = true;
 	playerCounter = 0;
+	playerDir = 0;
 }
 
 //デストラクタ
@@ -25,7 +26,7 @@ Player::~Player()
 
 void Player::SystemInit(void)
 {
-	LoadDivGraph("image/bule.png", PLAYER_ANI_MAX, PLAYER_ANI_MAX, 1, 40, 58, playerImage);
+	//LoadDivGraph("image/bulewalke.png", PLAYER_ANI_MAX, PLAYER_ANI_MAX, 1, 35, 52.5, playerImage);
 }
 
 void Player::GameInit(void)
@@ -46,6 +47,7 @@ void Player::Control(void)
 		if (playerPosX < SCREEN_SIZE_X - PLAYER_SIZE_X)
 		{
 			playerPosX = playerPosX + playerSpeed;
+			playerDir = DIR_DOWN;
 		}
 	}
 	if (CheckHitKey(keyList.Left))	// 左移動
@@ -53,6 +55,7 @@ void Player::Control(void)
 		if (playerPosX > 0)
 		{
 			playerPosX = playerPosX - playerSpeed;
+			playerDir = DIR_RIGHT;
 		}
 	}
 	if (CheckHitKey(keyList.Up))		// 上移動
@@ -60,6 +63,7 @@ void Player::Control(void)
 		if (playerPosY > 0)
 		{
 			playerPosY = playerPosY - playerSpeed;
+			playerDir = DIR_LEFT;
 		}
 	}
 	if (CheckHitKey(keyList.Down))		// 下移動
@@ -67,6 +71,7 @@ void Player::Control(void)
 		if (playerPosY < SCREEN_SIZE_Y - PLAYER_SIZE_Y)
 		{
 			playerPosY = playerPosY + playerSpeed;
+			playerDir = DIR_UP;
 		}
 	}
 
@@ -111,7 +116,7 @@ void Player::Draw(void)
 	DrawFormatString(0, 0, 0xffffff, "Speed:%d", playerSpeed);
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", playerCounter);
 
-	DrawGraph(playerPosX, playerPosY, playerImage[playerCounter / 5 % PLAYER_ANI_MAX], true);
+	DrawGraph(playerPosX, playerPosY, playerImage[playerDir][playerCounter / 5 % PLAYER_ANI_MAX], true);
 }
 
 void Player::DeletePlayer(void)

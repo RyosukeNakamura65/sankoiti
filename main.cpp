@@ -22,6 +22,9 @@ int titleWordImage;
 
 // クラスからインスタンスを生成する
 Player* player1;
+Player* player2;
+Player* player3;
+Player* player4;
 Stage* stage;
 Shot* shot;
 
@@ -41,6 +44,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 
 		player1->Control();
+		player2->Control();
+		player3->Control();
+		player4->Control();
 
 		ClsDrawScreen();
 
@@ -215,11 +221,36 @@ bool SystemInit(void)
 	player1 = new Player(PLAYER_1
 		, 100
 		, SCREEN_SIZE_Y - 50
-		, "image/bule.png"
+		, "image/bluewalk.png"
 		, { KEY_INPUT_W
 		,	KEY_INPUT_D
 		,	KEY_INPUT_S
 		,	KEY_INPUT_A});
+	player2 = new Player(PLAYER_2
+		, 130
+		, 50
+		, "image/pinkwalk.png"
+		, { KEY_INPUT_T
+		,	KEY_INPUT_H
+		,	KEY_INPUT_G
+		,	KEY_INPUT_F });
+	player3 = new Player(PLAYER_3
+		, SCREEN_SIZE_X - 50
+		, 50
+		, "image/greenwalk.png"
+		, { KEY_INPUT_U
+		,	KEY_INPUT_K
+		,	KEY_INPUT_J
+		,	KEY_INPUT_H });
+	player4 = new Player(PLAYER_4
+		, SCREEN_SIZE_X - 50
+		, SCREEN_SIZE_Y - 50
+		, "image/yellowwalk.png"
+		, { KEY_INPUT_O
+		,	KEY_INPUT_P
+		,	KEY_INPUT_L
+		,	KEY_INPUT_K });
+
 	shot = new Shot("image/プレイヤー1弾.png");
 
 	// グラフィックの登録
@@ -233,6 +264,9 @@ bool SystemInit(void)
 	preSceneID = SCENE_ID_MAX;
 	
 	player1->GameInit();
+	player2->GameInit();
+	player3->GameInit();
+	player4->GameInit();
 
 	KeyInit();		// キー情報の初期化
 	EffectInit();	// エフェクトの初期化
@@ -295,12 +329,12 @@ void CharacterSelectDraw(void)
 //---------------------------------------------------------------
 void StageSelectScene(void)
 {
+	STAGE_ID stageID = STAGE_ID_1;
+
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
 	}
-
-	STAGE_ID stageID = STAGE_ID_1;
 
 	stage = new Stage(stageID
 		, "image/mapChip.png");
@@ -366,6 +400,9 @@ void GameDraw(void)
 
 	//DrawBox(100, 100, 700, 500, GetColor(255, 0, 0), true);
 	player1->Draw();
+	player2->Draw();
+	player3->Draw();
+	player4->Draw();
 }
 
 

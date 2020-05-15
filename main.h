@@ -19,10 +19,10 @@ enum SCENE_ID {
 };
 
 enum PLAYER {
-	PLAYER_1,
-	PLAYER_2,
-	PLAYER_3,
-	PLAYER_4,
+	PLAYER_1,			// ê¬
+	PLAYER_2,			// Àﬂ›∏
+	PLAYER_3,			// óŒ
+	PLAYER_4,			// â©êF
 	PLAYER_MAX
 };
 
@@ -39,6 +39,7 @@ struct KEY_LIST {
 	int Right;
 	int Down;
 	int Left;
+	int Shot;
 };
 
 // ç\ë¢ëÃ
