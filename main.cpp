@@ -31,7 +31,6 @@ Player* player1;
 Player* player2;
 Player* player3;
 Player* player4;
-Stage* stage;
 Shot* shot1;
 Shot* shot2;
 Shot* shot3;
@@ -315,6 +314,8 @@ bool SystemInit(void)
 	player3->GameInit();
 	player4->GameInit();
 
+	StageSystemInit();
+
 	KeyInit();		// キー情報の初期化
 	EffectInit();	// エフェクトの初期化
 
@@ -404,9 +405,7 @@ void StageSelectScene(void)
 	{
 		fadeOut = true;
 
-		// ステージのインスタンスの生成
-		stage = new Stage(stageID
-			, "image/mapChip.png");
+		StageGameInit(stageID);
 	}
 
 	StageSelectDraw();
@@ -496,7 +495,7 @@ void GameScene(void)
 
 void GameDraw(void)
 {
-	stage->Draw();
+	StageDraw();
 
 	shot1->Draw();
 	shot2->Draw();

@@ -4,6 +4,10 @@
 
 
 // 変数
+int chipImage[MAP_CHIP_MAX];
+int map[MAP_Y][MAP_X];
+STAGE_ID stageNo;
+
 int stage1[MAP_Y][MAP_X] = {
 	{0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,0},
 	{0,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1,0},
@@ -41,8 +45,13 @@ int stage2[MAP_Y][MAP_X] = {
 };
 
 
-// コンストラクタ
-Stage::Stage(STAGE_ID no, const char filename[])
+void StageSystemInit(void)
+{
+	LoadDivGraph("image/mapChip.png", 6, 6, 1, CHIP_SIZE_X, CHIP_SIZE_Y, chipImage);
+}
+
+
+void StageGameInit(STAGE_ID no)
 {
 	// ステージ選択（ランダム）
 	if (no == STAGE_ID_RANDOM)
@@ -50,32 +59,12 @@ Stage::Stage(STAGE_ID no, const char filename[])
 		no = (STAGE_ID)GetRand(STAGE_ID_MAX - 2);
 	}
 	stageNo = no;
-	
-	LoadDivGraph(filename, 6, 6, 1, CHIP_SIZE_X, CHIP_SIZE_Y,chipImage);
 
 	SetMapData(stageNo);
 }
 
-// デストラクタ
-Stage::~Stage()
-{
-	
-}
 
-
-void Stage::SystemInit(void)
-{
-
-}
-
-
-void Stage::GameInit(void)
-{
-
-}
-
-
-void Stage::Draw(void)
+void StageDraw(void)
 {
 	for (int y = 0; y < MAP_Y; y++)
 	{
@@ -91,7 +80,7 @@ void Stage::Draw(void)
 
 
 // ピクセル座標系からマップ配列座標系に変換
-XY Stage::PosToIndex(XY pos)
+XY PosToIndex(XY pos)
 {
 	XY tmp;
 
@@ -103,7 +92,7 @@ XY Stage::PosToIndex(XY pos)
 
 
 // マップ配列座標系からピクセル座標系に変換
-XY Stage::IndexToPos(XY index)
+XY IndexToPos(XY index)
 {
 	XY tmp;
 
@@ -115,7 +104,7 @@ XY Stage::IndexToPos(XY index)
 
 
 // 指定した座標が通過可能かを返す　true:通過可能
-bool Stage::IsPass(XY pos)
+bool IsPass(XY pos)
 {
 	XY indexPos;
 	indexPos = PosToIndex(pos);
@@ -136,7 +125,7 @@ bool Stage::IsPass(XY pos)
 
 
 // 指定した座標が特別にイベントを起こすかを確認する　戻り値：イベントID
-//EVENT_ID Stage::GetEvent(XY pos)
+//EVENT_ID GetEvent(XY pos)
 //{
 //	XY indexPos;
 //	indexPos = PosToIndex(pos);
@@ -152,7 +141,7 @@ bool Stage::IsPass(XY pos)
 
 
 // ステージデータをマップ配列にコピーする
-void Stage::SetMapData(STAGE_ID stageID)
+void SetMapData(STAGE_ID stageID)
 {
 	// マップ配列の初期化
 	for (int y = 0; y < MAP_Y; y++)
