@@ -64,10 +64,10 @@ void shotControl(void)
 
 void shotDraw(void)
 {
-	for (int s; s < SHOT_MAX; s++)
+	/*for (int s; s < SHOT_MAX; s++)
 	{
 
-	}
+	}*/
 	/*if (Shotflag == true)
 	{
 		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
@@ -88,22 +88,22 @@ void CreateShot(XY pPos,MOVE_DIR pDir)
 	}*/
 }
 
-void DeleteShot(void)
-{
+//void DeleteShot(void)
+//{
+//
+//}
 
-}
+//XY GetPos(void)
+//{
+//	//return { ShotPosX, ShotPosY };
+//}
 
-XY GetPos(void)
-{
-	//return { ShotPosX, ShotPosY };
-}
+//XY GetSize(void)
+//{
+//	//return { SHOT_SIZE_X, SHOT_SIZE_Y };
+//}
 
-XY GetSize(void)
-{
-	//return { SHOT_SIZE_X, SHOT_SIZE_Y };
-}
-
-bool visible(void)
-{
-	//return Shotflag;
-}
+//bool visible(void)
+//{
+//	//return Shotflag;
+//}
