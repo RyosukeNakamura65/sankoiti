@@ -5,8 +5,9 @@
 
 
 //コンストラクタ
-Shot::Shot(const char image[])
+Shot::Shot(int no, int PosX, int PosY, const char image[])
 {
+	ShotNo = no;
 	ShotImage = LoadGraph(image);
 	//ShotImage = LoadGraph("image/弾.png");
 	ShotPosX = 100;

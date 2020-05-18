@@ -14,8 +14,9 @@ private:
 	int ShotPosY;
 	int Shotflag;
 	int ShotSpeed;
+	int ShotNo;
 public:
-	Shot(const char image[]);
+	Shot(int no, int PosX, int PosY, const char image[]);
 	~Shot();
 public:
 	void SystemInit(void);
