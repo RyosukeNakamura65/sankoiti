@@ -4,7 +4,8 @@
 #define SCREEN_SIZE_Y 750		// 画面サイズ縦
 #define START_MSG_1_CNT 120					// ｽﾀｰﾄﾒｯｾｰｼﾞ1の表示時間
 #define START_MSG_2_CNT 60					// ｽﾀｰﾄﾒｯｾｰｼﾞ2の表示時間
-
+#define FACE_SIZE_X 300
+#define FACE_SIZE_Y 300
 
 
 // 列挙型
