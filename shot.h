@@ -4,12 +4,12 @@
 
 #define SHOT_MAX 1
 
-void SystemInit(void);
-void GameInit(void);
-void Control(void);
-void Draw(void);
+void shotSystemInit(void);
+void shotGameInit(void);
+void shotControl(void);
+void shotDraw(void);
 
-void CreateShot(XY pos);
+void CreateShot(XY pPos, MOVE_DIR pDir);
 void DeleteShot(void);
 
 XY GetPos(void);

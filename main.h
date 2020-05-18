@@ -74,6 +74,7 @@ struct CHARACTER
 {
 	MOVE_DIR moveDir;	//向いている方向
 	XY pos;			//キャラクタの位置（中心）
+	XY startPos;	//スタートの位置
 	XY size;		//キャラクタ画像のサイズ
 	XY sizeOffset;		//キャラクタ中央からの左上位置
 	XY hitPosS;		//当たり判定用の左上
@@ -82,6 +83,7 @@ struct CHARACTER
 	bool jumpFlag;		//キャラクタの状態（ジャンプしているか？）
 	bool shotFlag;		//キャラクタの状態（弾撃っているか？）
 	bool damageFlag;	//キャラクタの状態（ダメージ受けているか？）
+	bool moveFlag;		//キャラクタの状態（動いているか？）
 	int moveSpeed;		//キャラクタの移動量
 	XY_F velocity;
 	int life;		//キャラクタの体力

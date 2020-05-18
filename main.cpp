@@ -223,6 +223,7 @@ bool SystemInit(void)
 	ID = 0;
 	
 	StageSystemInit();
+	shotSystemInit();
 	playerSystemInit();
 
 
@@ -239,6 +240,7 @@ bool SystemInit(void)
 void InitScene(void)
 {
 	fadeIn = true;
+	shotGameInit();
 	playerGameInit();
 
 	sceneID = SCENE_ID_TITLE;
@@ -331,6 +333,9 @@ void GameScene(void)
 {
 	// ‰æ–Ê•`‰æ
 	GameDraw();
+	shotDraw();
+
+	shotControl();
 	playerControl();
 
 	if (startCounter <= START_MSG_1_CNT)

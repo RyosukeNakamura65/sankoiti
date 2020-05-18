@@ -3,7 +3,8 @@
 #include "shot.h"
 #include "KeyCheck.h"
 
-
+int shotImage[PLAYER_MAX];
+CHARACTER shot[SHOT_MAX];
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
 //{
@@ -24,57 +25,67 @@
 
 
 //プロトタイプ宣言
-void SystemInit(void)
+void shotSystemInit(void)
 {
 	shotImage[PLAYER_1] = LoadGraph("image/プレイヤー１弾.png");
 }
 
-void GameInit(void)
+void shotGameInit(void)
 {
 	for (int sh = 0; sh < SHOT_MAX; sh++)
 	{
-		Shot[sh].visible = false;
-		Shot[sh].pos.x = 0;
-		Shot[sh].pos.y = 0;
-		Shot[sh].size.x = 16;
-		Shot[sh].size.y = 16;
-		Shot[sh].sizeOffset.x = Shot[sh].size.x / 2;
-		Shot[sh].sizeOffset.y = Shot[sh].size.y / 2;
-		Shot[sh].lifeMax = 20;
-		Shot[sh].life = 0;
-		Shot[sh].moveSpeed = 10;
+		shot[sh].visible = false;
+		shot[sh].pos.x = 0;
+		shot[sh].pos.y = 0;
+		shot[sh].size.x = 16;
+		shot[sh].size.y = 16;
+		shot[sh].sizeOffset.x = shot[sh].size.x / 2;
+		shot[sh].sizeOffset.y = shot[sh].size.y / 2;
+		shot[sh].lifeMax = 20;
+		shot[sh].life = 0;
+		shot[sh].moveSpeed = 10;
 	}
 }
 
-void Control(void)
+void shotControl(void)
 {
 
-	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	for (int sc = 0; sc < SHOT_MAX;sc++)
 	{
-		Shotflag = true;
-	}
-	if (Shotflag == true)
-	{
-		ShotPosX = ShotPosX + ShotSpeed;
+		if (shot[sc].visible)
+		{
+			if (shot[sc].moveDir == DIR_UP)
+			{
+				shot[sc].pos.y -= shot[sc].moveSpeed;
+			}
+		}
 	}
 }
 
-void Draw(void)
+void shotDraw(void)
 {
-	if (Shotflag == true)
+	for (int s; s < SHOT_MAX; s++)
+	{
+
+	}
+	/*if (Shotflag == true)
 	{
 		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
-	}
+	}*/
 }
 
-void CreateShot(XY pos)
+void CreateShot(XY pPos,MOVE_DIR pDir)
 {
-	if (Shotflag == false)
+	for (int cs = 0; cs < SHOT_MAX; cs++)
+	{
+
+	}
+	/*if (Shotflag == false)
 	{
 		Shotflag = true;
 		ShotPosX = pos.x;
 		ShotPosY = pos.y;
-	}
+	}*/
 }
 
 void DeleteShot(void)
