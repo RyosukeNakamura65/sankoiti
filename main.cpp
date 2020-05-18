@@ -14,7 +14,6 @@
 int gameCounter;		// gameLoop動作確認用
 int sceneCounter;		// シーンカウンター
 int startCounter;		// ｹﾞｰﾑ開始の時間設定
-int faceImage[PLAYER_MAX];
 SCENE_ID sceneID;
 SCENE_ID preSceneID;
 
@@ -25,12 +24,6 @@ int titleWordImage;
 // ステージ
 STAGE_ID stageID;
 int ID;
-
-// クラスからインスタンスを生成する
-Player* player1;
-Player* player2;
-Player* player3;
-Player* player4;
 
 // WinMain関数
 //-------------------------------------------------------------
@@ -214,65 +207,7 @@ bool SystemInit(void)
 		return -1;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-
-	faceImage[PLAYER_1] = LoadGraph("image/blueface.png");
-	faceImage[PLAYER_2] = LoadGraph("image/pinkface.png");
-	faceImage[PLAYER_3] = LoadGraph("image/greenface.png");
-	faceImage[PLAYER_4] = LoadGraph("image/yellowface.png");
-
-	// ｲﾝｽﾀﾝｽの生成
-	player1 = new Player(PLAYER_1
-		, MAP_OFFSET_X + CHIP_SIZE_X
-		, MAP_OFFSET_Y + CHIP_SIZE_Y * 2
-		, "image/bluewalk.png"
-		, "image/blueface.pnh"
-		, "image/bluehit.png"
-		, "image/blueshot.png"
-		, { KEY_INPUT_W
-		,	KEY_INPUT_D
-		,	KEY_INPUT_S
-		,	KEY_INPUT_A
-		,   KEY_INPUT_LCONTROL });
-	player2 = new Player(PLAYER_2
-		, SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2
-		, MAP_OFFSET_Y + CHIP_SIZE_Y * 2
-		, "image/pinkwalk.png"
-		, "image/pinkface.pnh"
-		, "image/pinkhit.png"
-		, "image/pinkshot.png"
-		, { KEY_INPUT_T
-		,	KEY_INPUT_H
-		,	KEY_INPUT_G
-		,	KEY_INPUT_F
-		,   KEY_INPUT_LCONTROL });
-	player3 = new Player(PLAYER_3
-		, MAP_OFFSET_X + CHIP_SIZE_X
-		, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - 10
-		, "image/greenwalk.png"
-		, "image/greenface.pnh"
-		, "image/greenhit.png"
-		, "image/greenshot.png"
-		, { KEY_INPUT_U
-		,	KEY_INPUT_K
-		,	KEY_INPUT_J
-		,	KEY_INPUT_H
-		,   KEY_INPUT_LCONTROL });
-	player4 = new Player(PLAYER_4
-		, SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2
-		, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - 10
-		, "image/yellowwalk.png"
-		, "image/yellowface.pnh"
-		, "image/yellowhit.png"
-		, "image/yellowshot.png"
-		, { KEY_INPUT_O
-		,	KEY_INPUT_P
-		,	KEY_INPUT_L
-		,	KEY_INPUT_K
-		,   KEY_INPUT_LCONTROL });
-
 	
-
-
 	// グラフィックの登録
 	//---------------------------------
 	
@@ -287,12 +222,9 @@ bool SystemInit(void)
 	stageID = STAGE_ID_1;
 	ID = 0;
 	
-	player1->GameInit();
-	player2->GameInit();
-	player3->GameInit();
-	player4->GameInit();
-
 	StageSystemInit();
+	playerSystemInit();
+
 
 	KeyInit();		// キー情報の初期化
 	EffectInit();	// エフェクトの初期化
@@ -307,7 +239,8 @@ bool SystemInit(void)
 void InitScene(void)
 {
 	fadeIn = true;
-	
+	playerGameInit();
+
 	sceneID = SCENE_ID_TITLE;
 
 }
@@ -347,10 +280,6 @@ void CharacterSelectScene(void)
 
 void CharacterSelectDraw(void)
 {
-	DrawGraph(0, 0, faceImage[PLAYER_1], true);
-	DrawGraph(SCREEN_SIZE_X / 2, 0, faceImage[PLAYER_2], true);
-	DrawGraph(0, SCREEN_SIZE_Y - FACE_SIZE_Y, faceImage[PLAYER_3], true);
-	DrawGraph(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y - FACE_SIZE_Y, faceImage[PLAYER_4], true);
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "CharacterSelectScene : %d", sceneCounter);
 }
 
@@ -402,6 +331,7 @@ void GameScene(void)
 {
 	// 画面描画
 	GameDraw();
+	playerControl();
 
 	if (startCounter <= START_MSG_1_CNT)
 	{
@@ -454,10 +384,7 @@ void GameScene(void)
 			}
 			else
 			{
-				player1->Control();
-				player2->Control();
-				player3->Control();
-				player4->Control();
+
 			}
 		}
 	}
@@ -469,15 +396,12 @@ void GameScene(void)
 void GameDraw(void)
 {
 	StageDraw();
+	playerDraw();
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
 
 	//DrawBox(100, 100, 700, 500, GetColor(255, 0, 0), true);
-	player1->Draw();
-	player2->Draw();
-	player3->Draw();
-	player4->Draw();
 }
 
 
