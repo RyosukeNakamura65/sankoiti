@@ -1,24 +1,51 @@
 #include"Dxlib.h"
 #include "main.h"
-#include "stage.h"
 #include "player.h"
 #include "shot.h"
+#include "stage.h"
 
-// ｺﾝｽﾄﾗｸﾀ
-Player::Player(int no, int posX, int posY, const char walkImage[], const char faceImage[]
-	, const char hitImage[], const char shotImage[], KEY_LIST key) : START_POS_X(posX), START_POS_Y(posY)
+XY playerPos;
+int playerSpeed;
+int playerCounter;
+int playerDir;
+bool playerFlag;
+bool playerShotFlag;
+bool playerMoveFlag;
+XY playerPosOffset;
+
+CHAR_IMAGE charImage[PLAYER_MAX];
+
+void playerSystemInit(void)
 {
-	playerNo = no;				// 操作するﾌﾟﾚｲﾔｰﾅﾝﾊﾞｰ
-	keyList = key;				// 操作キーの設定
-	playerImage[DIR_MAX][PLAYER_ANI_MAX] = LoadDivGraph(walkImage, PLAYER_ANI_MAX * DIR_MAX				// 歩く画像の読み込み
-		, PLAYER_ANI_MAX, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage[0]);
-	playerFaceImage = LoadGraph(faceImage);				// 顔の画像読み込み
-	playerHitImage = LoadGraph(hitImage);				// やられ画像の読み込み
-	playerShotImage[DIR_MAX] = LoadDivGraph(shotImage, DIR_MAX, 1, DIR_MAX
-		, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerShotImage);				// ｼｮｯﾄ時画像の読み込み
+	// ｷｬﾗの画像格納
+	const char* charFileList[PLAYER_MAX][CHAR_FILE_MAX] = {
+	{ "image/blueface.png", "image/bluewalk.png", "image/bluehit.png", "image/blueshot.png" },
+	{ "image/pinkface.png", "image/pinkwalk.png", "image/pinkhit.png", "image/pinkshot.png"  },
+	{ "image/greenface.png", "image/greenwalk.png", "image/greenhit.png", "image/greenshot.png"  },
+	{ "image/yellowface.png", "image/yellowwalk.png", "image/yellowhit.png", "image/yellowshot.png"  },
+	};
 
+	// 全ｷｬﾗｸﾀｰのｲﾒｰｼﾞ
+	for (int charID = 0; charID < PLAYER_MAX; charID++)
+	{
 
-	// 変数の初期化
+		charImage[charID].faceImage = LoadGraph(charFileList[charID][CHAR_FILE_FACE]);
+
+		LoadDivGraph(charFileList[charID][CHAR_FILE_WALK], PLAYER_ANI_MAX * DIR_MAX				// 歩く画像の読み込み
+			, PLAYER_ANI_MAX, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, charImage[charID].walkImage[0]);
+
+		charImage[charID].hitImage = LoadGraph(charFileList[charID][CHAR_FILE_HIT]);
+
+		charImage[charID].shotImage = LoadGraph(charFileList[charID][CHAR_FILE_SHOT]);
+
+	}
+}
+
+void playerGameInit(void)
+{
+	playerPos.x = 0;
+	playerPos.y = 0;
+	playerSpeed = PLAYER_DEF_SPEED;
 	playerPos.x = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;			// ﾌﾟﾚｲﾔｰのX座標
 	playerPos.y = (SCREEN_SIZE_Y - PLAYER_SIZE_Y);				// ﾌﾟﾚｲﾔｰのY座標
 	playerSpeed = PLAYER_DEF_SPEED;								// ﾌﾟﾚｲﾔｰの移動ｽﾋﾟｰﾄﾞ
@@ -27,34 +54,16 @@ Player::Player(int no, int posX, int posY, const char walkImage[], const char fa
 	playerMoveFlag = false;										// 移動ｷｰが入力されているならtrue,されていないならfalse
 	playerCounter = 10;											// ﾌﾟﾚｲﾔｰｱﾆﾒｰｼｮﾝを動かすｶｳﾝﾀｰ
 	playerDir = DIR_UP;												// ﾌﾟﾚｲﾔｰの向きを記憶
+
 }
 
-// ﾃﾞｽﾄﾗｸﾀ
-Player::~Player()
-{
-	//DeleteGraph(playerImage);
-}
-
-
-void Player::SystemInit(void)
-{
-	//LoadDivGraph("image/bulewalke.png", PLAYER_ANI_MAX, PLAYER_ANI_MAX, 1, 35, 52.5, playerImage);
-}
-
-void Player::GameInit(void)
-{
-	playerPos.x = START_POS_X;
-	playerPos.y = START_POS_Y;
-	playerSpeed = PLAYER_DEF_SPEED;
-}
-
-void Player::Control(void)
+void playerControl(void)
 {
 	// キー操作
 	// ｽﾋﾟｰﾄﾞを変える
 
 	XY playerPosCopy = playerPos;		// 座標のﾊﾞｯｸｱｯﾌﾟ
-	XY playerPosOffset = playerPos;
+	playerPosOffset = playerPosCopy;
 	playerShotFlag = false;
 	playerMoveFlag = false;
 		// ﾌﾟﾚｲﾔｰの方向
@@ -86,13 +95,13 @@ void Player::Control(void)
 		{
 			if (playerPos.x < SCREEN_SIZE_X - PLAYER_SIZE_X)
 			{
-				playerPos.x += playerSpeed;
-				//if (IsPass(playerPosOffset))
+				//playerPosCopy.x += playerSpeed;
+				//playerPosOffset.x = playerPosCopy.x + PLAYER_SIZE_X / 2;
+				//if (IsPass(GetPosOffset))
 				//{
 				//	playerPos = playerPosCopy;
 				//}
 			}
-			playerCounter++;
 		}
 		if (playerDir == DIR_RIGHT)	// 左移動
 		{
@@ -100,7 +109,6 @@ void Player::Control(void)
 			{
 				playerPos.x -= playerSpeed;
 			}
-			playerCounter++;
 		}
 		if (playerDir == DIR_LEFT)		// 上移動
 		{
@@ -108,7 +116,6 @@ void Player::Control(void)
 			{
 				playerPos.y -= playerSpeed;
 			}
-			playerCounter++;
 		}
 		if (playerDir == DIR_UP)		// 下移動
 		{
@@ -117,6 +124,7 @@ void Player::Control(void)
 				playerPos.y += playerSpeed;
 			}
 		}
+		playerCounter++;
 	}
 
 	// 弾の発射
@@ -136,17 +144,7 @@ void Player::Control(void)
 	//}
 }
 
-XY Player::GetPos(void)
-{
-	return { playerPos.x,playerPos.y };
-}
-
-XY Player::GetSize(void)
-{
-	return { PLAYER_SIZE_X,PLAYER_SIZE_Y };
-}
-
-void Player::Draw(void)
+void playerDraw(void)
 {
 	// ﾌﾟﾚｲﾔｰの表示
 	if (playerFlag == true)
@@ -158,17 +156,16 @@ void Player::Draw(void)
 	DrawFormatString(0, 0, 0xffffff, "Speed:%d", playerSpeed);
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", playerCounter);
 
-	if (playerShotFlag)
-	{
-		DrawGraph(playerPos.x, playerPos.y, playerShotImage[playerDir], true);
-	}
-	else
-	{
-		DrawGraph(playerPos.x, playerPos.y, playerImage[playerDir][playerCounter / 10 % PLAYER_ANI_MAX], true);
-	}
-}
 
-void Player::DeletePlayer(void)
-{
-	playerFlag = false;
+	for (int charID = 0; charID < PLAYER_MAX; charID++)
+	{
+		if (playerShotFlag)
+		{
+			DrawGraph(playerPos.x, playerPos.y, charImage[charID].shotImage, true);
+		}
+		else
+		{
+			DrawGraph(playerPos.x, playerPos.y, charImage[charID].walkImage[playerDir][playerCounter / 10 % PLAYER_ANI_MAX], true);
+		}
+	}
 }
