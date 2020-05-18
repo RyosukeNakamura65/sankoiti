@@ -1,6 +1,6 @@
 #define PLAYER_SIZE_X 35
 #define PLAYER_SIZE_Y 50
-#define PLAYER_DEF_SPEED 4
+#define PLAYER_DEF_SPEED 3
 #define PLAYER_ANI_MAX 4
 
 class Player
@@ -23,19 +23,24 @@ private:
 
 	// ÉÅÉìÉoïœêî
 	int playerImage[PLAYER_ANI_MAX][DIR_MAX];
-	int playerPosX;
-	int playerPosY;
+	int playerFaceImage;
+	int playerHitImage;
+	int playerShotImage[DIR_MAX];
+	XY playerPos;
 	int playerSpeed;
 	int playerCounter;
 	int playerDir;
 	bool playerFlag;
+	bool playerShotFlag;
+	bool playerMoveFlag;
 
 	int playerNo;
 	KEY_LIST keyList;
 
 public:
 	//Player(int no);
-	Player(int no, int posX, int posY, const char filename[], KEY_LIST key);
+	Player(int no, int posX, int posY, const char walkImage[], const char faceImage[]
+		, const char hitImage[], const char shotImage[], KEY_LIST key);
 	~Player();
 
 public:
