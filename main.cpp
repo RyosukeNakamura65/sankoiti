@@ -31,10 +31,6 @@ Player* player1;
 Player* player2;
 Player* player3;
 Player* player4;
-Shot* shot1;
-Shot* shot2;
-Shot* shot3;
-Shot* shot4;
 
 // WinMain関数
 //-------------------------------------------------------------
@@ -274,25 +270,7 @@ bool SystemInit(void)
 		,	KEY_INPUT_K
 		,   KEY_INPUT_LCONTROL });
 
-	shot1 = new Shot(PLAYER_1
-		, 100
-		, 100
-		, "image/プレイヤー1弾.png");
-
-	shot2 = new Shot(PLAYER_2
-		, SCREEN_SIZE_X - 100
-		, SCREEN_SIZE_Y - 650
-		, "image/プレイヤー2弾.png");
-
-	shot3 = new Shot(PLAYER_3
-		, 100
-		, SCREEN_SIZE_Y - 100
-		, "image/プレイヤー3弾.png");
-
-	shot4 = new Shot(PLAYER_4
-		, SCREEN_SIZE_X - 100
-		, SCREEN_SIZE_Y - 100
-		, "image/プレイヤー4弾.png");
+	
 
 
 	// グラフィックの登録
@@ -476,11 +454,6 @@ void GameScene(void)
 			}
 			else
 			{
-				shot1->Control();
-				shot2->Control();
-				shot3->Control();
-				shot4->Control();
-
 				player1->Control();
 				player2->Control();
 				player3->Control();
@@ -496,11 +469,6 @@ void GameScene(void)
 void GameDraw(void)
 {
 	StageDraw();
-
-	shot1->Draw();
-	shot2->Draw();
-	shot3->Draw();
-	shot4->Draw();
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);

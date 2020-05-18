@@ -4,31 +4,14 @@
 
 #define SHOT_MAX 1
 
-class Shot
-{
+void SystemInit(void);
+void GameInit(void);
+void Control(void);
+void Draw(void);
 
-private:
-	//ÉÅÉìÉoïœêî
-	int ShotImage;
-	int ShotPosX;
-	int ShotPosY;
-	int Shotflag;
-	int ShotSpeed;
-	int ShotNo;
-public:
-	Shot(int no, int PosX, int PosY, const char image[]);
-	~Shot();
-public:
-	void SystemInit(void);
-	void GameInit(void);
-	void Control(void);
-	void Draw(void);
+void CreateShot(XY pos);
+void DeleteShot(void);
 
-	void CreateShot(XY pos);
-	void DeleteShot(void);
-
-	XY GetPos(void);
-	XY GetSize(void);
-	bool visible(void);
-
-};
+XY GetPos(void);
+XY GetSize(void);
+bool visible(void);
