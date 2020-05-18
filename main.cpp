@@ -14,6 +14,7 @@
 int gameCounter;		// gameLoop動作確認用
 int sceneCounter;		// シーンカウンター
 int startCounter;		// ｹﾞｰﾑ開始の時間設定
+int faceImage[PLAYER_MAX];
 SCENE_ID sceneID;
 SCENE_ID preSceneID;
 
@@ -219,39 +220,60 @@ bool SystemInit(void)
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	faceImage[PLAYER_1] = LoadGraph("image/blueface.png");
+	faceImage[PLAYER_2] = LoadGraph("image/pinkface.png");
+	faceImage[PLAYER_3] = LoadGraph("image/greenface.png");
+	faceImage[PLAYER_4] = LoadGraph("image/yellowface.png");
+
 	// ｲﾝｽﾀﾝｽの生成
 	player1 = new Player(PLAYER_1
-		, 100
-		, SCREEN_SIZE_Y - 50
+		, MAP_OFFSET_X + CHIP_SIZE_X
+		, MAP_OFFSET_Y + CHIP_SIZE_Y * 2
 		, "image/bluewalk.png"
+		, "image/blueface.pnh"
+		, "image/bluehit.png"
+		, "image/blueshot.png"
 		, { KEY_INPUT_W
 		,	KEY_INPUT_D
 		,	KEY_INPUT_S
-		,	KEY_INPUT_A});
+		,	KEY_INPUT_A
+		,   KEY_INPUT_LCONTROL });
 	player2 = new Player(PLAYER_2
-		, 130
-		, 50
+		, SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2
+		, MAP_OFFSET_Y + CHIP_SIZE_Y * 2
 		, "image/pinkwalk.png"
+		, "image/pinkface.pnh"
+		, "image/pinkhit.png"
+		, "image/pinkshot.png"
 		, { KEY_INPUT_T
 		,	KEY_INPUT_H
 		,	KEY_INPUT_G
-		,	KEY_INPUT_F });
+		,	KEY_INPUT_F
+		,   KEY_INPUT_LCONTROL });
 	player3 = new Player(PLAYER_3
-		, SCREEN_SIZE_X - 50
-		, 50
+		, MAP_OFFSET_X + CHIP_SIZE_X
+		, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - 10
 		, "image/greenwalk.png"
+		, "image/greenface.pnh"
+		, "image/greenhit.png"
+		, "image/greenshot.png"
 		, { KEY_INPUT_U
 		,	KEY_INPUT_K
 		,	KEY_INPUT_J
-		,	KEY_INPUT_H });
+		,	KEY_INPUT_H
+		,   KEY_INPUT_LCONTROL });
 	player4 = new Player(PLAYER_4
-		, SCREEN_SIZE_X - 50
-		, SCREEN_SIZE_Y - 50
+		, SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2
+		, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - 10
 		, "image/yellowwalk.png"
+		, "image/yellowface.pnh"
+		, "image/yellowhit.png"
+		, "image/yellowshot.png"
 		, { KEY_INPUT_O
 		,	KEY_INPUT_P
 		,	KEY_INPUT_L
-		,	KEY_INPUT_K });
+		,	KEY_INPUT_K
+		,   KEY_INPUT_LCONTROL });
 
 	shot1 = new Shot(PLAYER_1
 		, 100
@@ -346,6 +368,10 @@ void CharacterSelectScene(void)
 
 void CharacterSelectDraw(void)
 {
+	DrawGraph(0, 0, faceImage[PLAYER_1], true);
+	DrawGraph(SCREEN_SIZE_X / 2, 0, faceImage[PLAYER_2], true);
+	DrawGraph(0, SCREEN_SIZE_Y - FACE_SIZE_Y, faceImage[PLAYER_3], true);
+	DrawGraph(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y - FACE_SIZE_Y, faceImage[PLAYER_4], true);
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "CharacterSelectScene : %d", sceneCounter);
 }
 
