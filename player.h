@@ -2,17 +2,9 @@
 #define PLAYER_SIZE_Y 50
 #define PLAYER_DEF_SPEED 3
 #define PLAYER_ANI_MAX 4
+#define PLAYER_LIFE_MAX 3
 
-	enum DIR
-	{
-		DIR_UP,				// ÌßÚ²Ô°‚ÌŒã‚ëp
-		DIR_RIGHT,			// ÌßÚ²Ô°‚Ì‰Ep	
-		DIR_DOWN,			// ÌßÚ²Ô°‚Ì‘Op
-		DIR_LEFT,			// ÌßÚ²Ô°‚Ì¶p
-		DIR_MAX
-	};
-
-	enum CHAR_FILE
+enum CHAR_FILE
 	{
 		CHAR_FILE_FACE,		// ·¬×‚ÌŠçÊ^
 		CHAR_FILE_WALK,		// ·¬×‚Ì³«°¸²Ò°¼Ş
@@ -28,9 +20,6 @@
 		int hitImage;									// ˆÚ“®²Ò°¼Ş
 		int shotImage;
 	};
-
-	int playerNo;
-	KEY_LIST keyList;
 
 	// ÌßÛÄÀ²ÌßéŒ¾
 	void playerSystemInit(void);

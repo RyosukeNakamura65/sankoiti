@@ -4,7 +4,7 @@
 #include "shot.h"
 #include "stage.h"
 
-XY playerPos;
+CHARACTER player[PLAYER_MAX];
 int playerSpeed;
 int playerCounter;
 int playerDir;
@@ -14,6 +14,10 @@ bool playerMoveFlag;
 XY playerPosOffset;
 
 CHAR_IMAGE charImage[PLAYER_MAX];
+
+// ｷｰの初期化
+const int KeyList[DIR_MAX]
+{ KEY_INPUT_UP, KEY_INPUT_RIGHT, KEY_INPUT_DOWN, KEY_INPUT_LEFT };
 
 void playerSystemInit(void)
 {
@@ -43,18 +47,25 @@ void playerSystemInit(void)
 
 void playerGameInit(void)
 {
-	playerPos.x = 0;
-	playerPos.y = 0;
-	playerSpeed = PLAYER_DEF_SPEED;
-	playerPos.x = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;			// ﾌﾟﾚｲﾔｰのX座標
-	playerPos.y = (SCREEN_SIZE_Y - PLAYER_SIZE_Y);				// ﾌﾟﾚｲﾔｰのY座標
-	playerSpeed = PLAYER_DEF_SPEED;								// ﾌﾟﾚｲﾔｰの移動ｽﾋﾟｰﾄﾞ
-	playerFlag = true;											// ﾌﾟﾚｲﾔｰが生きてるならtrue、死んでいるならfalse
-	playerShotFlag = false;										// ﾌﾟﾚｲﾔｰが弾を撃っているならtrue、撃っていないならfalse
-	playerMoveFlag = false;										// 移動ｷｰが入力されているならtrue,されていないならfalse
-	playerCounter = 10;											// ﾌﾟﾚｲﾔｰｱﾆﾒｰｼｮﾝを動かすｶｳﾝﾀｰ
-	playerDir = DIR_UP;												// ﾌﾟﾚｲﾔｰの向きを記憶
+	player[PLAYER_1].startPos = { MAP_OFFSET_X + CHIP_SIZE_X, MAP_OFFSET_Y + CHIP_SIZE_Y * 3 };
+	player[PLAYER_2].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2, MAP_OFFSET_Y + CHIP_SIZE_Y * 3 };
+	player[PLAYER_3].startPos = { MAP_OFFSET_X + CHIP_SIZE_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 };
+	player[PLAYER_4].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 };
 
+	for (int i = 0; i < PLAYER_MAX; i++)
+	{
+		player[i].moveDir = DIR_UP;						//向いている方向
+		player[i].pos = player[i].startPos;							//キャラクタの位置（中心）
+		player[i].size = { 35, 50 };					//キャラクタ画像のサイズ
+		player[i].shotFlag = false;						//キャラクタの状態（弾撃っているか？）
+		player[i].damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
+		player[i].moveSpeed = PLAYER_DEF_SPEED;			//キャラクタの移動量
+		player[i].lifeMax = PLAYER_LIFE_MAX;			//キャラクタの体力最大
+		player[i].life = player[i].lifeMax;				//キャラクタの体力
+		player[i].animCnt = 0;							//キャラクタのアニメーション用カウンタ
+		player[i].imgLockCnt = 0;						//キャラクタのイメージ固定用カウンタ
+		player[i].visible = true;						//表示状態
+	}
 }
 
 void playerControl(void)
@@ -62,110 +73,89 @@ void playerControl(void)
 	// キー操作
 	// ｽﾋﾟｰﾄﾞを変える
 
-	XY playerPosCopy = playerPos;		// 座標のﾊﾞｯｸｱｯﾌﾟ
-	playerPosOffset = playerPosCopy;
-	playerShotFlag = false;
-	playerMoveFlag = false;
+	for (int i = 0; i < PLAYER_MAX; i++)
+	{
+		player[i].shotFlag = false;
+		player[i].moveFlag = false;
+
 		// ﾌﾟﾚｲﾔｰの方向
-	// playerを移動させる
-	if (CheckHitKey(keyList.Right))		// 右移動の情報
-	{
-		playerDir = DIR_DOWN;
-	}
-	if (CheckHitKey(keyList.Left))		// 左移動の情報
-	{
-		playerDir = DIR_RIGHT;
-	}
-	if (CheckHitKey(keyList.Up))		// 上移動の情報
-	{
-		playerDir = DIR_LEFT;
-	}
-	if (CheckHitKey(keyList.Down))		// 下移動の情報
-	{
-		playerDir = DIR_UP;
-	}
-	if (CheckHitKey(keyList.Right) || CheckHitKey(keyList.Left) || CheckHitKey(keyList.Up) || CheckHitKey(keyList.Down))
-	{
-		playerMoveFlag = true;
-	}
-
-	if (playerMoveFlag == true)
-	{
-		if (playerDir == DIR_DOWN)	// 右移動
+		for (int dir = 0; dir < DIR_MAX; dir++)
 		{
-			if (playerPos.x < SCREEN_SIZE_X - PLAYER_SIZE_X)
+			if (CheckHitKey(KeyList[dir]) == 1)
 			{
-				//playerPosCopy.x += playerSpeed;
-				//playerPosOffset.x = playerPosCopy.x + PLAYER_SIZE_X / 2;
-				//if (IsPass(GetPosOffset))
-				//{
-				//	playerPos = playerPosCopy;
-				//}
+				player[i].moveDir = (MOVE_DIR)dir;
+				player[i].moveFlag = true;
 			}
 		}
-		if (playerDir == DIR_RIGHT)	// 左移動
+
+		// playerを移動させる
+		if (playerMoveFlag == true)
 		{
-			if (playerPos.x > 0)
+			if (player[i].moveDir == DIR_DOWN)	// 右移動
 			{
-				playerPos.x -= playerSpeed;
+				if (player[i].pos.x < SCREEN_SIZE_X - PLAYER_SIZE_X)
+				{
+					player[i].pos.x += playerSpeed;
+				}
 			}
-		}
-		if (playerDir == DIR_LEFT)		// 上移動
-		{
-			if (playerPos.y > 0)
+			if (player[i].moveDir == DIR_RIGHT)	// 左移動
 			{
-				playerPos.y -= playerSpeed;
+				if (player[i].pos.x > 0)
+				{
+					player[i].pos.x -= playerSpeed;
+				}
 			}
-		}
-		if (playerDir == DIR_UP)		// 下移動
-		{
-			if (playerPos.y < SCREEN_SIZE_Y - PLAYER_SIZE_Y)
+			if (player[i].moveDir == DIR_LEFT)		// 上移動
 			{
-				playerPos.y += playerSpeed;
+				if (player[i].pos.y > 0)
+				{
+					player[i].pos.y -= playerSpeed;
+				}
 			}
+			if (player[i].moveDir == DIR_UP)		// 下移動
+			{
+				if (player[i].pos.y < SCREEN_SIZE_Y - PLAYER_SIZE_Y)
+				{
+					player[i].pos.y += playerSpeed;
+				}
+			}
+			player[i].animCnt++;
 		}
-		playerCounter++;
+
+		// 弾の発射
+		//if (CheckHitKey(KEY_INPUT_CONTROL))
+		//{
+		//	//CreateMainShot(GetPos());
+		//	playerShotFlag = true;
+		//}
+
 	}
-
-	// 弾の発射
-	if (CheckHitKey(keyList.Shot))
-	{
-		//CreateMainShot(GetPos());
-		playerShotFlag = true;
-	}
-
-
-	//// 自機が倒されたら初期位置に再表示
-	//if (playerFlag == false)
-	//{
-	//	playerPosX = (SCREEN_SIZE_X - PLAYER_SIZE_X) / 2;
-	//	playerPosY = (SCREEN_SIZE_Y - PLAYER_SIZE_Y);
-	//	playerFlag = true;
-	//}
 }
 
 void playerDraw(void)
 {
-	// ﾌﾟﾚｲﾔｰの表示
-	if (playerFlag == true)
+	for (int i = 0; i < PLAYER_MAX; i++)
 	{
-		DrawBox(playerPos.x, playerPos.y, playerPos.x + PLAYER_SIZE_X, playerPos.y + PLAYER_SIZE_Y, 0xffffff, false);
-	}
-
-	// 文字の表示
-	DrawFormatString(0, 0, 0xffffff, "Speed:%d", playerSpeed);
-	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", playerCounter);
-
-
-	for (int charID = 0; charID < PLAYER_MAX; charID++)
-	{
-		if (playerShotFlag)
+		// ﾌﾟﾚｲﾔｰの表示
+		if (playerFlag == true)
 		{
-			DrawGraph(playerPos.x, playerPos.y, charImage[charID].shotImage, true);
+			DrawBox(player[i].pos.x, player[i].pos.y, player[i].pos.x + PLAYER_SIZE_X, player[i].pos.y + PLAYER_SIZE_Y, 0xffffff, false);
 		}
-		else
+
+		// 文字の表示
+		DrawFormatString(0, 0, 0xffffff, "Speed:%d", playerSpeed);
+		DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", playerCounter);
+
+		for (int charID = 0; charID < PLAYER_MAX; charID++)
 		{
-			DrawGraph(playerPos.x, playerPos.y, charImage[charID].walkImage[playerDir][playerCounter / 10 % PLAYER_ANI_MAX], true);
+			if (player[i].shotFlag)
+			{
+				DrawGraph(player[i].pos.x, player[i].pos.y, charImage[charID].shotImage, true);
+			}
+			else
+			{
+				DrawGraph(player[i].pos.x, player[i].pos.y, charImage[charID].walkImage[playerDir][playerCounter / 10 % PLAYER_ANI_MAX], true);
+			}
 		}
 	}
 }
