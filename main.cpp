@@ -17,6 +17,9 @@ int startCounter;		// ｹﾞｰﾑ開始の時間設定
 SCENE_ID sceneID;
 SCENE_ID preSceneID;
 
+// スタートメッセージ
+int startMsg[2];
+
 // タイトル
 int titleImage;
 int titleWordImage;
@@ -210,7 +213,9 @@ bool SystemInit(void)
 	
 	// グラフィックの登録
 	//---------------------------------
-	
+	startMsg[0] = LoadGraph("image/start1.png");
+	startMsg[1] = LoadGraph("image/start2.png");
+
 	// 変数の初期化
 	//---------------------------------
 	gameCounter = 0;
@@ -340,18 +345,23 @@ void GameScene(void)
 
 	if (startCounter <= START_MSG_1_CNT)
 	{
-		DrawFormatString(SCREEN_SIZE_X / 2
+		DrawGraph((SCREEN_SIZE_X - START_MSG_SIZE_X) / 2
+			, (SCREEN_SIZE_Y - START_MSG_SIZE_Y) / 2 + 60
+			, startMsg[0], true);
+		/*DrawFormatString(SCREEN_SIZE_X / 2
 			, SCREEN_SIZE_Y / 2
-			, GetColor(255,255,255), "よーい");
+			, GetColor(255,255,255), "よーい");*/
 	}
 	else
 	{
 		if (startCounter <= START_MSG_1_CNT + START_MSG_2_CNT)
 		{
-
-			DrawFormatString(SCREEN_SIZE_X / 2
+			DrawGraph((SCREEN_SIZE_X - START_MSG_SIZE_X) / 2
+				, (SCREEN_SIZE_Y - START_MSG_SIZE_Y) / 2 + 65
+				, startMsg[1], true);
+			/*DrawFormatString(SCREEN_SIZE_X / 2
 				, SCREEN_SIZE_Y / 2
-				, GetColor(255, 255, 255), "スタート");
+				, GetColor(255, 255, 255), "スタート");*/
 		}
 		else
 		{
