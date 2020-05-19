@@ -1,5 +1,7 @@
 #define PLAYER_SIZE_X 35
 #define PLAYER_SIZE_Y 50
+#define PLAYER_FACE_SIZE_X 300
+#define PLAYER_FACE_SIZE_Y 300
 #define PLAYER_DEF_SPEED 3
 #define PLAYER_ANI_MAX 4
 #define PLAYER_LIFE_MAX 3
@@ -24,5 +26,6 @@ enum CHAR_FILE
 	// Ãﬂ€ƒ¿≤ÃﬂêÈåæ
 	void playerSystemInit(void);
 	void playerGameInit(void);
+	void playerCharSelect(void);
 	void playerControl(void);
 	void playerDraw(void);	
