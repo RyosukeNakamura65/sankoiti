@@ -17,12 +17,13 @@ enum MAP_CHIP {
 	// ステージ１、２素材
 	S1_ROOF,			// 屋根
 	S1_WALL,			// 壁
-	S1_ROAD,			// 道
+	S1_WALL_ROAD,		// 壁道
 	S1_UNBREAK_WALL,	// 壊せない壁
-	S1_DESERT,			// 砂漠（床）
-	S1_KUSAMITI,		// 砂漠草（床）
+	S1_ROAD,			// 砂漠（床）
+	S1_ROAD2,			// 砂漠草（床）
 
 	MAP_CHIP_NON,		// マップチップ無し
+
 	// ステージ３素材
 	S3_ROOF,			// 屋根
 	S3_WALL,			// 壁
