@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "main.h"
 #include "shot.h"
+#include "stage.h"
 #include "KeyCheck.h"
 
 int shotImage[PLAYER_MAX];
@@ -27,12 +28,15 @@ CHARACTER shot[SHOT_MAX];
 //プロトタイプ宣言
 void shotSystemInit(void)
 {
-	shotImage[PLAYER_1] = LoadGraph("image/プレイヤー１弾.png");
+	shotImage[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
+	shotImage[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
+	shotImage[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
+	shotImage[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
 }
 
 void shotGameInit(void)
 {
-	for (int sh = 0; sh < SHOT_MAX; sh++)
+	for (int sh = 0; sh < PLAYER_SHOT_MAX; sh++)
 	{
 		shot[sh].visible = false;
 		shot[sh].pos.x = 0;
@@ -50,7 +54,7 @@ void shotGameInit(void)
 void shotControl(void)
 {
 
-	for (int sc = 0; sc < SHOT_MAX;sc++)
+	for (int sc = 0; sc < PLAYER_SHOT_MAX;sc++)
 	{
 		if (shot[sc].visible)
 		{
@@ -58,27 +62,41 @@ void shotControl(void)
 			{
 				shot[sc].pos.y -= shot[sc].moveSpeed;
 			}
+			if (shot[sc].moveDir == DIR_RIGHT)
+			{
+				shot[sc].pos.y += shot[sc].moveSpeed;
+			}
+			if (shot[sc].moveDir == DIR_DOWN)
+			{
+				shot[sc].pos.y += shot[sc].moveSpeed;
+			}
+			if (shot[sc].moveDir == DIR_LEFT)
+			{
+				shot[sc].pos.y -= shot[sc].moveSpeed;
+			}
 		}
 	}
 }
 
-void shotDraw(void)
+
+
+void CreateShot(XY pPos, MOVE_DIR pDir)
 {
-	/*for (int s; s < SHOT_MAX; s++)
+	for (int cs = 0; cs < PLAYER_SHOT_MAX; cs++)
 	{
+		if (!shot[cs].visible)
+		{
+			shot[cs].visible = true;
 
-	}*/
-	/*if (Shotflag == true)
-	{
-		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
-	}*/
-}
-
-void CreateShot(XY pPos,MOVE_DIR pDir)
-{
-	for (int cs = 0; cs < SHOT_MAX; cs++)
-	{
-
+			if (shot[cs].visible)
+			{
+				shot[cs].pos.x = pPos.x;
+				shot[cs].pos.y = pPos.y;
+				shot[cs].moveDir = pDir;
+				shot[cs].life = shot[cs].lifeMax;
+				break;
+			}
+		}
 	}
 	/*if (Shotflag == false)
 	{
@@ -88,11 +106,26 @@ void CreateShot(XY pPos,MOVE_DIR pDir)
 	}*/
 }
 
-//void DeleteShot(void)
-//{
-//
-//}
+void DeleteShot(void)
+{
 
+}
+
+
+void shotDraw(void)
+{
+	for (int s = 0; s < SHOT_MAX; s++)
+	{
+		DrawGraph(shot[s].pos.x - shot[s].sizeOffset.x + MAP_OFFSET_X,
+			shot[s].pos.y - shot[s].sizeOffset.y + MAP_OFFSET_Y,
+			shotImage[s],
+			true);
+	}
+	/*if (Shotflag == true)
+	{
+		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
+	}*/
+}
 //XY GetPos(void)
 //{
 //	//return { ShotPosX, ShotPosY };

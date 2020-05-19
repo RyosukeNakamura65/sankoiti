@@ -2,7 +2,7 @@
 #define SHOT_SIZE_X 32
 #define SHOT_SIZE_Y 32
 
-#define SHOT_MAX 1
+#define PLAYER_SHOT_MAX 1
 
 void shotSystemInit(void);
 void shotGameInit(void);

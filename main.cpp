@@ -247,7 +247,6 @@ void InitScene(void)
 	fadeIn = true;
 	shotGameInit();
 	playerGameInit();
-
 	sceneID = SCENE_ID_TITLE;
 
 }

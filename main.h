@@ -31,6 +31,14 @@ enum PLAYER {
 	PLAYER_MAX
 };
 
+enum SHOT {
+	SHOT_1,
+	SHOT_2,
+	SHOT_3,
+	SHOT_4,
+	SHOT_MAX
+};
+
 enum STAGE_ID {
 	STAGE_ID_1,
 	STAGE_ID_2,
