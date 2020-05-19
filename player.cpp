@@ -5,7 +5,8 @@
 #include "stage.h"
 
 CHARACTER player[PLAYER_MAX];
-XY playerPosOffset;
+XY playerPosCopy[PLAYER_MAX];
+XY playerPosOffset[PLAYER_MAX];
 int playerCounter;
 
 CHAR_IMAGE charImage[PLAYER_MAX];
@@ -42,16 +43,17 @@ void playerSystemInit(void)
 
 void playerGameInit(void)
 {
-	player[PLAYER_1].startPos = { MAP_OFFSET_X + CHIP_SIZE_X, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 };
-	player[PLAYER_2].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 };
-	player[PLAYER_3].startPos = { MAP_OFFSET_X + CHIP_SIZE_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 };
-	player[PLAYER_4].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 };
+	player[PLAYER_1].startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y};
+	player[PLAYER_2].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y };
+	player[PLAYER_3].startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y };
+	player[PLAYER_4].startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y };
 
 	for (int i = 0; i < PLAYER_MAX; i++)
 	{
 		player[i].moveDir = DIR_DOWN;						//向いている方向
 		player[i].pos = player[i].startPos;							//キャラクタの位置（中心）
 		player[i].size = { 35, 50 };					//キャラクタ画像のサイズ
+		player[i].sizeOffset = { player[i].size.x / 2 , player[i].size.y / 2 };
 		player[i].shotFlag = false;						//キャラクタの状態（弾撃っているか？）
 		player[i].damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
 		player[i].moveSpeed = PLAYER_DEF_SPEED;			//キャラクタの移動量
@@ -67,15 +69,22 @@ void playerGameInit(void)
 
 void playerCharSelect(void)
 {
+	// 背景の描画
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
+	// 各キャラの顔の描画
 	DrawGraph(0, 0, charImage[PLAYER_1].faceImage, true);
 	DrawGraph(SCREEN_SIZE_X / 2, 0, charImage[PLAYER_2].faceImage, true);
 	DrawGraph(0, SCREEN_SIZE_Y / 2, charImage[PLAYER_3].faceImage, true);
 	DrawGraph(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, charImage[PLAYER_4].faceImage, true);
-	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + FACE_SIZE_X, FACE_SIZE_Y / 2, charImage[PLAYER_1].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
-	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + SCREEN_SIZE_X / 2 + FACE_SIZE_X, FACE_SIZE_Y / 2, charImage[PLAYER_2].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
-	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + FACE_SIZE_X, SCREEN_SIZE_Y / 2 + FACE_SIZE_Y / 2, charImage[PLAYER_3].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
-	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + SCREEN_SIZE_X / 2 + FACE_SIZE_X, SCREEN_SIZE_Y / 2 + FACE_SIZE_Y / 2, charImage[PLAYER_4].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
+	// 各キャラのドット絵の描画
+	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + FACE_SIZE_X, FACE_SIZE_Y / 2
+		, charImage[PLAYER_1].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
+	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + SCREEN_SIZE_X / 2 + FACE_SIZE_X, FACE_SIZE_Y / 2
+		, charImage[PLAYER_2].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
+	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + FACE_SIZE_X, SCREEN_SIZE_Y / 2 + FACE_SIZE_Y / 2
+		, charImage[PLAYER_3].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
+	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + SCREEN_SIZE_X / 2 + FACE_SIZE_X, SCREEN_SIZE_Y / 2 + FACE_SIZE_Y / 2
+		, charImage[PLAYER_4].walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
 
 	playerCounter++;
 }
@@ -87,6 +96,9 @@ void playerControl(void)
 
 	for (int i = 0; i < PLAYER_MAX; i++)
 	{
+		playerPosCopy[i] = player[i].pos;		// 座標のﾊﾞｯｸｱｯﾌﾟ
+		playerPosOffset[i] = playerPosCopy[i];
+
 		player[i].shotFlag = false;
 		player[i].moveFlag = false;
 
@@ -105,30 +117,38 @@ void playerControl(void)
 		{
 			if (player[i].moveDir == DIR_RIGHT)	// 右移動
 			{
-				if (player[i].pos.x < SCREEN_SIZE_X - PLAYER_SIZE_X)
+				playerPosCopy[i].x += player[i].moveSpeed;
+				playerPosOffset[i].x = playerPosCopy[i].x + player[i].size.x / 2;
+				if (IsPass(playerPosOffset[i]))
 				{
-					player[i].pos.x += player[i].moveSpeed;
+					player[i].pos = playerPosCopy[i];
 				}
 			}
 			if (player[i].moveDir == DIR_LEFT)	// 左移動
 			{
-				if (player[i].pos.x > 0)
+				playerPosCopy[i].x -= player[i].moveSpeed;
+				playerPosOffset[i].x = playerPosCopy[i].x - player[i].size.x / 2;
+				if (IsPass(playerPosOffset[i]))
 				{
-					player[i].pos.x -= player[i].moveSpeed;
+					player[i].pos = playerPosCopy[i];
 				}
 			}
 			if (player[i].moveDir == DIR_UP)		// 上移動
 			{
-				if (player[i].pos.y > 0)
+				playerPosCopy[i].y -= player[i].moveSpeed;
+				playerPosOffset[i].y = playerPosCopy[i].y - player[i].size.y / 2;
+				if (IsPass(playerPosOffset[i]))
 				{
-					player[i].pos.y -= player[i].moveSpeed;
+					player[i].pos = playerPosCopy[i];
 				}
 			}
 			if (player[i].moveDir == DIR_DOWN)		// 下移動
 			{
-				if (player[i].pos.y < SCREEN_SIZE_Y - PLAYER_SIZE_Y)
+				playerPosCopy[i].y += player[i].moveSpeed;
+				playerPosOffset[i].y = playerPosCopy[i].y + player[i].size.y / 2;
+				if (IsPass(playerPosOffset[i]))
 				{
-					player[i].pos.y += player[i].moveSpeed;
+					player[i].pos = playerPosCopy[i];
 				}
 			}
 			player[i].animCnt++;
@@ -140,33 +160,27 @@ void playerControl(void)
 		//	//CreateMainShot(GetPos());
 		//	playerShotFlag = true;
 		//}
-
 	}
 }
 
 void playerDraw(void)
 {
-	for (int i = 0; i < PLAYER_MAX; i++)
-	{
 		// ﾌﾟﾚｲﾔｰの表示
-		if (player[i].visible == true)
-		{
-			DrawBox(player[i].pos.x, player[i].pos.y, player[i].pos.x + PLAYER_SIZE_X, player[i].pos.y + PLAYER_SIZE_Y, 0xffffff, false);
-		}
 		// 文字の表示
-		DrawFormatString(0, 0, 0xffffff, "Speed:%d", player[i].moveSpeed);
-		DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player[i].animCnt);
-	}
 
 	for (int charID = 0; charID < PLAYER_MAX; charID++)
 	{
+		DrawFormatString(0, 0, 0xffffff, "Speed:%d", player[charID].moveSpeed);
+		DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player[charID].animCnt);
+
 		if (player[charID].shotFlag)
 		{
-			DrawGraph(player[charID].pos.x, player[charID].pos.y, charImage[charID].shotImage, true);
+			DrawGraph(player[charID].pos.x - player[charID].sizeOffset.x + MAP_OFFSET_X
+				, player[charID].pos.y - player[charID].sizeOffset.y + MAP_OFFSET_Y, charImage[charID].shotImage, true);
 		}
 		else
 		{
-			DrawGraph(player[charID].pos.x, player[charID].pos.y
+			DrawGraph(player[charID].pos.x - player[charID].sizeOffset.x + MAP_OFFSET_X, player[charID].pos.y - player[charID].sizeOffset.y + MAP_OFFSET_Y
 			, charImage[charID].walkImage[player[charID].moveDir][player[charID].animCnt / 10 % PLAYER_ANI_MAX], true);
 		}
 	}
