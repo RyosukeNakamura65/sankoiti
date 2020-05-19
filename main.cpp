@@ -288,6 +288,7 @@ void CharacterSelectScene(void)
 void CharacterSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "CharacterSelectScene : %d", sceneCounter);
+	playerCharSelect();
 }
 
 
