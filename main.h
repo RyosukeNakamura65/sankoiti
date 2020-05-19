@@ -43,10 +43,10 @@ enum STAGE_ID {
 
 enum MOVE_DIR
 {
-	DIR_UP,
-	DIR_RIGHT,
 	DIR_DOWN,
 	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
 	DIR_MAX
 };
 
