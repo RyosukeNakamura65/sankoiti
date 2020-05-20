@@ -49,8 +49,8 @@ void shotGameInit(void)
 		shot[sh].size.y = 32;
 		shot[sh].sizeOffset.x = shot[sh].size.x / 2;
 		shot[sh].sizeOffset.y = shot[sh].size.y / 2;
-		//shot[sh].lifeMax = 20;
-		//shot[sh].life = 0;
+		shot[sh].lifeMax = 100;
+		shot[sh].life = 0;
 		shot[sh].moveSpeed = 10;
 	}
 }
@@ -68,7 +68,7 @@ void shotControl(void)
 			}
 			if (shot[sc].moveDir == DIR_RIGHT)
 			{
-				shot[sc].pos.y += shot[sc].moveSpeed;
+				shot[sc].pos.x += shot[sc].moveSpeed;
 			}
 			if (shot[sc].moveDir == DIR_DOWN)
 			{
@@ -76,11 +76,16 @@ void shotControl(void)
 			}
 			if (shot[sc].moveDir == DIR_LEFT)
 			{
-				shot[sc].pos.y -= shot[sc].moveSpeed;
+				shot[sc].pos.x -= shot[sc].moveSpeed;
 			}
 			if (!IsPass(shot[sc].pos))
 			{
+				shot[sc].life = 0;
 				shot[sc].visible = false;
+			}
+			if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)
+			{
+				shot[sc].life = 0;
 			}
 		}
 	}
