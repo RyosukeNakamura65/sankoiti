@@ -8,6 +8,8 @@
 #define MAP_Y		 15
 #define MAP_OFFSET_X 60
 #define MAP_OFFSET_Y 150
+#define STAGE_SIZE_X 800
+#define STAGE_SIZE_Y 569
 
 
 // 列挙型
@@ -24,7 +26,7 @@ enum MAP_CHIP {
 
 	MAP_CHIP_NON,		// マップチップ無し
 
-	// ステージ３素材
+	// ステージ３、４素材
 	S3_ROOF,			// 屋根
 	S3_WALL,			// 壁
 	S3_UNBREAK_WALL,	// 壊せない壁
@@ -54,3 +56,5 @@ bool IsPass(XY pos);				// 指定した座標が通過可能かを返す　true:通過可能
 EVENT_ID GetEvent(XY pos);			// 指定した座標が特別にイベントを起こすかを確認する　戻り値：イベントID
 
 void SetMapData(STAGE_ID stageID);	// ステージデータをマップ配列にコピーする
+
+void StageSelect(void);				// ステージ選択シーン用描画

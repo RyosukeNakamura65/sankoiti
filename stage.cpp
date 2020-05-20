@@ -5,6 +5,7 @@
 
 // 変数
 int chipImage[MAP_CHIP_MAX];
+int stageImage[STAGE_ID_MAX];
 int map[MAP_Y][MAP_X];
 STAGE_ID stageNo;
 
@@ -101,7 +102,16 @@ int stage5[MAP_Y][MAP_X] = {
 
 void StageSystemInit(void)
 {
+	// マップチップ画像
 	LoadDivGraph("image/mapChip.png", 14, 14, 1, CHIP_SIZE_X, CHIP_SIZE_Y, chipImage);
+
+	// ステージ選択シーン用画像
+	stageImage[STAGE_ID_1] = LoadGraph("image/stage1.png");
+	stageImage[STAGE_ID_2] = LoadGraph("image/stage2.png");
+	stageImage[STAGE_ID_3] = LoadGraph("image/stage3.png");
+	stageImage[STAGE_ID_4] = LoadGraph("image/stage4.png");
+	stageImage[STAGE_ID_5] = LoadGraph("image/stage5.png");
+	stageImage[STAGE_ID_RANDOM] = LoadGraph("image/stageR.png");
 }
 
 
@@ -280,4 +290,12 @@ void SetMapData(STAGE_ID stageID)
 			}
 		}
 	}
+}
+
+// ステージ選択シーン用描画
+void StageSelect(STAGE_ID stageID)
+{
+	DrawGraph((SCREEN_SIZE_X - STAGE_SIZE_X) / 2
+		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2
+		, stageImage[stageID], true);
 }
