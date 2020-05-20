@@ -226,9 +226,6 @@ bool SystemInit(void)
 	startCounter = 0;
 	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
-
-	stageID = STAGE_ID_1;
-	ID = 0;
 	
 	StageSystemInit();
 	shotSystemInit();
@@ -251,6 +248,9 @@ bool SystemInit(void)
 void InitScene(void)
 {
 	fadeIn = true;
+	stageID = STAGE_ID_1;
+	ID = 0;
+
 	shotGameInit();
 	playerGameInit();
 	player2GameInit();
