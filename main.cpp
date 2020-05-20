@@ -338,7 +338,7 @@ void GameScene(void)
 {
 	// âÊñ ï`âÊ
 	GameDraw();
-	shotDraw();
+	//shotDraw();
 
 	shotControl();
 	playerControl();
@@ -411,7 +411,7 @@ void GameScene(void)
 void GameDraw(void)
 {
 	StageDraw();
-	playerDraw();
+	//playerDraw();
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "ìÆçÏämîF : (%d)", a);
