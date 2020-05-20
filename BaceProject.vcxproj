@@ -140,6 +140,7 @@
     <ClCompile Include="player4.cpp" />
     <ClCompile Include="shot.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="Tobitiri.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Effect.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="player4.h" />
     <ClInclude Include="shot.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="Tobitiri.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

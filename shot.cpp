@@ -1,6 +1,10 @@
 #include "DxLib.h"
 #include "main.h"
 #include "shot.h"
+#include "player.h"
+#include "player2.h"
+#include "player3.h"
+#include "player4.h"
 #include "stage.h"
 #include "KeyCheck.h"
 
@@ -41,12 +45,12 @@ void shotGameInit(void)
 		shot[sh].visible = false;
 		shot[sh].pos.x = 0;
 		shot[sh].pos.y = 0;
-		shot[sh].size.x = 16;
-		shot[sh].size.y = 16;
+		shot[sh].size.x = 32;
+		shot[sh].size.y = 32;
 		shot[sh].sizeOffset.x = shot[sh].size.x / 2;
 		shot[sh].sizeOffset.y = shot[sh].size.y / 2;
-		shot[sh].lifeMax = 20;
-		shot[sh].life = 0;
+		//shot[sh].lifeMax = 20;
+		//shot[sh].life = 0;
 		shot[sh].moveSpeed = 10;
 	}
 }
@@ -73,6 +77,10 @@ void shotControl(void)
 			if (shot[sc].moveDir == DIR_LEFT)
 			{
 				shot[sc].pos.y -= shot[sc].moveSpeed;
+			}
+			if (!IsPass(shot[sc].pos))
+			{
+				shot[sc].visible = false;
 			}
 		}
 	}
