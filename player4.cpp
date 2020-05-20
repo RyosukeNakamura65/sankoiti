@@ -153,7 +153,7 @@ void player4Control(void)
 
 bool player4GameOver(void)
 {
-	if (player4.damageFlag)
+	if (player4.gameOverFlag)
 	{
 		return true;
 	}
