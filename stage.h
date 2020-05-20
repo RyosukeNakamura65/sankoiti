@@ -8,8 +8,8 @@
 #define MAP_Y		 15
 #define MAP_OFFSET_X 60
 #define MAP_OFFSET_Y 150
-#define STAGE_SIZE_X 800
-#define STAGE_SIZE_Y 569
+#define STAGE_SIZE_X 500
+#define STAGE_SIZE_Y 356
 
 
 // —ñ‹“Œ^
