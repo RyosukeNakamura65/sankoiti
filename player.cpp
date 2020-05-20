@@ -17,36 +17,38 @@ const int KeyList[DIR_MAX]
 
 void playerSystemInit(void)
 {
-	// 全ｷｬﾗｸﾀｰのｲﾒｰｼﾞ
-	playerImage.faceImage = LoadGraph("image/blueface.png");
+	// ｷｬﾗｸﾀｰの画像格納
 
-	LoadDivGraph("image/bluewalk.png", PLAYER_ANI_MAX * DIR_MAX				// 歩く画像の読み込み
-		, PLAYER_ANI_MAX, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.walkImage[0]);
+	playerImage.faceImage = LoadGraph("image/blueface.png");				// 顔の画像読み込み
 
-	playerImage.hitImage = LoadGraph("image/bluehit.png");
+	LoadDivGraph("image/bluewalk.png", PLAYER_ANI_MAX * DIR_MAX				
+		, PLAYER_ANI_MAX, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.walkImage[0]);				// 歩行画像読み込み
 
-	LoadDivGraph("image/blueshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.shotImage);
+	playerImage.hitImage = LoadGraph("image/bluehit.png");					// やられ画像読み込み
+
+	LoadDivGraph("image/blueshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.shotImage);			// ｼｮｯﾄ画像読み込み
 
 }
 
 void playerGameInit(void)
 {
-	player.moveDir = DIR_DOWN;						//向いている方向
-	player.size = { 35, 50 };					//キャラクタ画像のサイズ
-	player.sizeOffset = { player.size.x / 2 , player.size.y / 2 };
-	player.startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X + player.sizeOffset.x, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y + player.sizeOffset.y };
-	player.pos = player.startPos;							//キャラクタの位置（中心）
-	player.shotFlag = false;						//キャラクタの状態（弾撃っているか？）
-	player.damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
-	player.gameOverFlag = false;					//キャラクタの状態（やられているか？）
-	player.moveSpeed = PLAYER_DEF_SPEED;			//キャラクタの移動量
-	player.lifeMax = PLAYER_LIFE_MAX;			//キャラクタの体力最大
-	player.life = player.lifeMax;				//キャラクタの体力
-	player.animCnt = 10;							//キャラクタのアニメーション用カウンタ
-	player.imgLockCnt = 0;						//キャラクタのイメージ固定用カウンタ
-	player.visible = true;						//表示状態
+	player.moveDir = DIR_DOWN;														//向いている方向
+	player.size = { 35, 50 };														//キャラクタ画像のサイズ
+	player.sizeOffset = { player.size.x / 2 , player.size.y / 2 };					// ｷｬﾗｸﾀｰのｵﾌｾｯﾄｻｲｽﾞ
+	player.startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X + player.sizeOffset.x				
+		, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y + player.sizeOffset.y };				// キャラクタのスタートの位置
+	player.pos = player.startPos;													//キャラクタの位置（中心）
+	player.shotFlag = false;														//キャラクタの状態（弾撃っているか？）
+	player.damageFlag = false;														//キャラクタの状態（ダメージ受けているか？）
+	player.gameOverFlag = false;													//キャラクタの状態（やられているか？）
+	player.moveSpeed = PLAYER_DEF_SPEED;											//キャラクタの移動量
+	player.lifeMax = PLAYER_LIFE_MAX;												//キャラクタの体力最大
+	player.life = player.lifeMax;													//キャラクタの体力
+	player.animCnt = 10;															//キャラクタのアニメーション用カウンタ
+	player.imgLockCnt = 0;															//キャラクタのイメージ固定用カウンタ
+	player.visible = true;															//表示状態
 
-	playerCounter = 0;
+	playerCounter = 0;																// ﾌﾟﾚｲﾔｰ選択画面でのｱﾆﾒｰｼｮﾝｶｳﾝﾄ														
 }
 
 void playerCharSelect(void)
@@ -59,7 +61,7 @@ void playerCharSelect(void)
 	DrawGraph((SCREEN_SIZE_X / 2 - FACE_SIZE_X) / 2 + FACE_SIZE_X, FACE_SIZE_Y / 2
 		, playerImage.walkImage[DIR_DOWN][playerCounter / 20 % PLAYER_ANI_MAX], true);
 
-	playerCounter++;
+	playerCounter++;			// ｱﾆﾒｰｼｮﾝを動かす
 }
 
 void playerControl(void)
@@ -67,8 +69,8 @@ void playerControl(void)
 	// キー操作
 	// ｽﾋﾟｰﾄﾞを変える
 
-	playerPosCopy = player.pos;		// 座標のﾊﾞｯｸｱｯﾌﾟ
-	playerPosOffset = playerPosCopy;
+	playerPosCopy = player.pos;				// 座標のﾊﾞｯｸｱｯﾌﾟ
+	playerPosOffset = playerPosCopy;			// ｵﾌｾｯﾄ分先の座標
 
 	player.shotFlag = false;
 	player.moveFlag = false;
@@ -134,13 +136,13 @@ void playerControl(void)
 	// ﾌﾟﾚｲﾔｰの被弾時
 	if (player.damageFlag)
 	{
-		if (player.imgLockCnt < 50)
+		if (player.imgLockCnt < 50)					// 数秒動けなくなる
 		{
 			player.imgLockCnt++;
 		}
 		else
 		{
-			player.damageFlag = false;
+			player.damageFlag = false;				// 初期化
 			player.imgLockCnt = 0;
 		}
 	}
@@ -148,14 +150,15 @@ void playerControl(void)
 	// 弾の発射
 	if (CheckHitKey(KEY_INPUT_LCONTROL))
 	{
-		CreateShot(player.pos, player.moveDir);
+		CreateShot(player.pos, player.moveDir);				// 弾の生成
 		player.shotFlag = true;
 	}
 }
 
 bool playerGameOver(void)
 {
-	if (player.damageFlag)
+	// ﾌﾟﾚｲﾔｰのｺﾝﾄﾛｰﾙを中止
+	if (player.gameOverFlag)
 	{
 		return true;
 	}
@@ -165,8 +168,9 @@ bool playerGameOver(void)
 //弾との当たり判定
 bool ShotCheckHit(XY sPos, int ssize)
 {
-	if (!player.damageFlag)
+	if (!player.damageFlag)				// 弾が当たってないとき
 	{
+		// 弾とｷｬﾗｸﾀｰの当たり判定
 		if (player.pos.y - player.sizeOffset.y <= sPos.y
 			&& player.pos.y + player.sizeOffset.y >= sPos.y
 			&& player.pos.x - player.sizeOffset.x <= sPos.x
@@ -190,6 +194,8 @@ void playerDraw(void)
 	DrawFormatString(0, 0, 0xffffff, "Speed:%d", player.moveSpeed);
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player.animCnt);
 	DrawFormatString(100, 0, GetColor(255, 255, 255), "1Life%d", player.life);
+
+	// ｼｮｯﾄｲﾒｰｼﾞの描画(弾を撃っている:true、弾を撃っていない:false)
 	if (player.shotFlag)
 	{
 		DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X
@@ -197,12 +203,14 @@ void playerDraw(void)
 	}
 	else
 	{
+		// やられの描画(ﾗｲﾌが0:true、ﾗｲﾌが1以上:false)
 		if (player.gameOverFlag)
 		{
 			DrawGraph(player.pos.x, player.pos.y, playerImage.hitImage, true);
 		}
 		else
 		{
+			// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
 			if (player.damageFlag)
 			{
 				if (player.animCnt % 1 == 0)
@@ -216,6 +224,7 @@ void playerDraw(void)
 			}
 			else
 			{
+				// 通常時の描画
 				DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y
 					, playerImage.walkImage[player.moveDir][player.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
