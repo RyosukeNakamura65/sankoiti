@@ -20,7 +20,7 @@ enum CHAR_FILE
 		int faceImage;									// Šç²Ò°¼Ş
 		int walkImage[DIR_MAX][PLAYER_ANI_MAX];			// ‘Sg²Ò°¼Ş
 		int hitImage;									// ˆÚ“®²Ò°¼Ş
-		int shotImage;
+		int shotImage[DIR_MAX];
 	};
 
 	// ÌßÛÄÀ²ÌßéŒ¾
@@ -28,4 +28,6 @@ enum CHAR_FILE
 	void playerGameInit(void);
 	void playerCharSelect(void);
 	void playerControl(void);
+	bool playerGameOver(void);
+	bool ShotCheckHit(XY sPos, int ssize);
 	void playerDraw(void);	
