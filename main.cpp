@@ -341,6 +341,7 @@ void StageSelectScene(void)
 void StageSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
+	StageSelect(stageID);
 }
 
 

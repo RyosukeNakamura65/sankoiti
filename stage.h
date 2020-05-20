@@ -57,4 +57,4 @@ EVENT_ID GetEvent(XY pos);			// 指定した座標が特別にイベントを起こすかを確認する
 
 void SetMapData(STAGE_ID stageID);	// ステージデータをマップ配列にコピーする
 
-void StageSelect(void);				// ステージ選択シーン用描画
+void StageSelect(STAGE_ID stageID); // ステージ選択シーン用描画
