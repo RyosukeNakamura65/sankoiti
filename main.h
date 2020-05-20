@@ -97,6 +97,7 @@ struct CHARACTER
 	bool shotFlag;		//キャラクタの状態（弾撃っているか？）
 	bool damageFlag;	//キャラクタの状態（ダメージ受けているか？）
 	bool moveFlag;		//キャラクタの状態（動いているか？）
+	bool gameOverFlag;  //キャラクタの状態（やられたか？）
 	int moveSpeed;		//キャラクタの移動量
 	XY_F velocity;
 	int life;		//キャラクタの体力
