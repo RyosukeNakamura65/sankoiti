@@ -135,6 +135,9 @@
     <ClCompile Include="KeyCheck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="player2.cpp" />
+    <ClCompile Include="player3.cpp" />
+    <ClCompile Include="player4.cpp" />
     <ClCompile Include="shot.cpp" />
     <ClCompile Include="stage.cpp" />
   </ItemGroup>
@@ -143,6 +146,9 @@
     <ClInclude Include="KeyCheck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="player2.h" />
+    <ClInclude Include="player3.h" />
+    <ClInclude Include="player4.h" />
     <ClInclude Include="shot.h" />
     <ClInclude Include="stage.h" />
   </ItemGroup>
