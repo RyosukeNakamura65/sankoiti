@@ -2,6 +2,9 @@
 #include "Dxlib.h"			// Dxlibライブラリを使用
 #include "main.h"
 #include "player.h"
+#include "player2.h"
+#include "player3.h"
+#include "player4.h"
 #include "stage.h"
 #include "shot.h"
 #include "KeyCheck.h"
@@ -230,6 +233,9 @@ bool SystemInit(void)
 	StageSystemInit();
 	shotSystemInit();
 	playerSystemInit();
+	player2SystemInit();
+	player3SystemInit();
+	player4SystemInit();
 
 
 	KeyInit();		// キー情報の初期化
@@ -247,6 +253,9 @@ void InitScene(void)
 	fadeIn = true;
 	shotGameInit();
 	playerGameInit();
+	player2GameInit();
+	player3GameInit();
+	player4GameInit();
 	sceneID = SCENE_ID_TITLE;
 
 }
@@ -288,6 +297,9 @@ void CharacterSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "CharacterSelectScene : %d", sceneCounter);
 	playerCharSelect();
+	player2CharSelect();
+	player3CharSelect();
+	player4CharSelect();
 }
 
 
@@ -338,10 +350,25 @@ void GameScene(void)
 {
 	// 画面描画
 	GameDraw();
-	//shotDraw();
+	shotDraw();
 
 	shotControl();
-	playerControl();
+	if (!playerGameOver())
+	{
+		playerControl();
+	}
+	if (!player2GameOver())
+	{
+		player2Control();
+	}
+	if (!player3GameOver())
+	{
+		player3Control();
+	}
+	if (!player4GameOver())
+	{
+		player4Control();
+	}
 
 	if (startCounter <= START_MSG_1_CNT)
 	{
@@ -411,7 +438,10 @@ void GameScene(void)
 void GameDraw(void)
 {
 	StageDraw();
-	//playerDraw();
+	playerDraw();
+	player2Draw();
+	player3Draw();
+	player4Draw();
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
