@@ -3,6 +3,7 @@
 #include "player.h"
 #include "shot.h"
 #include "stage.h"
+#include "KeyCheck.h"
 
 CHARACTER player3;
 XY player3PosCopy;
@@ -31,12 +32,11 @@ void player3SystemInit(void)
 
 void player3GameInit(void)
 {
-	player3.startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y };
-
 	player3.moveDir = DIR_DOWN;						//向いている方向
-	player3.pos = player3.startPos;							//キャラクタの位置（中心）
 	player3.size = { 35, 50 };					//キャラクタ画像のサイズ
 	player3.sizeOffset = { player3.size.x / 2 , player3.size.y / 2 };
+	player3.startPos = { MAP_OFFSET_X + CHIP_SIZE_X - MAP_OFFSET_X + player3.sizeOffset.x, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y + player3.sizeOffset.y };
+	player3.pos = player3.startPos;							//キャラクタの位置（中心）
 	player3.shotFlag = false;						//キャラクタの状態（弾撃っているか？）
 	player3.damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
 	player3.gameOverFlag = false;					//キャラクタの状態（やられているか？）
@@ -142,9 +142,9 @@ void player3Control(void)
 		}
 	}
 	// 弾の発射
-	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	if (keyDownTrigger[KEY_ID_S])
 	{
-		CreateShot(player3.pos, player3.moveDir);
+		CreateShot(player3.pos, player3.sizeOffset, player3.moveDir);
 		player3.shotFlag = true;
 	}
 
@@ -188,32 +188,36 @@ void player3Draw(void)
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player3.animCnt);
 	DrawFormatString(300, 0, GetColor(255, 255, 255), "3Life%d", player3.life);
 
-	if (player3.shotFlag)
+	// やられの描画(ﾗｲﾌが0:true、ﾗｲﾌが1以上:false)
+	if (player3.gameOverFlag)
 	{
-		DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X
-			, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y, player3Image.shotImage[player3.moveDir], true);
+		DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y, player3Image.hitImage, true);
 	}
 	else
 	{
-		if (player3.gameOverFlag)
+		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
+		if (player3.damageFlag)
 		{
-			DrawGraph(player3.pos.x, player3.pos.y, player3Image.hitImage, true);
-		}
-		else
-		{
-			if (player3.damageFlag)
+			if (player3.animCnt % 2 == 0)
 			{
-				if (player3.animCnt % 1 == 0)
-				{
-					DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y
-						, player3Image.walkImage[player3.moveDir][player3.animCnt / 10 % PLAYER_ANI_MAX], true);
-				}
-				else
-				{
-				}
+				DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y
+					, player3Image.walkImage[player3.moveDir][player3.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
 			else
 			{
+			}
+		}
+		else
+		{
+			// ｼｮｯﾄｲﾒｰｼﾞの描画(弾を撃っている:true、弾を撃っていない:false)
+			if (player3.shotFlag)
+			{
+				DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X
+					, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y, player3Image.shotImage[player3.moveDir], true);
+			}
+			else
+			{
+				// 通常時の描画
 				DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y
 					, player3Image.walkImage[player3.moveDir][player3.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
