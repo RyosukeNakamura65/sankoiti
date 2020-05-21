@@ -62,38 +62,47 @@ void shotControl(void)
 	{
 		if (shot[sc].visible)
 		{
-			if (shot[sc].moveDir == DIR_UP)
-			{
-				shot[sc].pos.y -= shot[sc].moveSpeed;
-			}
-			if (shot[sc].moveDir == DIR_RIGHT)
-			{
-				shot[sc].pos.x += shot[sc].moveSpeed;
-			}
-			if (shot[sc].moveDir == DIR_DOWN)
-			{
-				shot[sc].pos.y += shot[sc].moveSpeed;
-			}
-			if (shot[sc].moveDir == DIR_LEFT)
-			{
-				shot[sc].pos.x -= shot[sc].moveSpeed;
-			}
+			if (shot[sc].moveDir == DIR_UP)shot[sc].pos.y -= shot[sc].moveSpeed;
+			if (shot[sc].moveDir == DIR_RIGHT)shot[sc].pos.x += shot[sc].moveSpeed;
+			if (shot[sc].moveDir == DIR_DOWN)shot[sc].pos.y += shot[sc].moveSpeed;
+			if (shot[sc].moveDir == DIR_LEFT)shot[sc].pos.x -= shot[sc].moveSpeed;
+
 			if (!IsPass(shot[sc].pos))
 			{
-				shot[sc].life = 0;
 				shot[sc].visible = false;
 			}
 			if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)
 			{
 				shot[sc].life = 0;
 			}
+			if (shot[sc].life < 0)
+			{
+				shot[sc].visible = false;
+			}
 		}
 	}
 }
 
+void shotDraw(void)
+{
+	for (int s = 0; s < SHOT_MAX; s++)
+	{
+		if (shot[s].visible)
+		{
+			DrawGraph(shot[s].pos.x - shot[s].sizeOffset.x + MAP_OFFSET_X,
+				shot[s].pos.y - shot[s].sizeOffset.y + MAP_OFFSET_Y,
+				shotImage[s],
+				true);
+		}
 
+	}
+	/*if (Shotflag == true)
+	{
+		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
+	}*/
+}
 
-void CreateShot(XY pPos, MOVE_DIR pDir)
+void CreateShot(XY pPos, XY poffset ,MOVE_DIR pDir)
 {
 	for (int cs = 0; cs < PLAYER_SHOT_MAX; cs++)
 	{
@@ -106,6 +115,10 @@ void CreateShot(XY pPos, MOVE_DIR pDir)
 				shot[cs].pos.x = pPos.x;
 				shot[cs].pos.y = pPos.y;
 				shot[cs].moveDir = pDir;
+				if (shot[cs].moveDir == DIR_UP)shot[cs].pos.y -= poffset.y;
+				if (shot[cs].moveDir == DIR_RIGHT)shot[cs].pos.x += poffset.x;
+				if (shot[cs].moveDir == DIR_DOWN)shot[cs].pos.y += poffset.y;
+				if (shot[cs].moveDir == DIR_LEFT)shot[cs].pos.x -= poffset.x;
 				shot[cs].life = shot[cs].lifeMax;
 				break;
 			}
@@ -121,24 +134,20 @@ void CreateShot(XY pPos, MOVE_DIR pDir)
 
 void DeleteShot(void)
 {
-
-}
-
-
-void shotDraw(void)
-{
-	for (int s = 0; s < SHOT_MAX; s++)
+	for (int s = 0; s < PLAYER_SHOT_MAX; s++)
 	{
-		DrawGraph(shot[s].pos.x - shot[s].sizeOffset.x + MAP_OFFSET_X,
-			shot[s].pos.y - shot[s].sizeOffset.y + MAP_OFFSET_Y,
-			shotImage[s],
-			true);
+		if (shot[s].life > 0)
+		{
+			if (ShotCheckHit(shot[s].pos, shot[s].size.x))
+			{
+				shot[s].life = 0;
+			}
+		}
 	}
-	/*if (Shotflag == true)
-	{
-		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
-	}*/
 }
+
+
+
 //XY GetPos(void)
 //{
 //	//return { ShotPosX, ShotPosY };
@@ -153,3 +162,4 @@ void shotDraw(void)
 //{
 //	//return Shotflag;
 //}
+

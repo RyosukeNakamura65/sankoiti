@@ -69,13 +69,34 @@ void TobiDraw(void)
 {
 	for (int ef = 0;ef < EFFECT_MAX; ef++)
 	{
-
+		if (tobi[ef].visible)
+		{
+			DrawGraph(tobi[ef].pos.x - tobi[ef].size.x + MAP_OFFSET_X
+				, tobi[ef].pos.y - tobi[ef].size.y + MAP_OFFSET_Y
+				, TobiImage[tobi[ef].effectColor][GetRand(3)]
+				, true);
+		}
 	}
 }
 
 void SetBlockEffect(XY pos, EFFECT_COLOR effectColor)
 {
+	float rad = 0.0f;
+	int effectCnt = 0;
 
+	for (int ef = 0; ef < EFFECT_MAX; ef++)
+	{
+		//if (!tobi[ef].visible)
+		//{
+		//	effectCnt++;
+		//	//1‹‚¸‚Â“®‚©‚µ‚È‚ª‚ç‘fÞ‚ð¶¬‚·‚é
+		//	//‘fÞ‚ÌˆÚ“®‘¬“x‚Í—”(1`10)‚ðŽg‚Á‚Äì‚é
+		//	rad = GetRand(360);
+		//	rad = 36 * PI
+		//}
+
+
+	}
 }
 
 void SetTobichiriEffect(XY pos, EFFECT_COLOR effectColor)
