@@ -182,8 +182,8 @@ bool IsPass(XY pos)
 	case S3_WALL:
 	case S3_UNBREAK_WALL:
 	case S3_UNBREAK_WALL2:
-	case S5_WALL:
-	case S5_WATER:
+	/*case S5_WALL:
+	case S5_WATER:*/
 		return false;
 		break;
 
@@ -195,19 +195,21 @@ bool IsPass(XY pos)
 
 
 // 指定した座標が特別にイベントを起こすかを確認する　戻り値：イベントID
-//EVENT_ID GetEvent(XY pos)
-//{
-//	XY indexPos;
-//	indexPos = PosToIndex(pos);
-//
-//	switch (map[indexPos.y][indexPos.x])
-//	{
-//		return ;
-//
-//	default:
-//		break;
-//	}
-//}
+EVENT_ID GetEvent(XY pos)
+{
+	XY indexPos;
+	indexPos = PosToIndex(pos);
+
+	switch (map[indexPos.y][indexPos.x])
+	{
+	case S5_WALL:
+	case S5_WATER:
+		return EVENT_NOT_GO;
+
+	default:
+		break;
+	}
+}
 
 
 // ステージデータをマップ配列にコピーする

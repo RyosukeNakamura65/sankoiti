@@ -50,6 +50,7 @@ enum MAP_CHIP {
 
 // イベント管理用
 enum EVENT_ID {
+	EVENT_NOT_GO,
 	EVENT_ID_MAX
 };
 
