@@ -3,6 +3,7 @@
 #include "player.h"
 #include "shot.h"
 #include "stage.h"
+#include "KeyCheck.h"
 
 CHARACTER player2;
 XY player2PosCopy;
@@ -143,9 +144,9 @@ void player2Control(void)
 	}
 
 	// ’e‚Ì”­Ë
-	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	if (keyDownTrigger[KEY_ID_W])
 	{
-		CreateShot(player2.pos, player2.moveDir);
+		CreateShot(player2.pos, player2.sizeOffset, player2.moveDir);
 		player2.shotFlag = true;
 	}
 }
@@ -188,32 +189,36 @@ void player2Draw(void)
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player2.animCnt);
 	DrawFormatString(200, 0, GetColor(255, 255, 255), "2Life%d", player2.life);
 
-	if (player2.shotFlag)
+	// ‚â‚ç‚ê‚Ì•`‰æ(×²Ì‚ª0:trueA×²Ì‚ª1ˆÈã:false)
+	if (player2.gameOverFlag)
 	{
-		DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X
-			, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y, player2Image.shotImage[player2.moveDir], true);
+		DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y, player2Image.hitImage, true);
 	}
 	else
 	{
-		if (player2.gameOverFlag)
+		// ÌßÚ²Ô°‚Ì”í’e‚Ì•`‰æi“_–Å‚³‚¹‚éj
+		if (player2.damageFlag)
 		{
-			DrawGraph(player2.pos.x, player2.pos.y, player2Image.hitImage, true);
-		}
-		else
-		{
-			if (player2.damageFlag)
+			if (player2.animCnt % 2 == 0)
 			{
-				if (player2.animCnt % 1 == 0)
-				{
-					DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y
-						, player2Image.walkImage[player2.moveDir][player2.animCnt / 10 % PLAYER_ANI_MAX], true);
-				}
-				else
-				{
-				}
+				DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y
+					, player2Image.walkImage[player2.moveDir][player2.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
 			else
 			{
+			}
+		}
+		else
+		{
+			// ¼®¯Ä²Ò°¼Ş‚Ì•`‰æ(’e‚ğŒ‚‚Á‚Ä‚¢‚é:trueA’e‚ğŒ‚‚Á‚Ä‚¢‚È‚¢:false)
+			if (player2.shotFlag)
+			{
+				DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X
+					, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y, player2Image.shotImage[player2.moveDir], true);
+			}
+			else
+			{
+				// ’Êí‚Ì•`‰æ
 				DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y
 					, player2Image.walkImage[player2.moveDir][player2.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
