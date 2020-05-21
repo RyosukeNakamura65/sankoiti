@@ -3,6 +3,7 @@
 #include "player.h"
 #include "shot.h"
 #include "stage.h"
+#include "KeyCheck.h"
 
 CHARACTER player4;
 XY player4PosCopy;
@@ -31,12 +32,11 @@ void player4SystemInit(void)
 
 void player4GameInit(void)
 {
-	player4.startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y };
-
 	player4.moveDir = DIR_DOWN;						//向いている方向
-	player4.pos = player4.startPos;							//キャラクタの位置（中心）
 	player4.size = { 35, 50 };					//キャラクタ画像のサイズ
 	player4.sizeOffset = { player4.size.x / 2 , player4.size.y / 2 };
+	player4.startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X + player4.sizeOffset.x, SCREEN_SIZE_Y - CHIP_SIZE_Y * 3 - MAP_OFFSET_Y + player4.sizeOffset.y };
+	player4.pos = player4.startPos;							//キャラクタの位置（中心）
 	player4.shotFlag = false;						//キャラクタの状態（弾撃っているか？）
 	player4.damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
 	player4.gameOverFlag = false;					//キャラクタの状態（やられているか？）
@@ -144,9 +144,9 @@ void player4Control(void)
 	}
 
 	// 弾の発射
-	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	if (keyDownTrigger[KEY_ID_D])
 	{
-		CreateShot(player4.pos, player4.moveDir);
+		CreateShot(player4.pos, player4.sizeOffset, player4.moveDir);
 		player4.shotFlag = true;
 	}
 }
@@ -189,32 +189,36 @@ void player4Draw(void)
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player4.animCnt);
 	DrawFormatString(400, 0, GetColor(255, 255, 255), "4Life%d", player4.life);
 
-	if (player4.shotFlag)
+	// やられの描画(ﾗｲﾌが0:true、ﾗｲﾌが1以上:false)
+	if (player4.gameOverFlag)
 	{
-		DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X
-			, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y, player4Image.shotImage[player4.moveDir], true);
+		DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y, player4Image.hitImage, true);
 	}
 	else
 	{
-		if (player4.gameOverFlag)
+		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
+		if (player4.damageFlag)
 		{
-			DrawGraph(player4.pos.x, player4.pos.y, player4Image.hitImage, true);
-		}
-		else
-		{
-			if (player4.damageFlag)
+			if (player4.animCnt % 2 == 0)
 			{
-				if (player4.animCnt % 1 == 0)
-				{
-					DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y
-						, player4Image.walkImage[player4.moveDir][player4.animCnt / 10 % PLAYER_ANI_MAX], true);
-				}
-				else
-				{
-				}
+				DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y
+					, player4Image.walkImage[player4.moveDir][player4.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
 			else
 			{
+			}
+		}
+		else
+		{
+			// ｼｮｯﾄｲﾒｰｼﾞの描画(弾を撃っている:true、弾を撃っていない:false)
+			if (player4.shotFlag)
+			{
+				DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X
+					, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y, player4Image.shotImage[player4.moveDir], true);
+			}
+			else
+			{
+				// 通常時の描画
 				DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y
 					, player4Image.walkImage[player4.moveDir][player4.animCnt / 10 % PLAYER_ANI_MAX], true);
 			}
