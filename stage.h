@@ -33,7 +33,17 @@ enum MAP_CHIP {
 	S3_UNBREAK_WALL2,	// 壊せない壁（影）
 	S3_TILE,			// タイル（床）
 	S3_ROAD,			// 草道（床）
-	S3,ROAD2,			// 草道【濃】（床）
+	S3_ROAD2,			// 草道【濃】（床）
+
+	// ステージ５素材
+	S5_ROAD,			// 草道（床）
+	S5_WALL,			// 壁
+	S5_WATER,			// 水
+	S5_WATER2,			// 水たまり
+	S5_ROAD2,			// 橋（床）
+	S5_UNBREAK_OBJ,		// 壊せないオブジェクト（柵）
+	S5_UNBREAK_OBJ2,	// 壊せないオブジェクト（草）
+	S5_ROAD3,			// 橋（床）
 
 	MAP_CHIP_MAX
 };
