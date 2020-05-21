@@ -3,6 +3,7 @@
 #include "player.h"
 #include "shot.h"
 #include "stage.h"
+#include "KeyCheck.h"
 
 CHARACTER player;
 XY playerPosCopy;
@@ -147,10 +148,25 @@ void playerControl(void)
 		}
 	}
 
-	// ’e‚Ì”­Ë
-	if (CheckHitKey(KEY_INPUT_LCONTROL))
+	// ’e‚Ì”­Ë
+	if (player.shotFlag)
 	{
-		CreateShot(player.pos, player.moveDir);				// ’e‚Ì¶¬
+		if (player.imgLockCnt < 10)					// ”•b“®‚¯‚È‚­‚È‚é
+		{
+			player.imgLockCnt++;
+		}
+		else
+		{
+			player.shotFlag = false;				// ‰Šú‰»
+			player.imgLockCnt = 0;
+		}
+
+	}
+
+	// ’e‚Ì”­Ë
+	if (keyDownTrigger[KEY_ID_A])
+	{
+		CreateShot(player.pos, player.sizeOffset, player.moveDir);				// ’e‚Ì¶¬
 		player.shotFlag = true;
 	}
 }
@@ -195,32 +211,32 @@ void playerDraw(void)
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "Count:%d", player.animCnt);
 	DrawFormatString(100, 0, GetColor(255, 255, 255), "1Life%d", player.life);
 
-	// ¼®¯Ä²Ò°¼Ş‚Ì•`‰æ(’e‚ğŒ‚‚Á‚Ä‚¢‚é:trueA’e‚ğŒ‚‚Á‚Ä‚¢‚È‚¢:false)
-	if (player.shotFlag)
+	// ‚â‚ç‚ê‚Ì•`‰æ(×²Ì‚ª0:trueA×²Ì‚ª1ˆÈã:false)
+	if (player.gameOverFlag)
 	{
-		DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X
-			, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y, playerImage.shotImage[player.moveDir], true);
+		DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y, playerImage.hitImage, true);
 	}
 	else
 	{
-		// ‚â‚ç‚ê‚Ì•`‰æ(×²Ì‚ª0:trueA×²Ì‚ª1ˆÈã:false)
-		if (player.gameOverFlag)
+		// ÌßÚ²Ô°‚Ì”í’e‚Ì•`‰æi“_–Å‚³‚¹‚éj
+		if (player.damageFlag)
 		{
-			DrawGraph(player.pos.x, player.pos.y, playerImage.hitImage, true);
+			if (player.animCnt % 2 == 0)
+			{
+				DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y
+					, playerImage.walkImage[player.moveDir][player.animCnt / 10 % PLAYER_ANI_MAX], true);
+			}
+			else
+			{
+			}
 		}
 		else
 		{
-			// ÌßÚ²Ô°‚Ì”í’e‚Ì•`‰æi“_–Å‚³‚¹‚éj
-			if (player.damageFlag)
+			// ¼®¯Ä²Ò°¼Ş‚Ì•`‰æ(’e‚ğŒ‚‚Á‚Ä‚¢‚é:trueA’e‚ğŒ‚‚Á‚Ä‚¢‚È‚¢:false)
+			if (player.shotFlag)
 			{
-				if (player.animCnt % 1 == 0)
-				{
-					DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y
-						, playerImage.walkImage[player.moveDir][player.animCnt / 10 % PLAYER_ANI_MAX], true);
-				}
-				else
-				{
-				}
+				DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X
+					, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y, playerImage.shotImage[player.moveDir], true);
 			}
 			else
 			{
