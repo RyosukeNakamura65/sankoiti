@@ -88,7 +88,7 @@ void player3Control(void)
 		{
 			player3PosCopy.x += player3.moveSpeed;
 			player3PosOffset.x = player3PosCopy.x + player3.size.x / 2;
-			if (IsPass(player3PosOffset))
+			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -97,7 +97,7 @@ void player3Control(void)
 		{
 			player3PosCopy.x -= player3.moveSpeed;
 			player3PosOffset.x = player3PosCopy.x - player3.size.x / 2;
-			if (IsPass(player3PosOffset))
+			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -106,7 +106,7 @@ void player3Control(void)
 		{
 			player3PosCopy.y -= player3.moveSpeed;
 			player3PosOffset.y = player3PosCopy.y - player3.size.y / 2;
-			if (IsPass(player3PosOffset))
+			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -115,7 +115,7 @@ void player3Control(void)
 		{
 			player3PosCopy.y += player3.moveSpeed;
 			player3PosOffset.y = player3PosCopy.y + player3.size.y / 2;
-			if (IsPass(player3PosOffset))
+			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}

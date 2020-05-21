@@ -89,7 +89,7 @@ void player4Control(void)
 		{
 			player4PosCopy.x += player4.moveSpeed;
 			player4PosOffset.x = player4PosCopy.x + player4.size.x / 2;
-			if (IsPass(player4PosOffset))
+			if (IsPass(player4PosOffset) || GetEvent(player4PosOffset))
 			{
 				player4.pos = player4PosCopy;
 			}
@@ -98,7 +98,7 @@ void player4Control(void)
 		{
 			player4PosCopy.x -= player4.moveSpeed;
 			player4PosOffset.x = player4PosCopy.x - player4.size.x / 2;
-			if (IsPass(player4PosOffset))
+			if (IsPass(player4PosOffset) || GetEvent(player4PosOffset))
 			{
 				player4.pos = player4PosCopy;
 			}
@@ -107,7 +107,7 @@ void player4Control(void)
 		{
 			player4PosCopy.y -= player4.moveSpeed;
 			player4PosOffset.y = player4PosCopy.y - player4.size.y / 2;
-			if (IsPass(player4PosOffset))
+			if (IsPass(player4PosOffset) || GetEvent(player4PosOffset))
 			{
 				player4.pos = player4PosCopy;
 			}
@@ -116,7 +116,7 @@ void player4Control(void)
 		{
 			player4PosCopy.y += player4.moveSpeed;
 			player4PosOffset.y = player4PosCopy.y + player4.size.y / 2;
-			if (IsPass(player4PosOffset))
+			if (IsPass(player4PosOffset) || GetEvent(player4PosOffset))
 			{
 				player4.pos = player4PosCopy;
 			}
