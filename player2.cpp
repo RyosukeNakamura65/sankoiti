@@ -36,7 +36,7 @@ void player2GameInit(void)
 	player2.moveDir = DIR_DOWN;						//向いている方向
 	player2.size = { 35, 50 };					//キャラクタ画像のサイズ
 	player2.sizeOffset = { player2.size.x / 2 , player2.size.y / 2 };
-	player2.startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X + player2.sizeOffset.x, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y + player2.sizeOffset.y };
+	player2.startPos = { SCREEN_SIZE_X - MAP_OFFSET_X - CHIP_SIZE_X * 2 - MAP_OFFSET_X + player2.sizeOffset.x, MAP_OFFSET_Y + CHIP_SIZE_Y * 2 - MAP_OFFSET_Y + player2.sizeOffset.y  };
 	player2.pos = player2.startPos;							//キャラクタの位置（中心）
 	player2.shotFlag = false;						//キャラクタの状態（弾撃っているか？）
 	player2.damageFlag = false;					//キャラクタの状態（ダメージ受けているか？）
@@ -69,6 +69,10 @@ void player2Control(void)
 
 	player2PosCopy = player2.pos;		// 座標のﾊﾞｯｸｱｯﾌﾟ
 	player2PosOffset = player2PosCopy;
+	XY playerHitRight = player2.pos;
+	XY playerHitLeft = player2.pos;
+	XY playerHitDown = player2.pos;
+	XY playerHitUp = player2.pos;
 
 	player2.shotFlag = false;
 	player2.moveFlag = false;
@@ -89,8 +93,16 @@ void player2Control(void)
 		if (player2.moveDir == DIR_RIGHT)	// 右移動
 		{
 			player2PosCopy.x += player2.moveSpeed;
-			player2PosOffset.x = player2PosCopy.x + player2.size.x / 2;
-			if (PIsPass(player2PosOffset))
+			player2PosOffset.x = player2PosCopy.x + player2.sizeOffset.x - 5;
+			player2PosOffset.y += 6;
+
+			playerHitUp.x = player2PosOffset.x;
+			playerHitUp.y -= player2.sizeOffset.y - 50;
+
+			playerHitDown = player2PosOffset;
+			playerHitDown.y += player2.sizeOffset.y - 20;
+
+			if (PIsPass(player2PosOffset) && PIsPass(playerHitUp) && PIsPass(playerHitDown))
 			{
 				player2.pos = player2PosCopy;
 			}
@@ -98,8 +110,16 @@ void player2Control(void)
 		if (player2.moveDir == DIR_LEFT)	// 左移動
 		{
 			player2PosCopy.x -= player2.moveSpeed;
-			player2PosOffset.x = player2PosCopy.x - player2.size.x / 2;
-			if (PIsPass(player2PosOffset))
+			player2PosOffset.x = player2PosCopy.x - player2.sizeOffset.x + 5;
+			player2PosOffset.y += 6;
+
+			playerHitUp.x = player2PosOffset.x;
+			playerHitUp.y -= player2.sizeOffset.y - 50;
+
+			playerHitDown = player2PosOffset;
+			playerHitDown.y += player2.sizeOffset.y - 20;
+
+			if (PIsPass(player2PosOffset) && PIsPass(playerHitUp) && PIsPass(playerHitDown))
 			{
 				player2.pos = player2PosCopy;
 			}
@@ -107,8 +127,17 @@ void player2Control(void)
 		if (player2.moveDir == DIR_UP)		// 上移動
 		{
 			player2PosCopy.y -= player2.moveSpeed;
-			player2PosOffset.y = player2PosCopy.y - player2.size.y / 2;
-			if (PIsPass(player2PosOffset))
+			player2PosOffset.y = player2PosCopy.y - player2.sizeOffset.y + 30;
+
+			//右の頭上にブロックがあるか
+			playerHitLeft = player2PosOffset;
+			playerHitLeft.x -= player2.sizeOffset.x - 5;
+
+			//左の頭上にブロックがあるか
+			playerHitRight = player2PosOffset;
+			playerHitRight.x += player2.sizeOffset.x - 5;
+
+			if (PIsPass(player2PosOffset) && PIsPass(playerHitLeft) && PIsPass(playerHitRight))
 			{
 				player2.pos = player2PosCopy;
 			}
@@ -116,8 +145,17 @@ void player2Control(void)
 		if (player2.moveDir == DIR_DOWN)		// 下移動
 		{
 			player2PosCopy.y += player2.moveSpeed;
-			player2PosOffset.y = player2PosCopy.y + player2.size.y / 2;
-			if (PIsPass(player2PosOffset))
+			player2PosOffset.y = player2PosCopy.y + player2.sizeOffset.y;
+
+			//右の足元にブロックがあるか
+			playerHitLeft = player2PosOffset;
+			playerHitLeft.x -= player2.sizeOffset.x - 5;
+
+			//左の足元にブロックがあるか
+			playerHitRight = player2PosOffset;
+			playerHitRight.x += player2.sizeOffset.x - 5;
+
+			if (PIsPass(player2PosOffset) && PIsPass(playerHitLeft) && PIsPass(playerHitRight))
 			{
 				player2.pos = player2PosCopy;
 			}
