@@ -337,11 +337,27 @@ void SetMapData(STAGE_ID stageID)
 // ステージ選択シーン用描画
 void StageSelect(STAGE_ID stageID,int blend)
 {
+	// ステージ裏の背景　～フェードイン～
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
 	DrawGraph(0, 0, stageSelectBG[stageID], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	// ステージ画像
 	DrawGraph((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 150
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2
 		, stageImage[stageID], true);
+
+	// ステージの名前
+	for (int st = 0; st < STAGE_ID_MAX; st++)
+	{
+		if (st == stageID)
+		{
+			DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "stage[%d]", st + 1);
+		}
+		else
+		{
+			DrawFormatString(740,250 + 50 * st, GetColor(255, 255, 255), "stage[%d]", st + 1);
+		}
+	}
+	
 }

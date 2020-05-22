@@ -7,7 +7,9 @@ enum KEY_ID {
 	KEY_ID_SPACE,		//	スペースキー
 	KEY_ID_PAUSE,
 	KEY_ID_SHOT,
+	KEY_ID_UP,			// 上キー
 	KEY_ID_RIGHT,		// 右キー
+	KEY_ID_DOWN,		// 下キー
 	KEY_ID_LEFT,		// 左キー
 	KEY_ID_W,			// ｷｬﾗｸﾀｰ上
 	KEY_ID_D,			// ｷｬﾗｸﾀｰ右

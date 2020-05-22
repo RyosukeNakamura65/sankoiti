@@ -45,7 +45,9 @@ void KeyCheck(void)
 	keyNew[KEY_ID_SPACE] = CheckHitKey(KEY_INPUT_SPACE);
 	keyNew[KEY_ID_PAUSE] = CheckHitKey(KEY_INPUT_P);
 	keyNew[KEY_ID_SHOT] = CheckHitKey(KEY_INPUT_LCONTROL);
+	keyNew[KEY_ID_UP] = CheckHitKey(KEY_INPUT_UP);
 	keyNew[KEY_ID_RIGHT] = CheckHitKey(KEY_INPUT_RIGHT);
+	keyNew[KEY_ID_DOWN] = CheckHitKey(KEY_INPUT_DOWN);
 	keyNew[KEY_ID_LEFT] = CheckHitKey(KEY_INPUT_LEFT);
 	keyNew[KEY_ID_W] = CheckHitKey(KEY_INPUT_W);
 	keyNew[KEY_ID_D] = CheckHitKey(KEY_INPUT_D);

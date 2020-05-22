@@ -320,7 +320,7 @@ void CharacterSelectDraw(void)
 void StageSelectScene(void)
 {
 	// ステージの変更
-	if (keyDownTrigger[KEY_ID_RIGHT])
+	if (keyDownTrigger[KEY_ID_DOWN])
 	{
 		ID++;
 		blend = 0;
@@ -329,7 +329,7 @@ void StageSelectScene(void)
 			ID = 0;
 		}
 	}
-	if (keyDownTrigger[KEY_ID_LEFT])
+	if (keyDownTrigger[KEY_ID_UP])
 	{
 		ID--;
 		blend = 0;
