@@ -376,27 +376,6 @@ void GameScene(void)
 	GameDraw();
 	shotDraw();
 
-	shotControl();
-	shot2Control();
-	shot3Control();
-	shot4Control();
-	if (!playerGameOver())
-	{
-		playerControl();
-	}
-	if (!player2GameOver())
-	{
-		player2Control();
-	}
-	if (!player3GameOver())
-	{
-		player3Control();
-	}
-	if (!player4GameOver())
-	{
-		player4Control();
-	}
-
 	if (startCounter <= START_MSG_1_CNT)
 	{
 		DrawGraph((SCREEN_SIZE_X - START_MSG_SIZE_X) / 2
@@ -419,6 +398,27 @@ void GameScene(void)
 		}
 		else
 		{
+			shotControl();
+			shot2Control();
+			shot3Control();
+			shot4Control();
+			if (!playerGameOver())
+			{
+				playerControl();
+			}
+			if (!player2GameOver())
+			{
+				player2Control();
+			}
+			if (!player3GameOver())
+			{
+				player3Control();
+			}
+			if (!player4GameOver())
+			{
+				player4Control();
+			}
+
 			if (keyUpTrigger[KEY_ID_SPACE])
 			{
 				fadeOut = true;
