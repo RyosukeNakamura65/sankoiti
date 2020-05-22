@@ -33,6 +33,7 @@ int titleWordImage;
 // ステージ
 STAGE_ID stageID;
 int ID;
+int blend;
 
 // WinMain関数
 //-------------------------------------------------------------
@@ -229,6 +230,7 @@ bool SystemInit(void)
 	startCounter = 0;
 	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
+	blend = 0;
 	
 	StageSystemInit();
 	shotSystemInit();
@@ -321,6 +323,7 @@ void StageSelectScene(void)
 	if (keyDownTrigger[KEY_ID_RIGHT])
 	{
 		ID++;
+		blend = 0;
 		if (stageID > STAGE_ID_MAX - 2)
 		{
 			ID = 0;
@@ -329,6 +332,7 @@ void StageSelectScene(void)
 	if (keyDownTrigger[KEY_ID_LEFT])
 	{
 		ID--;
+		blend = 0;
 		if (stageID <= 0)
 		{
 			ID = STAGE_ID_MAX - 1;
@@ -351,7 +355,16 @@ void StageSelectScene(void)
 void StageSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
-	StageSelect(stageID);
+	StageSelect(stageID,blend);
+
+	// フェードイン
+	if (sceneCounter % 2 == 1)
+	{
+		if (blend <= 150)
+		{
+			blend += 3;
+		}
+	}
 }
 
 
