@@ -60,12 +60,12 @@ void StageSystemInit(void);
 void StageGameInit(STAGE_ID no);
 void StageDraw(void);
 
-XY PosToIndex(XY pos);				// ピクセル座標系からマップ配列座標系に変換
-XY IndexToPos(XY index);			// マップ配列座標系からピクセル座標系に変換
-bool IsPass(XY pos);				// 指定した座標が通過可能かを返す　true:通過可能
-bool PIsPass(XY pos);				// プレイヤーのみが指定した座標が通過可能かを返す　true:通過可能
-EVENT_ID GetEvent(XY pos);			// 指定した座標が特別にイベントを起こすかを確認する　戻り値：イベントID
+XY PosToIndex(XY pos);							// ピクセル座標系からマップ配列座標系に変換
+XY IndexToPos(XY index);						// マップ配列座標系からピクセル座標系に変換
+bool IsPass(XY pos);							// 指定した座標が通過可能かを返す　true:通過可能
+bool PIsPass(XY pos);							// プレイヤーのみが指定した座標が通過可能かを返す　true:通過可能
+EVENT_ID GetEvent(XY pos);						// 指定した座標が特別にイベントを起こすかを確認する　戻り値：イベントID
 
-void SetMapData(STAGE_ID stageID);	// ステージデータをマップ配列にコピーする
+void SetMapData(STAGE_ID stageID);				// ステージデータをマップ配列にコピーする
 
-void StageSelect(STAGE_ID stageID); // ステージ選択シーン用描画
+void StageSelect(STAGE_ID stageID,int blend);	// ステージ選択シーン用描画

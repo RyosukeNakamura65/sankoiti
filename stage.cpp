@@ -6,7 +6,7 @@
 // 変数
 int chipImage[MAP_CHIP_MAX];
 int stageImage[STAGE_ID_MAX];
-
+int stageSelectBG[STAGE_ID_MAX];
 int map[MAP_Y][MAP_X];
 STAGE_ID stageNo;
 
@@ -113,6 +113,13 @@ void StageSystemInit(void)
 	stageImage[STAGE_ID_4] = LoadGraph("image/stage4.png");
 	stageImage[STAGE_ID_5] = LoadGraph("image/stage5.png");
 	stageImage[STAGE_ID_RANDOM] = LoadGraph("image/stageR.png");
+
+	// ステージ選択シーン用背景画像
+	stageSelectBG[STAGE_ID_1] = LoadGraph("image/砂漠.jpg");
+	stageSelectBG[STAGE_ID_2] = LoadGraph("image/砂漠.jpg");
+	stageSelectBG[STAGE_ID_3] = LoadGraph("image/遺跡.jpg");
+	stageSelectBG[STAGE_ID_4] = LoadGraph("image/遺跡.jpg");
+	stageSelectBG[STAGE_ID_5] = LoadGraph("image/無人島.png");
 }
 
 
@@ -316,8 +323,12 @@ void SetMapData(STAGE_ID stageID)
 
 
 // ステージ選択シーン用描画
-void StageSelect(STAGE_ID stageID)
+void StageSelect(STAGE_ID stageID,int blend)
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
+	DrawGraph(0, 0, stageSelectBG[stageID], true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	DrawGraph((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 150
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2
 		, stageImage[stageID], true);
