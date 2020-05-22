@@ -199,6 +199,7 @@ bool IsPass(XY pos)
 	}
 }
 
+// プレイヤーが指定した座標が通過可能かを返す
 bool PIsPass(XY pos)
 {
 	XY indexPos;
@@ -206,6 +207,13 @@ bool PIsPass(XY pos)
 
 	switch (map[indexPos.y][indexPos.x])
 	{
+	case S1_ROOF:
+	case S1_WALL:
+	case S1_UNBREAK_WALL:
+	case S3_ROOF:
+	case S3_WALL:
+	case S3_UNBREAK_WALL:
+	case S3_UNBREAK_WALL2:
 	case S5_WALL:
 	case S5_WATER:
 	case S5_WATER2:
