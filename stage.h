@@ -48,11 +48,10 @@ enum MAP_CHIP {
 	MAP_CHIP_MAX
 };
 
-// イベント管理用
-enum EVENT_ID {
-	EVENT_NOT_GO,
-	EVENT_ID_MAX
-};
+//// イベント管理用
+//enum EVENT_ID {
+//	EVENT_ID_MAX
+//};
 
 
 // プロトタイプ宣言
