@@ -72,10 +72,10 @@ void shot2Control(void)
 			{
 				shot2[sc].visible = false;
 			}
-			//if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
-			if (Shot2CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].life = 0;
-			//if (Shot3CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
-			//if (Shot4CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
+			if (ShotCheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
+			//if (Shot2CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
+			if (Shot3CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
+			if (Shot4CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
 
 			if (shot2[sc].life < 0)
 			{

@@ -33,9 +33,9 @@ CHARACTER shot[SHOT_MAX];
 void shotSystemInit(void)
 {
 	shotImage[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
-	shotImage[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
-	shotImage[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
-	shotImage[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
+	//shotImage[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
+	//shotImage[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
+	//shotImage[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
 }
 
 void shotGameInit(void)
@@ -71,10 +71,10 @@ void shotControl(void)
 			{
 				shot[sc].visible = false;
 			}
-			if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)
-			{
-				shot[sc].life = 0;
-			}
+			//if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].visible = false;
+			if (Shot2CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
+			if (Shot3CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
+			if (Shot4CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
 			if (shot[sc].life < 0)
 			{
 				shot[sc].visible = false;
@@ -85,13 +85,13 @@ void shotControl(void)
 
 void shotDraw(void)
 {
-	for (int s = 0; s < SHOT_MAX; s++)
+	for (int s = 0; s < PLAYER_SHOT_MAX; s++)
 	{
 		if (shot[s].visible)
 		{
 			DrawGraph(shot[s].pos.x - shot[s].sizeOffset.x + MAP_OFFSET_X,
 				shot[s].pos.y - shot[s].sizeOffset.y + MAP_OFFSET_Y,
-				shotImage[s],
+				shotImage[PLAYER_1],
 				true);
 		}
 
