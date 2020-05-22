@@ -320,32 +320,35 @@ void CharacterSelectDraw(void)
 void StageSelectScene(void)
 {
 	// ステージの変更
-	if (keyDownTrigger[KEY_ID_DOWN])
+	if (fadeOut == false)
 	{
-		ID++;
-		blend = 0;
-		if (stageID > STAGE_ID_MAX - 2)
+		if (keyDownTrigger[KEY_ID_DOWN])
 		{
-			ID = 0;
+			ID++;
+			blend = 0;
+			if (stageID > STAGE_ID_MAX - 2)
+			{
+				ID = 0;
+			}
 		}
-	}
-	if (keyDownTrigger[KEY_ID_UP])
-	{
-		ID--;
-		blend = 0;
-		if (stageID <= 0)
+		if (keyDownTrigger[KEY_ID_UP])
 		{
-			ID = STAGE_ID_MAX - 1;
+			ID--;
+			blend = 0;
+			if (stageID <= 0)
+			{
+				ID = STAGE_ID_MAX - 1;
+			}
 		}
-	}
-	stageID = (STAGE_ID)ID;
+		stageID = (STAGE_ID)ID;
 
-	// シーン遷移
-	if (keyUpTrigger[KEY_ID_SPACE])
-	{
-		fadeOut = true;
+		// シーン遷移
+		if (keyUpTrigger[KEY_ID_SPACE])
+		{
+			fadeOut = true;
 
-		StageGameInit(stageID);
+			StageGameInit(stageID);
+		}
 	}
 
 	StageSelectDraw();
