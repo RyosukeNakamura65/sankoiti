@@ -104,7 +104,7 @@ void shot4Draw(void)
 	}*/
 }
 
-void Createshot4(XY pPos, XY poffset, MOVE_DIR pDir)
+void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 {
 	for (int cs = 0; cs < PLAYER_SHOT4_MAX; cs++)
 	{

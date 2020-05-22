@@ -93,7 +93,7 @@ void playerControl(void)
 		{
 			playerPosCopy.x += player.moveSpeed;
 			playerPosOffset.x = playerPosCopy.x + player.size.x / 2;
-			if (IsPass(playerPosOffset) || GetEvent(playerPosOffset))
+			if (PIsPass(playerPosOffset))
 			{
 				player.pos = playerPosCopy;
 			}
@@ -102,7 +102,7 @@ void playerControl(void)
 		{
 			playerPosCopy.x -= player.moveSpeed;
 			playerPosOffset.x = playerPosCopy.x - player.size.x / 2;
-			if (IsPass(playerPosOffset) || GetEvent(playerPosOffset))
+			if (PIsPass(playerPosOffset))
 			{
 				player.pos = playerPosCopy;
 			}
@@ -111,7 +111,7 @@ void playerControl(void)
 		{
 			playerPosCopy.y -= player.moveSpeed;
 			playerPosOffset.y = playerPosCopy.y - player.size.y / 2;
-			if (IsPass(playerPosOffset) || GetEvent(playerPosOffset))
+			if (PIsPass(playerPosOffset))
 			{
 				player.pos = playerPosCopy;
 			}
@@ -120,7 +120,7 @@ void playerControl(void)
 		{
 			playerPosCopy.y += player.moveSpeed;
 			playerPosOffset.y = playerPosCopy.y + player.size.y / 2;
-			if (IsPass(playerPosOffset) || GetEvent(playerPosOffset))
+			if (PIsPass(playerPosOffset))
 			{
 				player.pos = playerPosCopy;
 			}
@@ -196,6 +196,7 @@ bool ShotCheckHit(XY sPos, int ssize)
 			{
 				player.life -= 1;
 				player.damageFlag = true;
+				DeleteShot();
 			}
 			return true;
 		}

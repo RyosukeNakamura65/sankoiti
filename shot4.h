@@ -7,7 +7,7 @@ void shot4GameInit(void);
 void shot4Control(void);
 void shot4Draw(void);
 
-void Createshot4(XY pPos, XY poffset, MOVE_DIR pDir);
+void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir);
 void Deleteshot4(void);
 
 XY GetPos4(void);

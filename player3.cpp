@@ -2,6 +2,7 @@
 #include "main.h"
 #include "player.h"
 #include "shot.h"
+#include "shot3.h"
 #include "stage.h"
 #include "KeyCheck.h"
 
@@ -88,7 +89,7 @@ void player3Control(void)
 		{
 			player3PosCopy.x += player3.moveSpeed;
 			player3PosOffset.x = player3PosCopy.x + player3.size.x / 2;
-			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
+			if (PIsPass(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -97,7 +98,7 @@ void player3Control(void)
 		{
 			player3PosCopy.x -= player3.moveSpeed;
 			player3PosOffset.x = player3PosCopy.x - player3.size.x / 2;
-			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
+			if (PIsPass(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -106,7 +107,7 @@ void player3Control(void)
 		{
 			player3PosCopy.y -= player3.moveSpeed;
 			player3PosOffset.y = player3PosCopy.y - player3.size.y / 2;
-			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
+			if (PIsPass(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -115,7 +116,7 @@ void player3Control(void)
 		{
 			player3PosCopy.y += player3.moveSpeed;
 			player3PosOffset.y = player3PosCopy.y + player3.size.y / 2;
-			if (IsPass(player3PosOffset) || GetEvent(player3PosOffset))
+			if (PIsPass(player3PosOffset))
 			{
 				player3.pos = player3PosCopy;
 			}
@@ -144,7 +145,7 @@ void player3Control(void)
 	// ’e‚Ì”­ŽË
 	if (keyDownTrigger[KEY_ID_S])
 	{
-		CreateShot(player3.pos, player3.sizeOffset, player3.moveDir);
+		CreateShot3(player3.pos, player3.sizeOffset, player3.moveDir);
 		player3.shotFlag = true;
 	}
 
@@ -173,6 +174,7 @@ bool Shot3CheckHit(XY sPos, int ssize)
 			{
 				player3.life -= 1;
 				player3.damageFlag = true;
+				DeleteShot();
 			}
 			return true;
 		}

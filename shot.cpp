@@ -134,15 +134,10 @@ void CreateShot(XY pPos, XY poffset ,MOVE_DIR pDir)
 
 void DeleteShot(void)
 {
-	for (int s = 0; s < PLAYER_SHOT_MAX; s++)
+	for (int s = 0; s < SHOT_MAX; s++)
 	{
-		if (shot[s].life > 0)
-		{
-			if (ShotCheckHit(shot[s].pos, shot[s].size.x))
-			{
-				shot[s].life = 0;
-			}
-		}
+		if (shot[s].visible)
+			shot[s].visible = false;
 	}
 }
 
