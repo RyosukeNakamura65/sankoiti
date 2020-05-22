@@ -10,6 +10,11 @@
 
 int shotImage[PLAYER_MAX];
 CHARACTER shot[SHOT_MAX];
+int shotCnt;
+int reloadtime;			//リロードの時間
+int reloadtimeMAX;		//リロードの最大時間
+int reloadFlag;			//リロードのフラグ
+
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
 //{
@@ -53,11 +58,14 @@ void shotGameInit(void)
 		shot[sh].life = 0;
 		shot[sh].moveSpeed = 10;
 	}
+	shotCnt = 0;
+	reloadtimeMAX = 15;
+	reloadtime = 0;
+	reloadtime = PLAYER_SHOT_MAX;
 }
 
 void shotControl(void)
 {
-
 	for (int sc = 0; sc < PLAYER_SHOT_MAX;sc++)
 	{
 		if (shot[sc].visible)
@@ -81,6 +89,21 @@ void shotControl(void)
 			}
 		}
 	}
+	if (0 >= reloadtime)
+	{
+		reloadFlag = true;
+	}
+	if (reloadFlag == true)
+	{
+		shotCnt++;
+		if (shotCnt > 100)
+		{
+			reloadFlag = false;
+			shotCnt = 0;
+			reloadtime = PLAYER_SHOT_MAX;
+		}
+	}
+
 }
 
 void shotDraw(void)
@@ -96,34 +119,50 @@ void shotDraw(void)
 		}
 
 	}
+	DrawFormatString(50, 50, GetColor(255, 255, 255), "shotCnt = %d", shotCnt);
 	/*if (Shotflag == true)
 	{
 		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
 	}*/
 }
 
-void CreateShot(XY pPos, XY poffset ,MOVE_DIR pDir)
+void CreateShot(XY pPos, XY poffset, MOVE_DIR pDir)
 {
-	for (int cs = 0; cs < PLAYER_SHOT_MAX; cs++)
+	if (reloadFlag)
 	{
-		if (!shot[cs].visible)
-		{
-			shot[cs].visible = true;
 
-			if (shot[cs].visible)
+	}
+	else
+	{
+
+	}
+	if (reloadFlag == false)
+	{
+		for (int cs = 0; cs < PLAYER_SHOT_MAX; cs++)
+		{
+			if (!shot[cs].visible)
 			{
-				shot[cs].pos.x = pPos.x;
-				shot[cs].pos.y = pPos.y;
-				shot[cs].moveDir = pDir;
-				if (shot[cs].moveDir == DIR_UP)shot[cs].pos.y -= poffset.y;
-				if (shot[cs].moveDir == DIR_RIGHT)shot[cs].pos.x += poffset.x;
-				if (shot[cs].moveDir == DIR_DOWN)shot[cs].pos.y += poffset.y;
-				if (shot[cs].moveDir == DIR_LEFT)shot[cs].pos.x -= poffset.x;
-				shot[cs].life = shot[cs].lifeMax;
-				break;
+				shot[cs].visible = true;
+
+				if (shot[cs].visible)
+				{
+
+					shot[cs].pos.x = pPos.x;
+					shot[cs].pos.y = pPos.y;
+					shot[cs].moveDir = pDir;
+					if (shot[cs].moveDir == DIR_UP)shot[cs].pos.y -= poffset.y;
+					if (shot[cs].moveDir == DIR_RIGHT)shot[cs].pos.x += poffset.x;
+					if (shot[cs].moveDir == DIR_DOWN)shot[cs].pos.y += poffset.y;
+					if (shot[cs].moveDir == DIR_LEFT)shot[cs].pos.x -= poffset.x;
+					shot[cs].life = shot[cs].lifeMax;
+					reloadtime--;
+					break;
+				}
 			}
+
 		}
 	}
+
 	/*if (Shotflag == false)
 	{
 		Shotflag = true;
@@ -157,4 +196,3 @@ void DeleteShot(void)
 //{
 //	//return Shotflag;
 //}
-
