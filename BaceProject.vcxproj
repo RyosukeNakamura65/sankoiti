@@ -139,6 +139,9 @@
     <ClCompile Include="player3.cpp" />
     <ClCompile Include="player4.cpp" />
     <ClCompile Include="shot.cpp" />
+    <ClCompile Include="shot2.cpp" />
+    <ClCompile Include="shot3.cpp" />
+    <ClCompile Include="shot4.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="Tobitiri.cpp" />
   </ItemGroup>
@@ -151,6 +154,9 @@
     <ClInclude Include="player3.h" />
     <ClInclude Include="player4.h" />
     <ClInclude Include="shot.h" />
+    <ClInclude Include="shot2.h" />
+    <ClInclude Include="shot3.h" />
+    <ClInclude Include="shot4.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="Tobitiri.h" />
   </ItemGroup>

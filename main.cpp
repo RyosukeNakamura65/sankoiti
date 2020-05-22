@@ -7,6 +7,9 @@
 #include "player4.h"
 #include "stage.h"
 #include "shot.h"
+#include "shot2.h"
+#include "shot3.h"
+#include "shot4.h"
 #include "KeyCheck.h"
 #include "Effect.h"
 
@@ -229,6 +232,9 @@ bool SystemInit(void)
 	
 	StageSystemInit();
 	shotSystemInit();
+	shot2SystemInit();
+	shot3SystemInit();
+	shot4SystemInit();
 	playerSystemInit();
 	player2SystemInit();
 	player3SystemInit();
@@ -251,7 +257,11 @@ void InitScene(void)
 	stageID = STAGE_ID_1;
 	ID = 0;
 
+	
 	shotGameInit();
+	shot2GameInit();
+	shot3GameInit();
+	shot4GameInit();
 	playerGameInit();
 	player2GameInit();
 	player3GameInit();
@@ -354,6 +364,9 @@ void GameScene(void)
 	shotDraw();
 
 	shotControl();
+	shot2Control();
+	shot3Control();
+	shot4Control();
 	if (!playerGameOver())
 	{
 		playerControl();
@@ -439,6 +452,10 @@ void GameScene(void)
 void GameDraw(void)
 {
 	StageDraw();
+	shotDraw();
+	shot2Draw();
+	shot3Draw();
+	shot4Draw();
 	playerDraw();
 	player2Draw();
 	player3Draw();
