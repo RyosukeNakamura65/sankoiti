@@ -11,6 +11,10 @@
 
 int shot4Image[PLAYER_MAX];
 CHARACTER shot4[PLAYER_SHOT4_MAX];
+int shot4Cnt;
+int reloadtime4;			//リロードの時間
+int reloadtime4MAX;		//リロードの最大時間
+int reloadFlag4;			//リロードのフラグ
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
 //{
@@ -54,6 +58,10 @@ void shot4GameInit(void)
 		shot4[sh].life = 0;
 		shot4[sh].moveSpeed = 10;
 	}
+	shot4Cnt = 0;
+	reloadtime4MAX = 15;
+	reloadtime4 = 0;
+	reloadtime4 = PLAYER_SHOT4_MAX;
 }
 
 void shot4Control(void)
@@ -83,6 +91,20 @@ void shot4Control(void)
 			}
 		}
 	}
+	if (0 >= reloadtime4)
+	{
+		reloadFlag4 = true;
+	}
+	if (reloadFlag4 == true)
+	{
+		shot4Cnt++;
+		if (shot4Cnt > 100)
+		{
+			reloadFlag4 = false;
+			shot4Cnt = 0;
+			reloadtime4 = PLAYER_SHOT4_MAX;
+		}
+	}
 }
 
 void shot4Draw(void)
@@ -98,6 +120,7 @@ void shot4Draw(void)
 		}
 
 	}
+	DrawFormatString(300, 50, GetColor(255, 255, 255), "shot4Cnt = %d", shot4Cnt);
 	/*if (shot4flag == true)
 	{
 		DrawGraph(shot4PosX, shot4PosY, shot4Image, true);
@@ -106,23 +129,35 @@ void shot4Draw(void)
 
 void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 {
-	for (int cs = 0; cs < PLAYER_SHOT4_MAX; cs++)
+	if (reloadFlag4)
 	{
-		if (!shot4[cs].visible)
-		{
-			shot4[cs].visible = true;
 
-			if (shot4[cs].visible)
+	}
+	else
+	{
+
+	}
+	if (reloadFlag4 == false)
+	{
+		for (int cs = 0; cs < PLAYER_SHOT4_MAX; cs++)
+		{
+			if (!shot4[cs].visible)
 			{
-				shot4[cs].pos.x = pPos.x;
-				shot4[cs].pos.y = pPos.y;
-				shot4[cs].moveDir = pDir;
-				if (shot4[cs].moveDir == DIR_UP)shot4[cs].pos.y -= poffset.y;
-				if (shot4[cs].moveDir == DIR_RIGHT)shot4[cs].pos.x += poffset.x;
-				if (shot4[cs].moveDir == DIR_DOWN)shot4[cs].pos.y += poffset.y;
-				if (shot4[cs].moveDir == DIR_LEFT)shot4[cs].pos.x -= poffset.x;
-				shot4[cs].life = shot4[cs].lifeMax;
-				break;
+				shot4[cs].visible = true;
+
+				if (shot4[cs].visible)
+				{
+					shot4[cs].pos.x = pPos.x;
+					shot4[cs].pos.y = pPos.y;
+					shot4[cs].moveDir = pDir;
+					if (shot4[cs].moveDir == DIR_UP)shot4[cs].pos.y -= poffset.y;
+					if (shot4[cs].moveDir == DIR_RIGHT)shot4[cs].pos.x += poffset.x;
+					if (shot4[cs].moveDir == DIR_DOWN)shot4[cs].pos.y += poffset.y;
+					if (shot4[cs].moveDir == DIR_LEFT)shot4[cs].pos.x -= poffset.x;
+					shot4[cs].life = shot4[cs].lifeMax;
+					reloadtime4--;
+					break;
+				}
 			}
 		}
 	}
@@ -134,7 +169,7 @@ void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 	}*/
 }
 
-void Deleteshot4(void)
+void DeleteShot4(void)
 {
 	for (int s = 0; s < PLAYER_SHOT4_MAX; s++)
 	{

@@ -11,6 +11,10 @@
 
 int shot3Image[PLAYER_MAX];
 CHARACTER shot3[PLAYER_SHOT3_MAX];
+int shot3Cnt;
+int reloadtime3;			//リロードの時間
+int reloadtime3MAX;		//リロードの最大時間
+int reloadFlag3;			//リロードのフラグ
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
 //{
@@ -54,6 +58,10 @@ void shot3GameInit(void)
 		shot3[sh].life = 0;
 		shot3[sh].moveSpeed = 10;
 	}
+	shot3Cnt = 0;
+	reloadtime3MAX = 15;
+	reloadtime3 = 0;
+	reloadtime3 = PLAYER_SHOT3_MAX;
 }
 
 void shot3Control(void)
@@ -83,6 +91,20 @@ void shot3Control(void)
 			}
 		}
 	}
+	if (0 >= reloadtime3)
+	{
+		reloadFlag3 = true;
+	}
+	if (reloadFlag3 == true)
+	{
+		shot3Cnt++;
+		if (shot3Cnt > 100)
+		{
+			reloadFlag3 = false;
+			shot3Cnt = 0;
+			reloadtime3 = PLAYER_SHOT3_MAX;
+		}
+	}
 }
 
 void shot3Draw(void)
@@ -98,6 +120,7 @@ void shot3Draw(void)
 		}
 
 	}
+	DrawFormatString(200, 50, GetColor(255, 255, 255), "shot3Cnt = %d", shot3Cnt);
 	/*if (shot3flag == true)
 	{
 		DrawGraph(shot3PosX, shot3PosY, shot3Image, true);
@@ -106,23 +129,35 @@ void shot3Draw(void)
 
 void CreateShot3(XY pPos, XY poffset, MOVE_DIR pDir)
 {
-	for (int cs = 0; cs < PLAYER_SHOT3_MAX; cs++)
+	if (reloadFlag3)
 	{
-		if (!shot3[cs].visible)
-		{
-			shot3[cs].visible = true;
 
-			if (shot3[cs].visible)
+	}
+	else
+	{
+
+	}
+	if (reloadFlag3 == false)
+	{
+		for (int cs = 0; cs < PLAYER_SHOT3_MAX; cs++)
+		{
+			if (!shot3[cs].visible)
 			{
-				shot3[cs].pos.x = pPos.x;
-				shot3[cs].pos.y = pPos.y;
-				shot3[cs].moveDir = pDir;
-				if (shot3[cs].moveDir == DIR_UP)shot3[cs].pos.y -= poffset.y;
-				if (shot3[cs].moveDir == DIR_RIGHT)shot3[cs].pos.x += poffset.x;
-				if (shot3[cs].moveDir == DIR_DOWN)shot3[cs].pos.y += poffset.y;
-				if (shot3[cs].moveDir == DIR_LEFT)shot3[cs].pos.x -= poffset.x;
-				shot3[cs].life = shot3[cs].lifeMax;
-				break;
+				shot3[cs].visible = true;
+
+				if (shot3[cs].visible)
+				{
+					shot3[cs].pos.x = pPos.x;
+					shot3[cs].pos.y = pPos.y;
+					shot3[cs].moveDir = pDir;
+					if (shot3[cs].moveDir == DIR_UP)shot3[cs].pos.y -= poffset.y;
+					if (shot3[cs].moveDir == DIR_RIGHT)shot3[cs].pos.x += poffset.x;
+					if (shot3[cs].moveDir == DIR_DOWN)shot3[cs].pos.y += poffset.y;
+					if (shot3[cs].moveDir == DIR_LEFT)shot3[cs].pos.x -= poffset.x;
+					shot3[cs].life = shot3[cs].lifeMax;
+					reloadtime3--;
+					break;
+				}
 			}
 		}
 	}

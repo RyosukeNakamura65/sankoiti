@@ -8,7 +8,7 @@ void shot4Control(void);
 void shot4Draw(void);
 
 void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir);
-void Deleteshot4(void);
+void DeleteShot4(void);
 
 XY GetPos4(void);
 XY GetSize4(void);

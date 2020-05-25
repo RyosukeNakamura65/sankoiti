@@ -11,6 +11,10 @@
 
 int shot2Image[PLAYER_MAX];
 CHARACTER shot2[PLAYER_SHOT2_MAX];
+int shot2Cnt;
+int reloadtime2;			//リロードの時間
+int reloadtime2MAX;		//リロードの最大時間
+int reloadFlag2;			//リロードのフラグ
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
 //{
@@ -54,6 +58,10 @@ void shot2GameInit(void)
 		shot2[sh].life = 0;
 		shot2[sh].moveSpeed = 10;
 	}
+	shot2Cnt = 0;
+	reloadtime2MAX = 15;
+	reloadtime2 = 0;
+	reloadtime2 = PLAYER_SHOT2_MAX;
 }
 
 void shot2Control(void)
@@ -72,15 +80,29 @@ void shot2Control(void)
 			{
 				shot2[sc].visible = false;
 			}
-			if (ShotCheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
+			if (ShotCheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].life = 0;
 			//if (Shot2CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
-			if (Shot3CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
-			if (Shot4CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].visible = false;
+			if (Shot3CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].life = 0;
+			if (Shot4CheckHit(shot2[sc].pos, shot2[sc].size.x) == true)shot2[sc].life = 0;
 
 			if (shot2[sc].life < 0)
 			{
 				shot2[sc].visible = false;
 			}
+		}
+	}
+	if (0 >= reloadtime2)
+	{
+		reloadFlag2 = true;
+	}
+	if (reloadFlag2 == true)
+	{
+		shot2Cnt++;
+		if (shot2Cnt > 100)
+		{
+			reloadFlag2 = false;
+			shot2Cnt = 0;
+			reloadtime2 = PLAYER_SHOT2_MAX;
 		}
 	}
 }
@@ -98,6 +120,7 @@ void shot2Draw(void)
 		}
 
 	}
+	DrawFormatString(100, 50, GetColor(255, 255, 255), "shot2Cnt = %d", shot2Cnt);
 	/*if (shot2flag == true)
 	{
 		DrawGraph(shot2PosX, shot2PosY, shot2Image, true);
@@ -106,23 +129,35 @@ void shot2Draw(void)
 
 void CreateShot2(XY pPos, XY poffset, MOVE_DIR pDir)
 {
-	for (int cs = 0; cs < PLAYER_SHOT2_MAX; cs++)
+	if (reloadFlag2)
 	{
-		if (!shot2[cs].visible)
-		{
-			shot2[cs].visible = true;
 
-			if (shot2[cs].visible)
+	}
+	else
+	{
+
+	}
+	if (reloadFlag2 == false)
+	{
+		for (int cs = 0; cs < PLAYER_SHOT2_MAX; cs++)
+		{
+			if (!shot2[cs].visible)
 			{
-				shot2[cs].pos.x = pPos.x;
-				shot2[cs].pos.y = pPos.y;
-				shot2[cs].moveDir = pDir;
-				if (shot2[cs].moveDir == DIR_UP)shot2[cs].pos.y -= poffset.y;
-				if (shot2[cs].moveDir == DIR_RIGHT)shot2[cs].pos.x += poffset.x;
-				if (shot2[cs].moveDir == DIR_DOWN)shot2[cs].pos.y += poffset.y;
-				if (shot2[cs].moveDir == DIR_LEFT)shot2[cs].pos.x -= poffset.x;
-				shot2[cs].life = shot2[cs].lifeMax;
-				break;
+				shot2[cs].visible = true;
+
+				if (shot2[cs].visible)
+				{
+					shot2[cs].pos.x = pPos.x;
+					shot2[cs].pos.y = pPos.y;
+					shot2[cs].moveDir = pDir;
+					if (shot2[cs].moveDir == DIR_UP)shot2[cs].pos.y -= poffset.y;
+					if (shot2[cs].moveDir == DIR_RIGHT)shot2[cs].pos.x += poffset.x;
+					if (shot2[cs].moveDir == DIR_DOWN)shot2[cs].pos.y += poffset.y;
+					if (shot2[cs].moveDir == DIR_LEFT)shot2[cs].pos.x -= poffset.x;
+					shot2[cs].life = shot2[cs].lifeMax;
+					reloadtime2--;
+					break;
+				}
 			}
 		}
 	}
