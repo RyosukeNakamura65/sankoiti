@@ -6,7 +6,7 @@
 // 変数
 int chipImage[MAP_CHIP_MAX];
 int stageImage[STAGE_ID_MAX];
-int stageSelectBG[STAGE_ID_MAX];
+int stageSelectBG[STAGE_BG_MAX];
 int map[MAP_Y][MAP_X];
 STAGE_ID stageNo;
 
@@ -115,11 +115,9 @@ void StageSystemInit(void)
 	stageImage[STAGE_ID_RANDOM] = LoadGraph("image/stageR.png");
 
 	// ステージ選択シーン用背景画像
-	stageSelectBG[STAGE_ID_1] = LoadGraph("image/砂漠.jpg");
-	stageSelectBG[STAGE_ID_2] = LoadGraph("image/砂漠.jpg");
-	stageSelectBG[STAGE_ID_3] = LoadGraph("image/遺跡.jpg");
-	stageSelectBG[STAGE_ID_4] = LoadGraph("image/遺跡.jpg");
-	stageSelectBG[STAGE_ID_5] = LoadGraph("image/無人島.png");
+	stageSelectBG[STAGE_BG_1] = LoadGraph("image/砂漠.jpg");
+	stageSelectBG[STAGE_BG_2] = LoadGraph("image/遺跡.jpg");
+	stageSelectBG[STAGE_BG_3] = LoadGraph("image/無人島.png");
 }
 
 
@@ -337,10 +335,29 @@ void SetMapData(STAGE_ID stageID)
 // ステージ選択シーン用描画
 void StageSelect(STAGE_ID stageID,int blend)
 {
+	STAGE_BG bgID;
+	
+	// ステージIDをもとに背景画像を決める
+	if (stageID == STAGE_ID_1 || stageID == STAGE_ID_2)
+	{
+		bgID = STAGE_BG_1;
+	}
+	else if (stageID == STAGE_ID_3 || stageID == STAGE_ID_4)
+	{
+		bgID = STAGE_BG_2;
+	}
+	else if (stageID == STAGE_ID_5)
+	{
+		bgID = STAGE_BG_3;
+	}
+
 	// ステージ裏の背景　～フェードイン～
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
-	DrawGraph(0, 0, stageSelectBG[stageID], true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (stageID != STAGE_ID_RANDOM)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
+		DrawGraph(0, 0, stageSelectBG[bgID], true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 	// ステージ画像
 	DrawGraph((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 150
