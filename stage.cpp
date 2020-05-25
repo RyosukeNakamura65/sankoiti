@@ -369,12 +369,82 @@ void StageSelect(STAGE_ID stageID,int blend)
 	{
 		if (st == stageID)
 		{
+			// ステージ選択されている部分
+			switch (st)
+			{
+			case STAGE_ID_1:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.砂漠Ⅰ", st + 1);
+				break;
+
+			case STAGE_ID_2:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.砂漠Ⅱ", st + 1);
+				break;
+
+			case STAGE_ID_3:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.遺跡Ⅰ", st + 1);
+				break;
+
+			case STAGE_ID_4:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.遺跡Ⅱ", st + 1);
+				break;
+
+			case STAGE_ID_5:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.無人島", st + 1);
+				break;
+
+			case STAGE_ID_RANDOM:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "%d.ランダム", st + 1);
+				break;
+
+			default:
+				break;
+			}
+		}
+		else
+		{
+			// ステージ選択されていない部分
+			switch (st)
+			{
+			case STAGE_ID_1:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.砂漠Ⅰ", st + 1);
+				break;
+
+			case STAGE_ID_2:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.砂漠Ⅱ", st + 1);
+				break;
+
+			case STAGE_ID_3:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.遺跡Ⅰ", st + 1);
+				break;
+
+			case STAGE_ID_4:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.遺跡Ⅱ", st + 1);
+				break;
+
+			case STAGE_ID_5:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.無人島", st + 1);
+				break;
+
+			case STAGE_ID_RANDOM:
+				DrawFormatString(740, 250 + 50 * st, GetColor(255, 255, 255), "%d.ランダム", st + 1);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	/*for (int st = 0; st < STAGE_ID_MAX; st++)
+	{
+		if (st == stageID)
+		{
 			DrawFormatString(740, 250 + 50 * st, GetColor(255, 0, 0), "stage[%d]", st + 1);
 		}
 		else
 		{
 			DrawFormatString(740,250 + 50 * st, GetColor(255, 255, 255), "stage[%d]", st + 1);
 		}
-	}
+	}*/
 	
 }
