@@ -213,7 +213,7 @@ bool Shot2CheckHit(XY sPos, int ssize)
 			{
 				player2.life -= 1;
 				player2.damageFlag = true;
-				DeleteShot();
+				DeleteShot2();
 			}
 			return true;
 		}

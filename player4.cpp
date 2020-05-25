@@ -213,7 +213,7 @@ bool Shot4CheckHit(XY sPos, int ssize)
 			{
 				player4.life -= 1;
 				player4.damageFlag = true;
-				DeleteShot();
+				DeleteShot4();
 			}
 			return true;
 		}
