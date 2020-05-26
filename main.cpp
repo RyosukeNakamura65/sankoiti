@@ -365,7 +365,7 @@ void StageSelectScene(void)
 	}
 
 	StageSelectDraw();
-	DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
+	//DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
 }
 
 void StageSelectDraw(void)

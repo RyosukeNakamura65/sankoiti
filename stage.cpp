@@ -336,8 +336,11 @@ void SetMapData(STAGE_ID stageID)
 void StageSelect(STAGE_ID stageID,int blend)
 {
 	STAGE_BG bgID;
+	int posX = 690;
+	int posY = 250;
 	int color;
-	
+	int fontHandle = CreateFontToHandle(NULL, 21, 3, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+
 	// ステージIDをもとに背景画像を決める
 	if (stageID == STAGE_ID_1 || stageID == STAGE_ID_2)
 	{
@@ -351,9 +354,19 @@ void StageSelect(STAGE_ID stageID,int blend)
 	{
 		bgID = STAGE_BG_3;
 	}
+	else if (stageID == STAGE_ID_RANDOM)
+	{
+		color = GetColor(150, 150, 150);
+	}
 
 	// ステージ裏の背景　～フェードイン～
-	if (stageID != STAGE_ID_RANDOM)
+	if (stageID == STAGE_ID_RANDOM)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
+		DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, color, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, blend);
 		DrawGraph(0, 0, stageSelectBG[bgID], true);
@@ -384,31 +397,33 @@ void StageSelect(STAGE_ID stageID,int blend)
 		switch (st)
 		{
 		case STAGE_ID_1:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.砂漠Ⅰ", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. 砂漠Ⅰ", st + 1);
 			break;
 
 		case STAGE_ID_2:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.砂漠Ⅱ", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. 砂漠Ⅱ", st + 1);
 			break;
 
 		case STAGE_ID_3:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.遺跡Ⅰ", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. 遺跡Ⅰ", st + 1);
 			break;
 
 		case STAGE_ID_4:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.遺跡Ⅱ", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. 遺跡Ⅱ", st + 1);
 			break;
 
 		case STAGE_ID_5:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.無人島", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. 無人島", st + 1);
 			break;
 
 		case STAGE_ID_RANDOM:
-			DrawFormatString(740, 250 + 50 * st, color, "%d.ランダム", st + 1);
+			DrawFormatStringToHandle(posX, posY + 50 * st, color, fontHandle, "%d. ランダム", st + 1);
 			break;
 
 		default:
 			break;
 		}
 	}
+
+	DeleteFontToHandle(fontHandle);
 }
