@@ -29,6 +29,7 @@ void playerSystemInit(void)
 
 	LoadDivGraph("image/blueshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.shotImage);			// ｼｮｯﾄ画像読み込み
 
+	playerImage.standImage = LoadGraph("image/buleup.png");
 }
 
 void playerGameInit(void)
@@ -209,6 +210,8 @@ void playerControl(void)
 		CreateShot(player.pos, player.sizeOffset, player.moveDir);				// 弾の生成
 		player.shotFlag = true;
 	}
+
+	playerCounter++;			// ｱﾆﾒｰｼｮﾝを動かす
 }
 
 bool playerGameOver(void)
@@ -219,6 +222,13 @@ bool playerGameOver(void)
 		return true;
 	}
 	return false;
+}
+
+void playerGameOverDraw(void)
+{
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
+	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー1のしょうり！！");
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, playerImage.standImage, true);
 }
 
 //弾との当たり判定
@@ -262,10 +272,10 @@ void playerDraw(void)
 		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
 		if (player.damageFlag)
 		{
-			if (player.animCnt % 2 == 0)
+			if (playerCounter % 2 == 0)
 			{
 				DrawGraph(player.pos.x - player.sizeOffset.x + MAP_OFFSET_X, player.pos.y - player.sizeOffset.y + MAP_OFFSET_Y
-					, playerImage.walkImage[player.moveDir][player.animCnt / 10 % PLAYER_ANI_MAX], true);
+					, playerImage.walkImage[player.moveDir][(player.animCnt / 10 % PLAYER_ANI_MAX)], true);
 			}
 			else
 			{

@@ -35,6 +35,13 @@ STAGE_ID stageID;
 int ID;
 int blend;
 
+// πﬁ∞—µ∞ ﬁ∞îªíf
+bool playerGameOverFlag;
+bool player2GameOverFlag;
+bool player3GameOverFlag;
+bool player4GameOverFlag;
+
+
 // WinMainä÷êî
 //-------------------------------------------------------------
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
@@ -228,6 +235,10 @@ bool SystemInit(void)
 	gameCounter = 0;
 	sceneCounter = 0;
 	startCounter = 0;
+	playerGameOverFlag = false;
+	player2GameOverFlag = false;
+	player3GameOverFlag = false;
+	player4GameOverFlag = false;
 	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
 	
@@ -409,17 +420,33 @@ void GameScene(void)
 			{
 				playerControl();
 			}
+			else
+			{
+				playerGameOverFlag = true;
+			}
 			if (!player2GameOver())
 			{
 				player2Control();
+			}
+			else
+			{
+				player2GameOverFlag = true;
 			}
 			if (!player3GameOver())
 			{
 				player3Control();
 			}
+			else
+			{
+				player3GameOverFlag = true;
+			}
 			if (!player4GameOver())
 			{
 				player4Control();
+			}
+			else
+			{
+				player4GameOverFlag = true;
 			}
 
 			if (keyUpTrigger[KEY_ID_SPACE])
@@ -461,6 +488,23 @@ void GameScene(void)
 		}
 	}
 
+	if (playerGameOverFlag && player2GameOverFlag && player3GameOverFlag && !player4GameOverFlag)
+	{
+		fadeOut = true;
+	}
+	if (playerGameOverFlag && player2GameOverFlag && !player3GameOverFlag && player4GameOverFlag)
+	{
+		fadeOut = true;
+	}
+	if (playerGameOverFlag && !player2GameOverFlag && player3GameOverFlag && player4GameOverFlag)
+	{
+		fadeOut = true;
+	}
+	if (!playerGameOverFlag && player2GameOverFlag && player3GameOverFlag && player4GameOverFlag)
+	{
+		fadeOut = true;
+	}
+
 	startCounter++;
 
 }
@@ -492,8 +536,24 @@ void GameOverScene(void)
 	{
 		fadeOut = true;
 	}
-
 	GameOverDraw();
+
+	if (!playerGameOverFlag)
+	{
+		playerGameOverDraw();
+	}
+	if (!player2GameOverFlag)
+	{
+		player2GameOverDraw();
+	}
+	if (!player3GameOverFlag)
+	{
+		player3GameOverDraw();
+	}
+	if (!player4GameOverFlag)
+	{
+		player4GameOverDraw();
+	}
 }
 
 void GameOverDraw(void)

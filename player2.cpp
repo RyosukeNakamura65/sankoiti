@@ -29,6 +29,8 @@ void player2SystemInit(void)
 
 	LoadDivGraph("image/pinkshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, player2Image.shotImage);
 
+	player2Image.standImage = LoadGraph("image/pinkup.png");
+
 }
 
 void player2GameInit(void)
@@ -188,6 +190,8 @@ void player2Control(void)
 		CreateShot2(player2.pos, player2.sizeOffset, player2.moveDir);
 		player2.shotFlag = true;
 	}
+
+	player2Counter++;
 }
 
 bool player2GameOver(void)
@@ -197,6 +201,13 @@ bool player2GameOver(void)
 		return true;
 	}
 	return false;
+}
+
+void player2GameOverDraw(void)
+{
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
+	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー2のしょうり！！");
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, player2Image.standImage, true);
 }
 
 //弾との当たり判定
@@ -239,7 +250,7 @@ void player2Draw(void)
 		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
 		if (player2.damageFlag)
 		{
-			if (player2.animCnt % 2 == 0)
+			if (player2Counter% 2 == 0)
 			{
 				DrawGraph(player2.pos.x - player2.sizeOffset.x + MAP_OFFSET_X, player2.pos.y - player2.sizeOffset.y + MAP_OFFSET_Y
 					, player2Image.walkImage[player2.moveDir][player2.animCnt / 10 % PLAYER_ANI_MAX], true);

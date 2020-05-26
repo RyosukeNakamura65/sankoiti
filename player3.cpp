@@ -29,6 +29,7 @@ void player3SystemInit(void)
 
 	LoadDivGraph("image/greenshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, player3Image.shotImage);
 
+	player3Image.standImage = LoadGraph("image/greenup.png");
 }
 
 void player3GameInit(void)
@@ -187,6 +188,7 @@ void player3Control(void)
 		player3.shotFlag = true;
 	}
 
+	player3Counter++;
 }
 
 bool player3GameOver(void)
@@ -196,6 +198,13 @@ bool player3GameOver(void)
 		return true;
 	}
 	return false;
+}
+
+void player3GameOverDraw(void)
+{
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
+	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー3のしょうり！！");
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, player3Image.standImage, true);
 }
 
 	//弾との当たり判定
@@ -238,7 +247,7 @@ void player3Draw(void)
 		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
 		if (player3.damageFlag)
 		{
-			if (player3.animCnt % 2 == 0)
+			if (player3Counter % 2 == 0)
 			{
 				DrawGraph(player3.pos.x - player3.sizeOffset.x + MAP_OFFSET_X, player3.pos.y - player3.sizeOffset.y + MAP_OFFSET_Y
 					, player3Image.walkImage[player3.moveDir][player3.animCnt / 10 % PLAYER_ANI_MAX], true);

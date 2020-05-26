@@ -6,5 +6,6 @@ void player3GameInit(void);
 void player3CharSelect(void);
 void player3Control(void);
 bool player3GameOver(void);
+void player3GameOverDraw(void);
 bool Shot3CheckHit(XY sPos, int ssize);
 void player3Draw(void);

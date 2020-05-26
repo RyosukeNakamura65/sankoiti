@@ -2,6 +2,8 @@
 #define PLAYER_SIZE_Y 50
 #define PLAYER_FACE_SIZE_X 300
 #define PLAYER_FACE_SIZE_Y 300
+#define PLAYER_STAND_X 300
+#define PLAYER_STAND_Y 700
 #define PLAYER_DEF_SPEED 3
 #define PLAYER_ANI_MAX 4
 #define PLAYER_LIFE_MAX 3
@@ -20,6 +22,7 @@ enum CHAR_FILE
 		int faceImage;									// äÁ≤“∞ºﬁ
 		int walkImage[DIR_MAX][PLAYER_ANI_MAX];			// ëSêg≤“∞ºﬁ
 		int hitImage;									// à⁄ìÆ≤“∞ºﬁ
+		int standImage;									// óßÇøäG≤“∞ºﬁ
 		int shotImage[DIR_MAX];
 	};
 
@@ -29,5 +32,6 @@ enum CHAR_FILE
 	void playerCharSelect(void);
 	void playerControl(void);
 	bool playerGameOver(void);
+	void playerGameOverDraw(void);
 	bool ShotCheckHit(XY sPos, int ssize);
 	void playerDraw(void);	

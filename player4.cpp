@@ -29,6 +29,7 @@ void player4SystemInit(void)
 
 	LoadDivGraph("image/yellowshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, player4Image.shotImage);
 
+	player4Image.standImage = LoadGraph("image/yellowup.png");
 }
 
 void player4GameInit(void)
@@ -188,6 +189,8 @@ void player4Control(void)
 		CreateShot4(player4.pos, player4.sizeOffset, player4.moveDir);
 		player4.shotFlag = true;
 	}
+
+	player4Counter++;
 }
 
 bool player4GameOver(void)
@@ -197,6 +200,13 @@ bool player4GameOver(void)
 		return true;
 	}
 	return false;
+}
+
+void player4GameOverDraw(void)
+{
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
+	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー4のしょうり！！");
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, player4Image.standImage, true);
 }
 
 //弾との当たり判定
@@ -239,7 +249,7 @@ void player4Draw(void)
 		// ﾌﾟﾚｲﾔｰの被弾の描画（点滅させる）
 		if (player4.damageFlag)
 		{
-			if (player4.animCnt % 2 == 0)
+			if (player4Counter % 2 == 0)
 			{
 				DrawGraph(player4.pos.x - player4.sizeOffset.x + MAP_OFFSET_X, player4.pos.y - player4.sizeOffset.y + MAP_OFFSET_Y
 					, player4Image.walkImage[player4.moveDir][player4.animCnt / 10 % PLAYER_ANI_MAX], true);
