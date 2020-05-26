@@ -10,6 +10,7 @@
 #include "shot2.h"
 #include "shot3.h"
 #include "shot4.h"
+#include "Tobitiri.h"
 #include "KeyCheck.h"
 #include "Effect.h"
 
@@ -251,7 +252,7 @@ bool SystemInit(void)
 	player2SystemInit();
 	player3SystemInit();
 	player4SystemInit();
-
+	TobiSystemInit();
 
 	KeyInit();		// キー情報の初期化
 	EffectInit();	// エフェクトの初期化
@@ -279,6 +280,7 @@ void InitScene(void)
 	player2GameInit();
 	player3GameInit();
 	player4GameInit();
+	TobiGameInit();
 	sceneID = SCENE_ID_TITLE;
 
 }
@@ -448,6 +450,7 @@ void GameScene(void)
 			{
 				player4GameOverFlag = true;
 			}
+			TobiContlor();
 
 			if (keyUpTrigger[KEY_ID_SPACE])
 			{
@@ -520,7 +523,7 @@ void GameDraw(void)
 	player2Draw();
 	player3Draw();
 	player4Draw();
-
+	TobiDraw();
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameScene : %d", sceneCounter);
 	DrawFormatString(0, 64, GetColor(255, 255, 255), "動作確認 : (%d)", a);
 

@@ -7,6 +7,7 @@
 #include "player3.h"
 #include "player4.h"
 #include "stage.h"
+#include "Tobitiri.h"
 #include "KeyCheck.h"
 
 int shot3Image[PLAYER_MAX];
@@ -79,6 +80,7 @@ void shot3Control(void)
 			if (!IsPass(shot3[sc].pos))
 			{
 				shot3[sc].visible = false;
+				SetBlockEffect(shot3[sc].pos, EFFECT_C_GREEN);
 			}
 			if (ShotCheckHit(shot3[sc].pos, shot3[sc].size.x) == true)shot3[sc].life = 0;
 			if (Shot2CheckHit(shot3[sc].pos, shot3[sc].size.x) == true)shot3[sc].life = 0;
@@ -196,3 +198,8 @@ void DeleteShot3(void)
 //{
 //	//return Shotflag;
 //}
+
+
+
+
+

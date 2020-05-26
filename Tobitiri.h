@@ -37,7 +37,7 @@ struct EFFECT {
 
 void TobiSystemInit(void);
 
-void TobiInit(void);
+void TobiGameInit(void);
 
 void TobiContlor(void);
 

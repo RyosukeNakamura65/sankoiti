@@ -26,7 +26,7 @@ void TobiSystemInit(void)
 }
 
 
-void TobiInit(void)
+void TobiGameInit(void)
 {
 	for (int ef = 0; ef < EFFECT_MAX; ef++)
 	{
@@ -50,7 +50,7 @@ void TobiContlor(void)
 		if (tobi[ef].visible)
 		{
 			TemPos = tobi[ef].pos;
-			if (tobi[ef].effectType == EFFECT_T_TOBITIRI)
+			if (tobi[ef].effectType == EFFECT_T_BLOCK)
 			{
 				tobi[ef].pos.y += TobitiriAcc;
 			}
@@ -86,14 +86,38 @@ void SetBlockEffect(XY pos, EFFECT_COLOR effectColor)
 
 	for (int ef = 0; ef < EFFECT_MAX; ef++)
 	{
-		//if (!tobi[ef].visible)
-		//{
-		//	effectCnt++;
-		//	//1‹‚¸‚Â“®‚©‚µ‚È‚ª‚ç‘fÞ‚ð¶¬‚·‚é
-		//	//‘fÞ‚ÌˆÚ“®‘¬“x‚Í—”(1`10)‚ðŽg‚Á‚Äì‚é
-		//	rad = GetRand(360);
-		//	rad = 36 * PI
-		//}
+		if (!tobi[ef].visible)
+		{
+			effectCnt++;
+			//1‹‚¸‚Â“®‚©‚µ‚È‚ª‚ç‘fÞ‚ð¶¬‚·‚é
+			//‘fÞ‚ÌˆÚ“®‘¬“x‚Í—”(1`10)‚ðŽg‚Á‚Äì‚é
+			rad = GetRand(360);
+			rad = 36 * PI / 180.0;
+			tobi[ef].angel = rad;
+
+			tobi[ef].effectType = EFFECT_T_BLOCK;
+
+			tobi[ef].speed = GetRand(9) + 1;
+
+			tobi[ef].effectColor = effectColor;
+
+			tobi[ef].pos.x = pos.x;
+			tobi[ef].pos.y = pos.y;
+
+			tobi[ef].move.x = cos(rad) * tobi[ef].speed;
+			tobi[ef].move.y = sin(rad) * tobi[ef].speed;
+
+			TobitiriAcc = 0.3f;
+
+			tobi[ef].life = 10;
+
+			tobi[ef].visible = true;
+
+			if (effectCnt > TOBI_EFFECT_MAX)
+			{
+				break;
+			}
+		}
 
 
 	}

@@ -7,6 +7,7 @@
 #include "player3.h"
 #include "player4.h"
 #include "stage.h"
+#include "Tobitiri.h"
 #include "KeyCheck.h"
 
 int shot4Image[PLAYER_MAX];
@@ -79,6 +80,7 @@ void shot4Control(void)
 			if (!IsPass(shot4[sc].pos))
 			{
 				shot4[sc].visible = false;
+				SetBlockEffect(shot4[sc].pos, EFFECT_C_YELLOW);
 			}
 			if (ShotCheckHit(shot4[sc].pos, shot4[sc].size.x) == true)shot4[sc].life = 0;
 			if (Shot2CheckHit(shot4[sc].pos, shot4[sc].size.x) == true)shot4[sc].life = 0;
