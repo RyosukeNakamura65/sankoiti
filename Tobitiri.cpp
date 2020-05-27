@@ -22,7 +22,7 @@ void TobiSystemInit(void)
 	LoadDivGraph("image/”ò‚ÑŽU‚è.png", 4, 4, 1, 16, 16, TobiImage[EFFECT_C_BLUE]);
 	LoadDivGraph("image/”ò‚ÑŽU‚è(ƒsƒ“ƒN).png", 4, 4, 1, 16, 16, TobiImage[EFFECT_C_PINK]);
 	LoadDivGraph("image/”ò‚ÑŽU‚è(—Î).png", 4, 4, 1, 16, 16, TobiImage[EFFECT_C_GREEN]);
-	LoadDivGraph("image/”ò‚ÑŽU‚è(‰©),png", 4, 4, 1, 16, 16, TobiImage[EFFECT_C_YELLOW]);
+	LoadDivGraph("image/”ò‚ÑŽU‚è(‰©).png", 4, 4, 1, 16, 16, TobiImage[EFFECT_C_YELLOW]);
 }
 
 
@@ -73,7 +73,7 @@ void TobiDraw(void)
 		{
 			DrawGraph(tobi[ef].pos.x - tobi[ef].size.x + MAP_OFFSET_X
 				, tobi[ef].pos.y - tobi[ef].size.y + MAP_OFFSET_Y
-				, TobiImage[tobi[ef].effectColor][GetRand(3)]
+				, TobiImage[tobi[ef].effectColor][GetRand(4)]
 				, true);
 		}
 	}
