@@ -15,6 +15,7 @@ enum KEY_ID {
 	KEY_ID_D,			// ｷｬﾗｸﾀｰ右
 	KEY_ID_S,			// ｷｬﾗｸﾀｰ下
 	KEY_ID_A,			// ｷｬﾗｸﾀｰ左
+	KEY_ID_BACK,		// Zキー　戻る
 	KEY_ID_MAX
 };
 

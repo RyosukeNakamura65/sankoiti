@@ -53,6 +53,7 @@ void KeyCheck(void)
 	keyNew[KEY_ID_D] = CheckHitKey(KEY_INPUT_D);
 	keyNew[KEY_ID_S] = CheckHitKey(KEY_INPUT_S);
 	keyNew[KEY_ID_A] = CheckHitKey(KEY_INPUT_A);
+	keyNew[KEY_ID_BACK] = CheckHitKey(KEY_INPUT_Z);
 
 	// ÉgÉäÉKÅ[ÇÃéZèo
 	for (int keyID = 0; keyID < KEY_ID_MAX; keyID++)

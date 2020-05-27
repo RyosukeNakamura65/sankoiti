@@ -33,6 +33,7 @@ int titleWordImage;
 
 // ステージ
 STAGE_ID stageID;
+SELECT_ID selectID;
 int ID;
 int blend;
 
@@ -133,6 +134,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeInScreen(5))
 				{
 					// エフェクト終了後の処理
+					selectID = SELECT_MAIN;
 				}
 			}
 			else if (fadeOut)
@@ -140,9 +142,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeOutScreen(5))
 				{
 					// エフェクト終了後の処理
-					sceneID = SCENE_ID_GAME;
-					fadeIn = true;
-					//SetDrawBright(255, 255, 255);
+					if (selectID == SELECT_NEXT)
+					{
+						sceneID = SCENE_ID_GAME;
+						fadeIn = true;
+						//SetDrawBright(255, 255, 255);
+					}
+					else if (selectID == SELECT_BACK)
+					{
+						sceneID = SCENE_ID_CHARASELE;
+						fadeIn = true;
+						//SetDrawBright(255, 255, 255);
+					}
 				}
 			}
 			StageSelectScene();
@@ -267,10 +278,11 @@ bool SystemInit(void)
 void InitScene(void)
 {
 	fadeIn = true;
+	startCounter = 0;
+
 	stageID = STAGE_ID_1;
 	ID = 0;
 	blend = 0;
-	startCounter = 0;
 	
 	shotGameInit();
 	shot2GameInit();
@@ -333,50 +345,73 @@ void CharacterSelectDraw(void)
 void StageSelectScene(void)
 {
 	// ステージの変更
-	if (fadeOut == false)
+	if (selectID == SELECT_MAIN)
 	{
-		if (keyDownTrigger[KEY_ID_DOWN])
+		if (fadeOut == false)
 		{
-			ID++;
-			blend = 0;
-			if (stageID > STAGE_ID_MAX - 2)
+			if (keyDownTrigger[KEY_ID_DOWN])
 			{
-				ID = 0;
+				ID++;
+				blend = 0;
+				if (stageID > STAGE_ID_MAX - 2)
+				{
+					ID = 0;
+				}
 			}
-		}
-		if (keyDownTrigger[KEY_ID_UP])
-		{
-			ID--;
-			blend = 0;
-			if (stageID <= 0)
+			if (keyDownTrigger[KEY_ID_UP])
 			{
-				ID = STAGE_ID_MAX - 1;
+				ID--;
+				blend = 0;
+				if (stageID <= 0)
+				{
+					ID = STAGE_ID_MAX - 1;
+				}
 			}
-		}
-		stageID = (STAGE_ID)ID;
+			stageID = (STAGE_ID)ID;
 
+			if (keyUpTrigger[KEY_ID_SPACE])
+			{
+				selectID = SELECT_NEXT;
+			}
+			else if (keyUpTrigger[KEY_ID_BACK])
+			{
+				selectID = SELECT_BACK;
+				fadeOut = true;
+			}
+		}
+	}
+
+	// ステージが決まったのでシーン遷移
+	if (selectID == SELECT_NEXT)
+	{
 		// シーン遷移
-		if (keyUpTrigger[KEY_ID_SPACE])
+		if (keyDownTrigger[KEY_ID_SPACE])
 		{
 			fadeOut = true;
 
 			StageGameInit(stageID);
 		}
+		else if (keyUpTrigger[KEY_ID_BACK])
+		{
+			selectID = SELECT_MAIN;
+		}
 	}
 
 	StageSelectDraw();
-	//DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
+	DrawFormatString(0, 70, GetColor(255, 255, 255), "selectID = %d", selectID);
 }
 
 void StageSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
 	StageSelect(stageID,blend);
+	NextToBackDraw(selectID, sceneCounter);
 
 	// フェードイン
 	if (sceneCounter % 2 == 1)
 	{
-		if (blend <= 150)
+		if (blend <= 200)
 		{
 			blend += 3;
 		}
