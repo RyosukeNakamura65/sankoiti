@@ -340,6 +340,7 @@ void StageSelect(STAGE_ID stageID,int blend)
 	int posY = 280;
 	int color;
 	int fontHandle = CreateFontToHandle(NULL, 21, 3, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	int fontHandleTitle = CreateFontToHandle(NULL, 90, 3, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 
 	// ステージIDをもとに背景画像を決める
 	if (stageID == STAGE_ID_1 || stageID == STAGE_ID_2)
@@ -387,6 +388,12 @@ void StageSelect(STAGE_ID stageID,int blend)
 		, SCREEN_SIZE_X / 2 + 410
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 430
 		, GetColor(0, 0, 255), false);
+	// ステージセレクト（タイトル）
+	DrawBox(0 - 1
+		, 50
+		, SCREEN_SIZE_X + 1
+		, 150
+		, GetColor(0, 0, 0), false);
 
 	// 透過あり
 	// ステージ裏
@@ -402,6 +409,12 @@ void StageSelect(STAGE_ID stageID,int blend)
 		, SCREEN_SIZE_X / 2 + 410
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 430
 		, GetColor(0, 0, 0), true);
+	// ステージセレクト（タイトル）
+	DrawBox(0
+		, 50
+		, SCREEN_SIZE_X
+		, 150
+		, GetColor(0, 0, 255), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	
@@ -458,10 +471,16 @@ void StageSelect(STAGE_ID stageID,int blend)
 		}
 	}
 
+	// ステージセレクト（タイトル）
+	DrawFormatStringToHandle(50, 55, GetColor(255,255,255), fontHandleTitle, "SELECT STAGE");
+
 	DeleteFontToHandle(fontHandle);
+	DeleteFontToHandle(fontHandleTitle);
 }
 
-void NextToBackDraw(SELECT_ID selectID,int cnt)
+
+// ステージ選択シーン用描画（NEXT,BACK）
+void NextBackDraw(SELECT_ID selectID,int cnt)
 {
 	int color = GetColor(255,255,255);
 	int fontHandle = CreateFontToHandle(NULL, 21, 3, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
@@ -511,7 +530,7 @@ void NextToBackDraw(SELECT_ID selectID,int cnt)
 					, 675
 					, SCREEN_SIZE_X / 2 + 405
 					, 725
-					, GetColor(255, 255, 255), true);
+					, GetColor(255, 255, 0), true);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 		}

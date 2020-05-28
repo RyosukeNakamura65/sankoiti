@@ -278,10 +278,6 @@ void InitScene(void)
 {
 	fadeIn = true;
 	startCounter = 0;
-
-	stageID = STAGE_ID_1;
-	ID = 0;
-	blend = 0;
 	
 	shotGameInit();
 	shot2GameInit();
@@ -325,7 +321,10 @@ void CharacterSelectScene(void)
 	{
 		fadeOut = true;
 
+		stageID = STAGE_ID_1;
 		selectID = SELECT_MAIN;
+		ID = 0;
+		blend = 0;
 	}
 
 	CharacterSelectDraw();
@@ -407,7 +406,7 @@ void StageSelectDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
 	StageSelect(stageID,blend);
-	NextToBackDraw(selectID, sceneCounter);
+	NextBackDraw(selectID, sceneCounter);
 
 	// フェードイン
 	if (sceneCounter % 2 == 1)
