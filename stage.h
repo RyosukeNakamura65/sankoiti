@@ -77,4 +77,4 @@ EVENT_ID GetEvent(XY pos);						// w’è‚µ‚½À•W‚ª“Á•Ê‚ÉƒCƒxƒ“ƒg‚ğ‹N‚±‚·‚©‚ğŠm”F‚
 void SetMapData(STAGE_ID stageID);				// ƒXƒe[ƒWƒf[ƒ^‚ğƒ}ƒbƒv”z—ñ‚ÉƒRƒs[‚·‚é
 
 void StageSelect(STAGE_ID stageID,int blend);	// ƒXƒe[ƒW‘I‘ğƒV[ƒ“—p•`‰æ
-void NextToBackDraw(SELECT_ID selectID,int cnt);		// ƒXƒe[ƒW‘I‘ğƒV[ƒ“—p•`‰æiNEXT,BACKj
+void NextBackDraw(SELECT_ID selectID,int cnt);	// ƒXƒe[ƒW‘I‘ğƒV[ƒ“—p•`‰æiNEXT,BACKj
