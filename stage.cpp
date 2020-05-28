@@ -374,20 +374,13 @@ void StageSelect(STAGE_ID stageID,int blend)
 	}
 
 	// 枠
+	// 透過無し
 	// ステージ裏
 	DrawBox((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 185
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 15
 		, (SCREEN_SIZE_X - STAGE_SIZE_X) / 2 + 385
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 435
 		, GetColor(0, 0, 255), false);
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-	DrawBox((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 185
-		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 15
-		, (SCREEN_SIZE_X - STAGE_SIZE_X) / 2 + 385
-		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 435
-		, GetColor(0, 0, 0), true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	// ステージ名
 	DrawBox(SCREEN_SIZE_X / 2 + 210
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 20
@@ -395,7 +388,15 @@ void StageSelect(STAGE_ID stageID,int blend)
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 430
 		, GetColor(0, 0, 255), false);
 
+	// 透過あり
+	// ステージ裏
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawBox((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 185
+		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 15
+		, (SCREEN_SIZE_X - STAGE_SIZE_X) / 2 + 385
+		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 435
+		, GetColor(0, 0, 0), true);
+	// ステージ名
 	DrawBox(SCREEN_SIZE_X / 2 + 210
 		, (SCREEN_SIZE_Y - STAGE_SIZE_Y) / 2 + 20
 		, SCREEN_SIZE_X / 2 + 410
@@ -403,6 +404,7 @@ void StageSelect(STAGE_ID stageID,int blend)
 		, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	
 
 	// ステージ画像
 	DrawGraph((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 150
@@ -465,20 +467,13 @@ void NextToBackDraw(SELECT_ID selectID,int cnt)
 	int fontHandle = CreateFontToHandle(NULL, 21, 3, DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
 
 	// 枠
+	//透過無し
 	// 準備完了 
 	DrawBox(SCREEN_SIZE_X / 2 + 210
 		, 670
 		, SCREEN_SIZE_X / 2 + 410
 		, 730
 		, GetColor(0, 0, 255), false);
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-	DrawBox(SCREEN_SIZE_X / 2 + 210
-		, 670
-		, SCREEN_SIZE_X / 2 + 410
-		, 730
-		, GetColor(0, 0, 0), true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	// 戻る
 	DrawBox((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 185
 		, 670
@@ -486,13 +481,23 @@ void NextToBackDraw(SELECT_ID selectID,int cnt)
 		, 730
 		, GetColor(0, 0, 255), false);
 
+	// 透過あり
+	// 準備完了
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawBox(SCREEN_SIZE_X / 2 + 210
+		, 670
+		, SCREEN_SIZE_X / 2 + 410
+		, 730
+		, GetColor(0, 0, 0), true);
+	// 戻る
 	DrawBox((SCREEN_SIZE_X - STAGE_SIZE_X) / 2 - 185
 		, 670
 		, (SCREEN_SIZE_X - STAGE_SIZE_X) / 2 + 100
 		, 730
 		, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	
 
 	for (int sl = 0; sl < SELECT_MAX; sl++)
 	{
@@ -510,18 +515,18 @@ void NextToBackDraw(SELECT_ID selectID,int cnt)
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 		}
-
-		// selectIDをもとに各キーの描画
+		
+		// selectIDをもとに各情報の描画
 		switch (sl)
 		{
 		case SELECT_BACK:
 			if (selectID == SELECT_NEXT)
 			{
-				DrawFormatStringToHandle(100, 690, color, fontHandle, "キャンセル（Z）");
+				DrawFormatStringToHandle(100, 690, GetColor(255,255,255), fontHandle, "キャンセル（Z）");
 			}
 			else
 			{
-				DrawFormatStringToHandle(70, 690, color, fontHandle, "キャラクタ選択へ（Z）");
+				DrawFormatStringToHandle(70, 690, GetColor(255,255,255), fontHandle, "キャラクタ選択へ（Z）");
 			}
 			break;
 

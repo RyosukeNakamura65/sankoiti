@@ -134,7 +134,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeInScreen(5))
 				{
 					// エフェクト終了後の処理
-					selectID = SELECT_MAIN;
 				}
 			}
 			else if (fadeOut)
@@ -325,6 +324,8 @@ void CharacterSelectScene(void)
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
+
+		selectID = SELECT_MAIN;
 	}
 
 	CharacterSelectDraw();
