@@ -94,6 +94,7 @@ void SetBlockEffect(XY pos, EFFECT_COLOR effectColor)
 			rad = GetRand(360);
 			rad = 36 * PI / 180.0;
 			tobi[ef].angel = rad;
+			tobi[ef].index = GetRand(3);
 
 			tobi[ef].effectType = EFFECT_T_BLOCK;
 
