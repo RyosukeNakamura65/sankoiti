@@ -398,13 +398,14 @@ void StageSelectScene(void)
 	}
 
 	StageSelectDraw();
-	DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
-	DrawFormatString(0, 70, GetColor(255, 255, 255), "selectID = %d", selectID);
 }
 
 void StageSelectDraw(void)
 {
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
+	//DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
+	// DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
+	// DrawFormatString(0, 70, GetColor(255, 255, 255), "selectID = %d", selectID);
+
 	StageSelect(stageID,blend);
 	NextBackDraw(selectID, sceneCounter);
 
