@@ -10,6 +10,7 @@ CHARACTER player2;
 XY player2PosCopy;
 XY player2PosOffset;
 int player2Counter;
+int player2Win;
 
 CHAR_IMAGE player2Image;
 
@@ -31,6 +32,7 @@ void player2SystemInit(void)
 
 	player2Image.standImage = LoadGraph("image/pinkup.png");
 
+	player2Win = LoadGraph("image/player2win.png");
 }
 
 void player2GameInit(void)
@@ -205,9 +207,8 @@ bool player2GameOver(void)
 
 void player2GameOverDraw(void)
 {
-	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
-	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー2のしょうり！！");
-	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, player2Image.standImage, true);
+	DrawGraph(80, 250, player2Win, true);
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X - 50, SCREEN_SIZE_Y - PLAYER_STAND_Y, player2Image.standImage, true);
 }
 
 //弾との当たり判定

@@ -31,6 +31,10 @@ int startMsg[2];
 int titleImage;
 int titleWordImage;
 
+// ｹﾞｰﾑｵｰﾊﾞｰ
+int gameOverImage;
+int gameOverMessage;
+
 // ステージ
 STAGE_ID stageID;
 SELECT_ID selectID;
@@ -95,7 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeOutScreen(5))
 				{
 					// エフェクト終了後の処理
-					sceneID = SCENE_ID_INIT;
+					sceneID = SCENE_ID_CHARASELE;
 					fadeIn = true;
 					//SetDrawBright(255, 255, 255);
 				}
@@ -149,7 +153,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 					}
 					else if (selectID == SELECT_BACK)
 					{
-						sceneID = SCENE_ID_INIT;
+						sceneID = SCENE_ID_CHARASELE;
 						fadeIn = true;
 						//SetDrawBright(255, 255, 255);
 					}
@@ -186,6 +190,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			// 画面切り替えエフェクト
 			if (fadeIn)
 			{
+				fadeOut = false;
 				if (!FadeInScreen(5))
 				{
 					// エフェクト終了後の処理
@@ -240,6 +245,8 @@ bool SystemInit(void)
 	//---------------------------------
 	startMsg[0] = LoadGraph("image/start1.png");
 	startMsg[1] = LoadGraph("image/start2.png");
+	gameOverImage = LoadGraph("image/表彰台.png");
+	gameOverMessage = LoadGraph("image/gameover.png");
 
 	// 変数の初期化
 	//---------------------------------
@@ -250,7 +257,7 @@ bool SystemInit(void)
 	player2GameOverFlag = false;
 	player3GameOverFlag = false;
 	player4GameOverFlag = false;
-	sceneID = SCENE_ID_TITLE;
+	sceneID = SCENE_ID_INIT;
 	preSceneID = SCENE_ID_MAX;
 	
 	StageSystemInit();
@@ -278,11 +285,6 @@ void InitScene(void)
 {
 	fadeIn = true;
 	startCounter = 0;
-
-	stageID = STAGE_ID_1;
-	selectID = SELECT_MAIN;
-	ID = 0;
-	blend = 0;
 	
 	shotGameInit();
 	shot2GameInit();
@@ -293,7 +295,7 @@ void InitScene(void)
 	player3GameInit();
 	player4GameInit();
 	TobiGameInit();
-	sceneID = SCENE_ID_CHARASELE;
+	sceneID = SCENE_ID_TITLE;
 
 }
 
@@ -325,6 +327,11 @@ void CharacterSelectScene(void)
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
+
+		stageID = STAGE_ID_1;
+		selectID = SELECT_MAIN;
+		ID = 0;
+		blend = 0;
 	}
 
 	CharacterSelectDraw();
@@ -398,14 +405,13 @@ void StageSelectScene(void)
 	}
 
 	StageSelectDraw();
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
+	DrawFormatString(0, 70, GetColor(255, 255, 255), "selectID = %d", selectID);
 }
 
 void StageSelectDraw(void)
 {
-	//DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
-	// DrawFormatString(0, 50, GetColor(255, 255, 255), "stageID = %d", stageID);
-	// DrawFormatString(0, 70, GetColor(255, 255, 255), "selectID = %d", selectID);
-
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "StageSelectScene : %d", sceneCounter);
 	StageSelect(stageID,blend);
 	NextBackDraw(selectID, sceneCounter);
 
@@ -599,5 +605,14 @@ void GameOverDraw(void)
 {
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "GameOverScene : %d", sceneCounter);
 
-	DrawBox(100, 100, 700, 500, GetColor(0, 0, 255), true);
+	DrawGraph(0, 0, gameOverImage, true);
+
+	if (sceneCounter / 30 % 2 == 0)
+	{
+		DrawGraph(10, SCREEN_SIZE_Y - 300, gameOverMessage, true);
+	}
+	else
+	{
+
+	}
 }

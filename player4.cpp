@@ -10,6 +10,7 @@ CHARACTER player4;
 XY player4PosCopy;
 XY player4PosOffset;
 int player4Counter;
+int player4Win;
 
 CHAR_IMAGE player4Image;
 
@@ -30,6 +31,8 @@ void player4SystemInit(void)
 	LoadDivGraph("image/yellowshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, player4Image.shotImage);
 
 	player4Image.standImage = LoadGraph("image/yellowup.png");
+
+	player4Win = LoadGraph("image/player4win.png");
 }
 
 void player4GameInit(void)
@@ -204,9 +207,8 @@ bool player4GameOver(void)
 
 void player4GameOverDraw(void)
 {
-	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
-	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー4のしょうり！！");
-	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, player4Image.standImage, true);
+	DrawGraph(80, 250, player4Win, true);
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X - 50, SCREEN_SIZE_Y - PLAYER_STAND_Y, player4Image.standImage, true);
 }
 
 //弾との当たり判定

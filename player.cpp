@@ -9,6 +9,7 @@ CHARACTER player;
 XY playerPosCopy;
 XY playerPosOffset;
 int playerCounter;
+int player1Win;
 
 CHAR_IMAGE playerImage;
 
@@ -30,6 +31,8 @@ void playerSystemInit(void)
 	LoadDivGraph("image/blueshot.png", DIR_MAX, 1, DIR_MAX, PLAYER_SIZE_X, PLAYER_SIZE_Y, playerImage.shotImage);			// ｼｮｯﾄ画像読み込み
 
 	playerImage.standImage = LoadGraph("image/buleup.png");
+
+	player1Win = LoadGraph("image/player1win.png");
 }
 
 void playerGameInit(void)
@@ -226,9 +229,8 @@ bool playerGameOver(void)
 
 void playerGameOverDraw(void)
 {
-	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, GetColor(255, 255, 255), true);
-	DrawFormatString(100, SCREEN_SIZE_Y / 2, GetColor(0, 0, 0), "プレイヤー1のしょうり！！");
-	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X, SCREEN_SIZE_Y - PLAYER_STAND_Y, playerImage.standImage, true);
+	DrawGraph(80, 250, player1Win, true);
+	DrawGraph(SCREEN_SIZE_X - PLAYER_STAND_X - 50, SCREEN_SIZE_Y - PLAYER_STAND_Y, playerImage.standImage, true);
 }
 
 //弾との当たり判定
