@@ -99,7 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeOutScreen(5))
 				{
 					// エフェクト終了後の処理
-					sceneID = SCENE_ID_CHARASELE;
+					sceneID = SCENE_ID_INIT;
 					fadeIn = true;
 					//SetDrawBright(255, 255, 255);
 				}
@@ -153,7 +153,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 					}
 					else if (selectID == SELECT_BACK)
 					{
-						sceneID = SCENE_ID_CHARASELE;
+						sceneID = SCENE_ID_INIT;
 						fadeIn = true;
 						//SetDrawBright(255, 255, 255);
 					}
@@ -201,7 +201,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				if (!FadeOutScreen(5))
 				{
 					// エフェクト終了後の処理
-					sceneID = SCENE_ID_INIT;
+					sceneID = SCENE_ID_TITLE;
 					fadeIn = true;
 					//SetDrawBright(255, 255, 255);
 				}
@@ -257,7 +257,7 @@ bool SystemInit(void)
 	player2GameOverFlag = false;
 	player3GameOverFlag = false;
 	player4GameOverFlag = false;
-	sceneID = SCENE_ID_INIT;
+	sceneID = SCENE_ID_TITLE;
 	preSceneID = SCENE_ID_MAX;
 	
 	StageSystemInit();
@@ -285,6 +285,11 @@ void InitScene(void)
 {
 	fadeIn = true;
 	startCounter = 0;
+
+	stageID = STAGE_ID_1;
+	selectID = SELECT_MAIN;
+	ID = 0;
+	blend = 0;
 	
 	shotGameInit();
 	shot2GameInit();
@@ -295,7 +300,7 @@ void InitScene(void)
 	player3GameInit();
 	player4GameInit();
 	TobiGameInit();
-	sceneID = SCENE_ID_TITLE;
+	sceneID = SCENE_ID_CHARASELE;
 
 }
 
@@ -327,11 +332,6 @@ void CharacterSelectScene(void)
 	if (keyUpTrigger[KEY_ID_SPACE])
 	{
 		fadeOut = true;
-
-		stageID = STAGE_ID_1;
-		selectID = SELECT_MAIN;
-		ID = 0;
-		blend = 0;
 	}
 
 	CharacterSelectDraw();
