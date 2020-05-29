@@ -12,6 +12,9 @@
 int shotImage[PLAYER_MAX];
 CHARACTER shot[SHOT_MAX];
 int shotCnt;
+int shotCntMax;
+int shotTimeCnt;
+int shotTimeCntMax;
 int reloadtime;			//リロードの時間
 int reloadtimeMAX;		//リロードの最大時間
 int reloadFlag;			//リロードのフラグ
@@ -60,6 +63,9 @@ void shotGameInit(void)
 		shot[sh].moveSpeed = 10;
 	}
 	shotCnt = 0;
+	shotCntMax = 100;
+	shotTimeCnt = 100;
+	shotTimeCntMax = 100;
 	reloadtimeMAX = 15;
 	reloadtime = 0;
 	reloadtime = PLAYER_SHOT_MAX;
@@ -80,6 +86,7 @@ void shotControl(void)
 			{
 				shot[sc].visible = false;
 				SetBlockEffect(shot[sc].pos, EFFECT_C_BLUE);
+
 			}
 			//if (ShotCheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].visible = false;
 			if (Shot2CheckHit(shot[sc].pos, shot[sc].size.x) == true)shot[sc].life = 0;
@@ -98,10 +105,12 @@ void shotControl(void)
 	if (reloadFlag == true)
 	{
 		shotCnt++;
+		shotTimeCnt++;
 		if (shotCnt > 100)
 		{
 			reloadFlag = false;
 			shotCnt = 0;
+			shotTimeCnt = 100;
 			reloadtime = PLAYER_SHOT_MAX;
 		}
 	}
@@ -121,7 +130,20 @@ void shotDraw(void)
 		}
 
 	}
-	DrawFormatString(50, 50, GetColor(255, 255, 255), "shotCnt = %d", shotCnt);
+	DrawBox(0 //- enemy1[index].offsetSize.X
+		, 150 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+		, shotTimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+		, GetColor(63, 111, 159)
+		, true);
+
+	DrawBox(0 //- enemy1[index].offsetSize.X + mapPos.X
+		, 150  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+		, 250 - shotTimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+		, GetColor(255, 0, 0)
+		, true);
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "shotCnt = %d", shotCnt);
 	/*if (Shotflag == true)
 	{
 		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
@@ -158,6 +180,7 @@ void CreateShot(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot[cs].moveDir == DIR_LEFT)shot[cs].pos.x -= poffset.x;
 					shot[cs].life = shot[cs].lifeMax;
 					reloadtime--;
+					shotTimeCnt -= 25;
 					break;
 				}
 			}
@@ -181,7 +204,7 @@ void DeleteShot(void)
 		{
 			shot[s].visible = false;
 		}
-			
+
 	}
 }
 

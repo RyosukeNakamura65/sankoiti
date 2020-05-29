@@ -13,6 +13,8 @@
 int shot4Image[PLAYER_MAX];
 CHARACTER shot4[PLAYER_SHOT4_MAX];
 int shot4Cnt;
+int shot4TimeCnt;
+int shot4TimeCntMax;
 int reloadtime4;			//リロードの時間
 int reloadtime4MAX;		//リロードの最大時間
 int reloadFlag4;			//リロードのフラグ
@@ -60,6 +62,8 @@ void shot4GameInit(void)
 		shot4[sh].moveSpeed = 10;
 	}
 	shot4Cnt = 0;
+	shot4TimeCnt = 100;
+	shot4TimeCntMax = 100;
 	reloadtime4MAX = 15;
 	reloadtime4 = 0;
 	reloadtime4 = PLAYER_SHOT4_MAX;
@@ -100,6 +104,7 @@ void shot4Control(void)
 	if (reloadFlag4 == true)
 	{
 		shot4Cnt++;
+		shot4TimeCnt++;
 		if (shot4Cnt > 100)
 		{
 			reloadFlag4 = false;
@@ -122,6 +127,19 @@ void shot4Draw(void)
 		}
 
 	}
+	DrawBox(930 //- enemy1[index].offsetSize.X
+		, 500 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+		, 350 + shot4TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+		, GetColor(255, 255, 28)
+		, true);
+
+	DrawBox(930 //- enemy1[index].offsetSize.X + mapPos.X
+		, 500  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+		, 600 - shot4TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+		, GetColor(255, 0, 0)
+		, true);
 	DrawFormatString(300, 50, GetColor(255, 255, 255), "shot4Cnt = %d", shot4Cnt);
 	/*if (shot4flag == true)
 	{
@@ -158,6 +176,7 @@ void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot4[cs].moveDir == DIR_LEFT)shot4[cs].pos.x -= poffset.x;
 					shot4[cs].life = shot4[cs].lifeMax;
 					reloadtime4--;
+					shot4TimeCnt -= 25;
 					break;
 				}
 			}

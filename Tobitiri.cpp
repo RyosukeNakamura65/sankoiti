@@ -92,7 +92,7 @@ void SetBlockEffect(XY pos, EFFECT_COLOR effectColor)
 			//1‹‚¸‚Â“®‚©‚µ‚È‚ª‚ç‘fŞ‚ğ¶¬‚·‚é
 			//‘fŞ‚ÌˆÚ“®‘¬“x‚Í—”(1`10)‚ğg‚Á‚Äì‚é
 			rad = GetRand(360);
-			rad = 36 * PI / 180.0;
+			rad += 36 * PI / 180.0;
 			tobi[ef].angel = rad;
 			tobi[ef].index = GetRand(3);
 
