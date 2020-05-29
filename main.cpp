@@ -250,7 +250,7 @@ bool SystemInit(void)
 	player2GameOverFlag = false;
 	player3GameOverFlag = false;
 	player4GameOverFlag = false;
-	sceneID = SCENE_ID_INIT;
+	sceneID = SCENE_ID_TITLE;
 	preSceneID = SCENE_ID_MAX;
 	
 	StageSystemInit();
