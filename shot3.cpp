@@ -15,6 +15,7 @@ CHARACTER shot3[PLAYER_SHOT3_MAX];
 int shot3Cnt;
 int shot3TimeCnt;
 int shot3TimeCntMax;
+int shot3Sound[SHOT_MAX];
 int reloadtime3;			//リロードの時間
 int reloadtime3MAX;		//リロードの最大時間
 int reloadFlag3;			//リロードのフラグ
@@ -40,10 +41,9 @@ int reloadFlag3;			//リロードのフラグ
 //プロトタイプ宣言
 void shot3SystemInit(void)
 {
-	//shot3Image[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
-	//shot3Image[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
 	shot3Image[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
-	//shot3Image[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
+	shot3Sound[SHOT_3] = LoadSoundMem("効果音/laser2.mp3");
+	
 }
 
 void shot3GameInit(void)
@@ -62,7 +62,7 @@ void shot3GameInit(void)
 		shot3[sh].moveSpeed = 10;
 	}
 	shot3Cnt = 0;
-	shot3TimeCnt = 100;
+	shot3TimeCnt = 200;
 	shot3TimeCntMax = 100;
 	reloadtime3MAX = 15;
 	reloadtime3 = 0;
@@ -97,7 +97,7 @@ void shot3Control(void)
 			}
 		}
 	}
-	if (0 >= reloadtime3)
+	/*if (0 >= reloadtime3)
 	{
 		reloadFlag3 = true;
 	}
@@ -105,12 +105,18 @@ void shot3Control(void)
 	{
 		shot3Cnt++;
 		shot3TimeCnt++;
+		DrawString(0, 450, "Reload", 0x00fe00, true);
 		if (shot3Cnt > 100)
 		{
 			reloadFlag3 = false;
 			shot3Cnt = 0;
+			shot3TimeCnt = 100;
 			reloadtime3 = PLAYER_SHOT3_MAX;
 		}
+	}*/
+	if (shot3TimeCnt <= 200)
+	{
+		shot3TimeCnt++;
 	}
 }
 
@@ -127,19 +133,37 @@ void shot3Draw(void)
 		}
 
 	}
-	DrawBox(0 //- enemy1[index].offsetSize.X
-		, 500 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 350 + shot3TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(28, 255, 28)
-		, true);
 
-	DrawBox(0 //- enemy1[index].offsetSize.X + mapPos.X
-		, 500  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 600 - shot3TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 0, 0)
-		, true);
+	if (shot3TimeCnt >= 200)
+	{
+		DrawGraph(0, 500, shot3Image[PLAYER_3], true);
+	}
+	if (shot3TimeCnt >= 150)
+	{
+		DrawGraph(0, 550, shot3Image[PLAYER_3], true);
+	}
+	if (shot3TimeCnt >= 100)
+	{
+		DrawGraph(0, 600, shot3Image[PLAYER_3], true);
+	}
+	if (shot3TimeCnt >= 50)
+	{
+		DrawGraph(0, 650, shot3Image[PLAYER_3], true);
+	}
+
+	//DrawBox(0 //- enemy1[index].offsetSize.X
+	//	, 500 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, 350 + shot3TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(28, 255, 28)
+	//	, true);
+
+	//DrawBox(0 //- enemy1[index].offsetSize.X + mapPos.X
+	//	, 500  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, 600 - shot3TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(255, 0, 0)
+	//	, true);
 	DrawFormatString(200, 50, GetColor(255, 255, 255), "shot3Cnt = %d", shot3Cnt);
 	/*if (shot3flag == true)
 	{
@@ -157,7 +181,7 @@ void CreateShot3(XY pPos, XY poffset, MOVE_DIR pDir)
 	{
 
 	}
-	if (reloadFlag3 == false)
+	if (shot3TimeCnt > 50)
 	{
 		for (int cs = 0; cs < PLAYER_SHOT3_MAX; cs++)
 		{
@@ -175,8 +199,9 @@ void CreateShot3(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot3[cs].moveDir == DIR_DOWN)shot3[cs].pos.y += poffset.y;
 					if (shot3[cs].moveDir == DIR_LEFT)shot3[cs].pos.x -= poffset.x;
 					shot3[cs].life = shot3[cs].lifeMax;
+					PlaySoundMem(shot3Sound[SHOT_3], DX_PLAYTYPE_BACK);
 					reloadtime3--;
-					shot3TimeCnt -= 25;
+					shot3TimeCnt -= 50;
 					break;
 				}
 			}

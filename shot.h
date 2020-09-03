@@ -12,6 +12,6 @@ void shotDraw(void);
 void CreateShot(XY pPos, XY poffset ,MOVE_DIR pDir);
 void DeleteShot(void);
 
-XY GetPos(void);
-XY GetSize(void);
-bool visible(void);
+//XY GetPos(void);
+//XY GetSize(void);
+//bool visible(void);

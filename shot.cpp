@@ -11,13 +11,16 @@
 
 int shotImage[PLAYER_MAX];
 CHARACTER shot[SHOT_MAX];
+
 int shotCnt;
 int shotCntMax;
 int shotTimeCnt;
 int shotTimeCntMax;
+int shotSound[SHOT_MAX];
 int reloadtime;			//リロードの時間
 int reloadtimeMAX;		//リロードの最大時間
 int reloadFlag;			//リロードのフラグ
+
 
 ////コンストラクタ
 //Shot::Shot(int no, int PosX, int PosY, const char image[])
@@ -42,9 +45,8 @@ int reloadFlag;			//リロードのフラグ
 void shotSystemInit(void)
 {
 	shotImage[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
-	//shotImage[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
-	//shotImage[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
-	//shotImage[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
+	shotSound[SHOT_1] = LoadSoundMem("効果音/laser2.mp3");
+	
 }
 
 void shotGameInit(void)
@@ -64,8 +66,9 @@ void shotGameInit(void)
 	}
 	shotCnt = 0;
 	shotCntMax = 100;
-	shotTimeCnt = 100;
+	shotTimeCnt = 200;
 	shotTimeCntMax = 100;
+	//reloadFlag = true;
 	reloadtimeMAX = 15;
 	reloadtime = 0;
 	reloadtime = PLAYER_SHOT_MAX;
@@ -98,22 +101,16 @@ void shotControl(void)
 			}
 		}
 	}
-	if (0 >= reloadtime)
+	
+
+	//常にリロード状態
+	if (shotTimeCnt <= 200)
 	{
-		reloadFlag = true;
-	}
-	if (reloadFlag == true)
-	{
-		shotCnt++;
 		shotTimeCnt++;
-		if (shotCnt > 100)
-		{
-			reloadFlag = false;
-			shotCnt = 0;
-			shotTimeCnt = 100;
-			reloadtime = PLAYER_SHOT_MAX;
-		}
 	}
+
+
+
 
 }
 
@@ -128,26 +125,29 @@ void shotDraw(void)
 				shotImage[PLAYER_1],
 				true);
 		}
+		
 
 	}
-	DrawBox(0 //- enemy1[index].offsetSize.X
-		, 150 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, shotTimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(63, 111, 159)
-		, true);
-
-	DrawBox(0 //- enemy1[index].offsetSize.X + mapPos.X
-		, 150  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 30 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 250 - shotTimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 0, 0)
-		, true);
-	DrawFormatString(0, 50, GetColor(255, 255, 255), "shotCnt = %d", shotCnt);
-	/*if (Shotflag == true)
+	//残弾数の可視化
+	if (shotTimeCnt >= 200)
 	{
-		DrawGraph(ShotPosX, ShotPosY, ShotImage, true);
-	}*/
+		DrawGraph(0, 150, shotImage[PLAYER_1], true);
+	}
+	if (shotTimeCnt >= 150)
+	{
+		DrawGraph(0, 200, shotImage[PLAYER_1], true);
+	}
+	if (shotTimeCnt >= 100)
+	{
+		DrawGraph(0, 250, shotImage[PLAYER_1], true);
+	}
+	if (shotTimeCnt >= 50)
+	{
+		DrawGraph(0, 300, shotImage[PLAYER_1], true);
+	}
+
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "shotCnt = %d", shotCnt);
+	
 }
 
 void CreateShot(XY pPos, XY poffset, MOVE_DIR pDir)
@@ -160,7 +160,7 @@ void CreateShot(XY pPos, XY poffset, MOVE_DIR pDir)
 	{
 
 	}
-	if (reloadFlag == false)
+	if (shotTimeCnt > 50)
 	{
 		for (int cs = 0; cs < PLAYER_SHOT_MAX; cs++)
 		{
@@ -178,9 +178,11 @@ void CreateShot(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot[cs].moveDir == DIR_RIGHT)shot[cs].pos.x += poffset.x;
 					if (shot[cs].moveDir == DIR_DOWN)shot[cs].pos.y += poffset.y;
 					if (shot[cs].moveDir == DIR_LEFT)shot[cs].pos.x -= poffset.x;
+
+					PlaySoundMem(shotSound[SHOT_1], DX_PLAYTYPE_BACK);
 					shot[cs].life = shot[cs].lifeMax;
 					reloadtime--;
-					shotTimeCnt -= 25;
+					shotTimeCnt -= 50;
 					break;
 				}
 			}
@@ -200,11 +202,16 @@ void DeleteShot(void)
 {
 	for (int s = 0; s < SHOT_MAX; s++)
 	{
-		if (shot[s].visible)
+		/*if (ShotCheckHit(shot[s].pos,shot[s].size.x) == true)
 		{
+			SetTobichiriEffect(shot[s].pos, EFFECT_C_BLUE);
+			shot[s].visible = false;
+		}*/
+		if (shot[s].visible == true)
+		{
+			SetTobichiriEffect(shot[s].pos, EFFECT_C_BLUE);
 			shot[s].visible = false;
 		}
-
 	}
 }
 

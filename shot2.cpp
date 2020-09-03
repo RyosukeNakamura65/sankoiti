@@ -15,6 +15,7 @@ CHARACTER shot2[PLAYER_SHOT2_MAX];
 int shot2Cnt;
 int shot2TimeCnt;
 int shot2TimeCntMax;
+int shot2Sound[SHOT_MAX];
 int reloadtime2;			//リロードの時間
 int reloadtime2MAX;		//リロードの最大時間
 int reloadFlag2;			//リロードのフラグ
@@ -40,10 +41,8 @@ int reloadFlag2;			//リロードのフラグ
 //プロトタイプ宣言
 void shot2SystemInit(void)
 {
-	//shot2Image[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
 	shot2Image[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
-	//shot2Image[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
-	//shot2Image[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
+	shot2Sound[SHOT_2] = LoadSoundMem("効果音/laser2.mp3");
 }
 
 void shot2GameInit(void)
@@ -62,7 +61,7 @@ void shot2GameInit(void)
 		shot2[sh].moveSpeed = 10;
 	}
 	shot2Cnt = 0;
-	shot2TimeCnt = 100;
+	shot2TimeCnt = 200;
 	shot2TimeCntMax = 100;
 	reloadtime2MAX = 15;
 	reloadtime2 = 0;
@@ -97,7 +96,7 @@ void shot2Control(void)
 			}
 		}
 	}
-	if (0 >= reloadtime2)
+	/*if (0 >= reloadtime2)
 	{
 		reloadFlag2 = true;
 	}
@@ -105,12 +104,18 @@ void shot2Control(void)
 	{
 		shot2Cnt++;
 		shot2TimeCnt++;
+		DrawString(900, 100, "Reload", 0xff00ff, true);
 		if (shot2Cnt > 100)
 		{
 			reloadFlag2 = false;
 			shot2Cnt = 0;
+			shot2TimeCnt = 100;
 			reloadtime2 = PLAYER_SHOT2_MAX;
 		}
+	}*/
+	if (shot2TimeCnt <= 200)
+	{
+		shot2TimeCnt++;
 	}
 }
 
@@ -127,19 +132,36 @@ void shot2Draw(void)
 		}
 
 	}
-	DrawBox(930 //- enemy1[index].offsetSize.X
-		, 150 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, shot2TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 84, 255)
-		, true);
+	if (shot2TimeCnt >= 200)
+	{
+		DrawGraph(930, 150, shot2Image[PLAYER_2], true);
+	}
+	if (shot2TimeCnt >= 150)
+	{
+		DrawGraph(930, 200, shot2Image[PLAYER_2], true);
+	}
+	if (shot2TimeCnt >= 100)
+	{
+		DrawGraph(930, 250, shot2Image[PLAYER_2], true);
+	}
+	if (shot2TimeCnt >= 50)
+	{
+		DrawGraph(930, 300, shot2Image[PLAYER_2], true);
+	}
 
-	DrawBox(930 //- enemy1[index].offsetSize.X + mapPos.X
-		, 150  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 250 - shot2TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 0, 0)
-		, true);
+	//DrawBox(930 //- enemy1[index].offsetSize.X
+	//	, 150 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, shot2TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(255, 84, 255)
+	//	, true);
+
+	//DrawBox(930 //- enemy1[index].offsetSize.X + mapPos.X
+	//	, 150  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, 250 - shot2TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(255, 0, 0)
+	//	, true);
 	DrawFormatString(100, 50, GetColor(255, 255, 255), "shot2Cnt = %d", shot2Cnt);
 	/*if (shot2flag == true)
 	{
@@ -157,7 +179,7 @@ void CreateShot2(XY pPos, XY poffset, MOVE_DIR pDir)
 	{
 
 	}
-	if (reloadFlag2 == false)
+	if (shot2TimeCnt > 50)
 	{
 		for (int cs = 0; cs < PLAYER_SHOT2_MAX; cs++)
 		{
@@ -175,8 +197,9 @@ void CreateShot2(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot2[cs].moveDir == DIR_DOWN)shot2[cs].pos.y += poffset.y;
 					if (shot2[cs].moveDir == DIR_LEFT)shot2[cs].pos.x -= poffset.x;
 					shot2[cs].life = shot2[cs].lifeMax;
+					PlaySoundMem(shot2Sound[SHOT_2], DX_PLAYTYPE_BACK);
 					reloadtime2--;
-					shot2TimeCnt -= 25;
+					shot2TimeCnt -= 50;
 					break;
 				}
 			}
@@ -194,6 +217,11 @@ void DeleteShot2(void)
 {
 	for (int s = 0; s < PLAYER_SHOT2_MAX; s++)
 	{
+		/*if (Shot2CheckHit(shot2[s].pos, shot2[s].size.x) == true)
+		{
+			SetTobichiriEffect(shot2[s].pos, EFFECT_C_PINK);
+			shot2[s].visible = false;
+		}*/
 		if (shot2[s].visible)
 		{
 			shot2[s].visible = false;

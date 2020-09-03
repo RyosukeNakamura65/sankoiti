@@ -15,6 +15,7 @@ CHARACTER shot4[PLAYER_SHOT4_MAX];
 int shot4Cnt;
 int shot4TimeCnt;
 int shot4TimeCntMax;
+int shot4Sound[SHOT_MAX];
 int reloadtime4;			//リロードの時間
 int reloadtime4MAX;		//リロードの最大時間
 int reloadFlag4;			//リロードのフラグ
@@ -40,10 +41,8 @@ int reloadFlag4;			//リロードのフラグ
 //プロトタイプ宣言
 void shot4SystemInit(void)
 {
-	//shot4Image[PLAYER_1] = LoadGraph("image/プレイヤー1弾.png");
-	//shot4Image[PLAYER_2] = LoadGraph("image/プレイヤー2弾.png");
-	//shot4Image[PLAYER_3] = LoadGraph("image/プレイヤー3弾.png");
 	shot4Image[PLAYER_4] = LoadGraph("image/プレイヤー4弾.png");
+	shot4Sound[SHOT_4] = LoadSoundMem("効果音/laser2.mp3");
 }
 
 void shot4GameInit(void)
@@ -62,7 +61,7 @@ void shot4GameInit(void)
 		shot4[sh].moveSpeed = 10;
 	}
 	shot4Cnt = 0;
-	shot4TimeCnt = 100;
+	shot4TimeCnt = 200;
 	shot4TimeCntMax = 100;
 	reloadtime4MAX = 15;
 	reloadtime4 = 0;
@@ -97,7 +96,7 @@ void shot4Control(void)
 			}
 		}
 	}
-	if (0 >= reloadtime4)
+	/*if (0 >= reloadtime4)
 	{
 		reloadFlag4 = true;
 	}
@@ -105,13 +104,21 @@ void shot4Control(void)
 	{
 		shot4Cnt++;
 		shot4TimeCnt++;
+		DrawString(900, 450, "Reload", 0xFFFF00, true);
 		if (shot4Cnt > 100)
 		{
 			reloadFlag4 = false;
 			shot4Cnt = 0;
+			shot4TimeCnt = 100;
 			reloadtime4 = PLAYER_SHOT4_MAX;
 		}
+	}*/
+
+	if (shot4TimeCnt <= 200)
+	{
+		shot4TimeCnt++;
 	}
+
 }
 
 void shot4Draw(void)
@@ -127,19 +134,37 @@ void shot4Draw(void)
 		}
 
 	}
-	DrawBox(930 //- enemy1[index].offsetSize.X
-		, 500 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 350 + shot4TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 255, 28)
-		, true);
 
-	DrawBox(930 //- enemy1[index].offsetSize.X + mapPos.X
-		, 500  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
-		, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
-		, 600 - shot4TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
-		, GetColor(255, 0, 0)
-		, true);
+	if (shot4TimeCnt >= 200)
+	{
+		DrawGraph(930, 500, shot4Image[PLAYER_4], true);
+	}
+	if (shot4TimeCnt >= 150)
+	{
+		DrawGraph(930, 550, shot4Image[PLAYER_4], true);
+	}
+	if (shot4TimeCnt >= 100)
+	{
+		DrawGraph(930, 600, shot4Image[PLAYER_4], true);
+	}
+	if (shot4TimeCnt >= 50)
+	{
+		DrawGraph(930, 650, shot4Image[PLAYER_4], true);
+	}
+
+	//DrawBox(930 //- enemy1[index].offsetSize.X
+	//	, 500 //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, 350 + shot4TimeCntMax * 2.5//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(255, 255, 28)
+	//	, true);
+
+	//DrawBox(930 //- enemy1[index].offsetSize.X + mapPos.X
+	//	, 500  //- enemy1[index].size.Y + 20 + mapPos.Y/* - enemy1[index].offsetSize.Y / 2 - mapPos.Y*/
+	//	, 960 //- enemy1[index].offsetSize.X + mapPos.X + enemy1[index].lifeMax * 8
+	//	, 600 - shot4TimeCnt//- enemy1[index].size.Y + 15 + mapPos.Y/*+ enemy1[index].size.Y - enemy1[index].offsetSize.Y - mapPos.Y*/
+	//	, GetColor(255, 0, 0)
+	//	, true);
 	DrawFormatString(300, 50, GetColor(255, 255, 255), "shot4Cnt = %d", shot4Cnt);
 	/*if (shot4flag == true)
 	{
@@ -157,7 +182,7 @@ void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 	{
 
 	}
-	if (reloadFlag4 == false)
+	if (shot4TimeCnt > 50)
 	{
 		for (int cs = 0; cs < PLAYER_SHOT4_MAX; cs++)
 		{
@@ -175,8 +200,9 @@ void CreateShot4(XY pPos, XY poffset, MOVE_DIR pDir)
 					if (shot4[cs].moveDir == DIR_DOWN)shot4[cs].pos.y += poffset.y;
 					if (shot4[cs].moveDir == DIR_LEFT)shot4[cs].pos.x -= poffset.x;
 					shot4[cs].life = shot4[cs].lifeMax;
+					PlaySoundMem(shot4Sound[SHOT_4], DX_PLAYTYPE_BACK);
 					reloadtime4--;
-					shot4TimeCnt -= 25;
+					shot4TimeCnt -= 50;
 					break;
 				}
 			}
